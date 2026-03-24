@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    @apply text-gray-800 bg-white antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Sora', sans-serif;
+    @apply leading-tight;
+  }
+}
+
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+           font-semibold text-sm border-2 border-transparent
+           transition-all duration-200 whitespace-nowrap cursor-pointer;
+  }
+  .btn-primary  { @apply bg-green-600 text-white border-green-600 hover:bg-green-700 hover:-translate-y-0.5 hover:shadow-lg; }
+  .btn-blue     { @apply bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-lg; }
+  .btn-outline  { @apply bg-transparent text-navy-800 border-gray-200 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50; }
+  .btn-ghost    { @apply bg-transparent text-gray-500 border-transparent hover:bg-gray-100 hover:text-gray-800; }
+  .btn-white    { @apply bg-white text-navy-800 border-white hover:bg-gray-50 hover:-translate-y-0.5; }
+  .btn-danger   { @apply bg-red-600 text-white border-red-600 hover:bg-red-700; }
+  .btn-sm       { @apply px-4 py-1.5 text-xs rounded-lg; }
+  .btn-lg       { @apply px-7 py-3.5 text-base rounded-2xl; }
+  .btn-xl       { @apply px-8 py-4 text-lg rounded-2xl; }
+  .btn-block    { @apply w-full; }
+  .btn:disabled { @apply opacity-50 cursor-not-allowed transform-none; }
+
+  /* Cards */
+  .card { @apply bg-white rounded-2xl border border-gray-200 transition-all duration-200; }
+  .card-hover:hover { @apply shadow-xl border-gray-300 -translate-y-1; }
+
+  /* Form inputs */
+  .input {
+    @apply w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm
+           bg-white text-gray-800 transition-all duration-200 outline-none
+           focus:border-blue-500 focus:ring-2 focus:ring-blue-100;
+  }
+  .input-error { @apply border-red-400 focus:border-red-500 focus:ring-red-100; }
+  .label { @apply block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5; }
+  .error-msg { @apply text-red-500 text-xs mt-1; }
+
+  /* Badges */
+  .badge { @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide; }
+  .badge-blue  { @apply bg-blue-50 text-blue-600; }
+  .badge-green { @apply bg-green-50 text-green-700; }
+  .badge-gold  { @apply bg-amber-50 text-amber-600; }
+  .badge-red   { @apply bg-red-50 text-red-600; }
+  .badge-gray  { @apply bg-gray-100 text-gray-600; }
+  .badge-navy  { @apply bg-white/15 text-white; }
+
+  /* Status pills */
+  .pill { @apply inline-block px-3 py-0.5 rounded-full text-xs font-bold; }
+  .pill-pending  { @apply bg-amber-50 text-amber-600; }
+  .pill-review   { @apply bg-blue-50 text-blue-600; }
+  .pill-accepted { @apply bg-green-50 text-green-700; }
+  .pill-rejected { @apply bg-red-50 text-red-600; }
+  .pill-draft    { @apply bg-gray-100 text-gray-600; }
+
+  /* Tags */
+  .tag { @apply inline-block px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded; }
+
+  /* Section layout */
+  .section { @apply py-20; }
+  .section-sm { @apply py-12; }
+  .container { @apply max-w-6xl mx-auto px-6; }
+  .section-header { @apply text-center mb-14; }
+  .section-header h2 { @apply text-3xl md:text-4xl font-black text-navy-800 mb-4 tracking-tight; }
+  .section-header p { @apply text-gray-500 text-lg max-w-xl mx-auto leading-relaxed; }
+
+  /* Page hero */
+  .page-hero { @apply bg-gradient-to-br from-navy-900 to-navy-600 py-12 text-white; }
+  .page-hero h1 { @apply text-3xl font-black mb-2; }
+  .page-hero p  { @apply text-white/65 text-sm; }
+
+  /* Breadcrumb */
+  .breadcrumb { @apply flex items-center gap-2 text-xs text-white/40 mb-3; }
+  .breadcrumb span { @apply cursor-pointer hover:text-white/70 transition-colors; }
+
+  /* Sidebar layouts */
+  .sidebar-layout { @apply grid gap-7 items-start; }
+
+  /* Progress bar */
+  .progress-bar  { @apply h-1 bg-gray-100 rounded-full overflow-hidden; }
+  .progress-fill { @apply h-full bg-gradient-to-r from-blue-500 to-green-500 rounded-full transition-all duration-500; }
+
+  /* AI elements */
+  .ai-dot { @apply w-2 h-2 bg-blue-500 rounded-full animate-bounce; }
+}
+
+/* Dot pattern background */
+.dot-pattern {
+  background-image: radial-gradient(rgba(255,255,255,.06) 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
