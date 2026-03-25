@@ -278,7 +278,7 @@ export const SCHOLARSHIPS = [
     steps: [
         'Register on the Study in Italy portal', 
         'Identify an eligible course in an Italian institution', 
-        'Submit the online application by June deadline', 
+        'Submit the online application by  deadline', 
         'Attend interview at the local Italian Embassy', 
         'Confirm university enrollment upon selection'
     ]
