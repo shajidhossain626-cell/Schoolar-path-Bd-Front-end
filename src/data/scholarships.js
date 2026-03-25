@@ -197,6 +197,49 @@ export const SCHOLARSHIPS = [
         'Submit documents for consortium review', 
         'Attend interview if shortlisted'
     ]
+},
+{
+    id: 14, flag: '🇭🇺', country: 'Hungary',
+    name: 'Stipendium Hungaricum Scholarship',
+    short: 'SH',
+    desc: 'The most prestigious higher education scholarship of the Hungarian Government for international students.',
+    tags: ["Bachelor's", "Master's", "PhD", 'Hungary'], 
+    amount: 'Full tuition + monthly stipend',
+    deadline: 'January 15, 2027', 
+    deadlineDate: '2027-01-15',
+    urgent: false, 
+    funding: 'fully-funded', 
+    degree: ['bachelors', 'masters', 'phd'], 
+    field: 'business & mba',
+    overview: 'The Stipendium Hungaricum program aims to promote cultural understanding and economic relations between Hungary and partner countries like Bangladesh.',
+    benefits: [
+        'Full tuition fee waiver', 
+        'Monthly stipend (HUF 43,700 for Masters)', 
+        'Free dormitory place or housing allowance', 
+        'Health insurance (HUF 65,000/year)', 
+        'International travel costs (in some cases)'
+    ],
+    eligibility: [
+        'Citizen of an eligible partner country', 
+        'Born before August 31, 2009', 
+        'High academic performance', 
+        'Meet host university language requirements (IELTS/TOEFL)'
+    ],
+    documents: [
+        'Online application form', 
+        'Motivation letter (min. 1 page)', 
+        'Language proficiency certificate', 
+        'Academic transcripts and diplomas', 
+        'Medical certificate',
+        'Copy of identification'
+    ],
+    steps: [
+        'Register on the DreamApply online portal', 
+        'Select 2 preferred study programs', 
+        'Upload all required documents by January deadline', 
+        'Submit application to Sending Partner (Ministry of Education)', 
+        'Complete university entrance exams/interviews'
+    ]
 }
 ]
 
