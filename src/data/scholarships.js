@@ -210,7 +210,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'fully-funded', 
     degree: ['bachelors', 'masters', 'phd'], 
-    field: 'engineering'& 'business'& 'medical'& 'arts'& 'social',
+    field: 'business & mba',
     overview: 'The Stipendium Hungaricum program aims to promote cultural understanding and economic relations between Hungary and partner countries like Bangladesh.',
     benefits: [
         'Full tuition fee waiver', 
