@@ -1,37 +1,45 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
+import { authAPI } from '../services/api'
 
 const AuthContext = createContext(null)
-
-const MOCK_USER = {
-  id: 'user_001',
-  name: 'Rafiqul Alam',
-  firstName: 'Rafiqul',
-  email: 'rafiqul@email.com',
-  avatar: 'RA',
-  plan: 'Standard',
-  joinedAt: '2024-11-01',
-}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check localStorage for persisted session
+    const token = localStorage.getItem('sp_token')
     const saved = localStorage.getItem('sp_user')
-    if (saved) {
-      try { setUser(JSON.parse(saved)) } catch { localStorage.removeItem('sp_user') }
+    if (token && saved) {
+      try {
+        setUser(JSON.parse(saved))
+        // Verify token is still valid
+        authAPI.me().then(res => {
+          if (res.data?.success) {
+            setUser(res.data.data)
+            localStorage.setItem('sp_user', JSON.stringify(res.data.data))
+          }
+        }).catch(() => {
+          localStorage.removeItem('sp_token')
+          localStorage.removeItem('sp_user')
+          setUser(null)
+        })
+      } catch {
+        localStorage.removeItem('sp_user')
+        localStorage.removeItem('sp_token')
+      }
     }
     setLoading(false)
   }, [])
 
   const login = async (email, password) => {
     if (!email || !password) throw new Error('Please fill in all fields')
-    // TODO: replace with real API call → api.post('/auth/login', { email, password })
-    await new Promise(r => setTimeout(r, 800)) // simulate network
-    const userData = { ...MOCK_USER, email }
+    const res = await authAPI.login({ email, password })
+    if (!res.data?.success) throw new Error(res.data?.message || 'Login failed')
+    const { user: userData, token } = res.data.data
     setUser(userData)
+    localStorage.setItem('sp_token', token)
     localStorage.setItem('sp_user', JSON.stringify(userData))
     toast.success(`Welcome back, ${userData.firstName}! 🎉`)
     return userData
@@ -39,9 +47,11 @@ export function AuthProvider({ children }) {
 
   const signup = async ({ firstName, lastName, email, password }) => {
     if (!firstName || !email || !password) throw new Error('Please fill in all fields')
-    await new Promise(r => setTimeout(r, 900))
-    const userData = { ...MOCK_USER, name: `${firstName} ${lastName}`, firstName, email, avatar: `${firstName[0]}${lastName?.[0] || ''}` }
+    const res = await authAPI.signup({ firstName, lastName, email, password })
+    if (!res.data?.success) throw new Error(res.data?.message || 'Signup failed')
+    const { user: userData, token } = res.data.data
     setUser(userData)
+    localStorage.setItem('sp_token', token)
     localStorage.setItem('sp_user', JSON.stringify(userData))
     toast.success(`Welcome to ScholarPath, ${firstName}! 🎓`)
     return userData
@@ -49,17 +59,13 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
     setUser(null)
+    localStorage.removeItem('sp_token')
     localStorage.removeItem('sp_user')
     toast.success('Signed out successfully')
   }
 
   const socialLogin = async (provider) => {
-    await new Promise(r => setTimeout(r, 700))
-    const userData = { ...MOCK_USER }
-    setUser(userData)
-    localStorage.setItem('sp_user', JSON.stringify(userData))
-    toast.success(`Signed in with ${provider}! 🎉`)
-    return userData
+    toast.error(`${provider} login coming soon!`)
   }
 
   return (
