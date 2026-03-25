@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScholarPath BD — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --bg2: #111827;
+  --bg3: #1a2235;
+  --border: rgba(255,255,255,0.08);
+  --accent: #3b82f6;
+  --accent2: #10b981;
+  --accent3: #f59e0b;
+  --danger: #ef4444;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --text3: #475569;
+  --card: #131c2e;
+  --sidebar-w: 240px;
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; font-size: 14px; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w); background: var(--bg2); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100;
+}
+.logo {
+  padding: 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-icon { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.logo-text { font-size: 15px; font-weight: 600; color: var(--text); }
+.logo-sub { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; }
+.nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
+.nav-section { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .1em; padding: 12px 10px 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+  border-radius: 8px; cursor: pointer; color: var(--text2); font-size: 13px; font-weight: 500;
+  transition: all .15s; margin-bottom: 2px;
+}
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active { background: rgba(59,130,246,0.15); color: var(--accent); }
+.nav-item .icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 600; }
+.sidebar-footer { padding: 16px; border-top: 1px solid var(--border); }
+.admin-info { display: flex; align-items: center; gap: 10px; }
+.admin-avatar { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.admin-name { font-size: 13px; font-weight: 500; }
+.admin-role { font-size: 11px; color: var(--text2); }
+
+/* MAIN */
+.main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+.topbar {
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+.page-title { font-size: 16px; font-weight: 600; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.api-status { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+.btn {
+  padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;
+  cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all .15s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #2563eb; }
+.btn-success { background: var(--accent2); color: #fff; }
+.btn-success:hover { background: #059669; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { background: #dc2626; }
+.btn-ghost { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+.btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+
+.content { padding: 24px; flex: 1; }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.stat-card.blue::before { background: var(--accent); }
+.stat-card.green::before { background: var(--accent2); }
+.stat-card.amber::before { background: var(--accent3); }
+.stat-card.red::before { background: var(--danger); }
+.stat-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+.stat-value { font-size: 28px; font-weight: 600; margin-bottom: 4px; }
+.stat-sub { font-size: 12px; color: var(--text2); }
+
+/* TABLE */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-size: 14px; font-weight: 600; }
+.card-body { padding: 0; }
+table { width: 100%; border-collapse: collapse; }
+th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid var(--border); }
+td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text2); font-size: 13px; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+.badge-pill {
+  display: inline-block; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600;
+}
+.badge-green { background: rgba(16,185,129,0.15); color: var(--accent2); }
+.badge-blue { background: rgba(59,130,246,0.15); color: var(--accent); }
+.badge-amber { background: rgba(245,158,11,0.15); color: var(--accent3); }
+.badge-red { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+/* FORM */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 12px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; }
+input, select, textarea {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); padding: 10px 12px; font-size: 13px; font-family: 'DM Sans', sans-serif;
+  transition: border .15s; width: 100%;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+input::placeholder, textarea::placeholder { color: var(--text3); }
+textarea { resize: vertical; min-height: 80px; }
+.form-actions { display: flex; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200;
+  display: none; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+  width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; padding: 24px;
+}
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.modal-title { font-size: 16px; font-weight: 600; }
+.close-btn { background: none; border: none; color: var(--text2); font-size: 20px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.close-btn:hover { background: var(--bg3); color: var(--text); }
+
+/* TOAST */
+.toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+.toast {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 16px; font-size: 13px; display: flex; align-items: center; gap: 8px;
+  animation: slideIn .3s ease; min-width: 260px;
+}
+.toast.success { border-color: var(--accent2); }
+.toast.error { border-color: var(--danger); }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+/* LOGIN */
+.login-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; width: 100%; background: var(--bg); }
+.login-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 40px; width: 380px; }
+.login-logo { text-align: center; margin-bottom: 32px; }
+.login-logo-icon { width: 56px; height: 56px; background: var(--accent); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 12px; }
+.login-title { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+.login-sub { font-size: 13px; color: var(--text2); }
+.login-form { margin-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+.login-err { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: var(--danger); padding: 10px 14px; border-radius: 8px; font-size: 13px; display: none; }
+
+/* SEARCH */
+.search-bar { position: relative; margin-bottom: 16px; }
+.search-bar input { padding-left: 36px; }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 14px; }
+
+/* LOADING */
+.loading { text-align: center; padding: 40px; color: var(--text2); }
+.spinner { display: inline-block; width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* EMPTY */
+.empty { text-align: center; padding: 48px; color: var(--text3); }
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+/* SECTION HEADER */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-title { font-size: 18px; font-weight: 600; }
+
+.divider { height: 1px; background: var(--border); margin: 20px 0; }
+.text-sm { font-size: 12px; color: var(--text2); }
+.font-mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+.text-green { color: var(--accent2); }
+.text-amber { color: var(--accent3); }
+.text-red { color: var(--danger); }
+.text-blue { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div class="login-wrap" id="loginPage">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">🎓</div>
+      <div class="login-title">ScholarPath BD</div>
+      <div class="login-sub">Admin Panel — Restricted Access</div>
+    </div>
+    <div id="loginErr" class="login-err">Invalid email or password</div>
+    <div class="login-form">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="admin@scholarpath.com.bd" value="admin@scholarpath.com.bd">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPass" placeholder="••••••••" value="admin123456">
+      </div>
+      <button class="btn btn-primary" onclick="doLogin()" style="width:100%;padding:12px">Sign In to Admin Panel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LAYOUT -->
+<div id="adminLayout" style="display:none;width:100%;display:none">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">🎓</div>
+    <div><div class="logo-text">ScholarPath BD</div><div class="logo-sub">Admin Panel</div></div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">📊</span> Dashboard</div>
+    <div class="nav-section">Content</div>
+    <div class="nav-item" onclick="showPage('scholarships',this)"><span class="icon">🎓</span> Scholarships</div>
+    <div class="nav-section">Users</div>
+    <div class="nav-item" onclick="showPage('users',this)"><span class="icon">👥</span> All Users</div>
+    <div class="nav-item" onclick="showPage('applications',this)"><span class="icon">📋</span> Applications</div>
+    <div class="nav-section">Business</div>
+    <div class="nav-item" onclick="showPage('payments',this)"><span class="icon">💳</span> Payments</div>
+    <div class="nav-item" onclick="showPage('contacts',this)"><span class="icon">✉️</span> Messages</div>
+    <div class="nav-section">System</div>
+    <div class="nav-item" onclick="showPage('settings',this)"><span class="icon">⚙️</span> Settings</div>
+    <div class="nav-item" onclick="doLogout()"><span class="icon">🚪</span> Logout</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="admin-info">
+      <div class="admin-avatar">A</div>
+      <div><div class="admin-name">Admin</div><div class="admin-role">Super Admin</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="pageTitle">Dashboard</div>
+    <div class="topbar-right">
+      <div class="api-status"><div class="dot"></div><span id="apiStatusText">Connected</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="refreshPage()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card blue"><div class="stat-label">Total Users</div><div class="stat-value" id="stat-users">—</div><div class="stat-sub">Registered accounts</div></div>
+        <div class="stat-card green"><div class="stat-label">Scholarships</div><div class="stat-value" id="stat-scholarships">—</div><div class="stat-sub">Active listings</div></div>
+        <div class="stat-card amber"><div class="stat-label">Applications</div><div class="stat-value" id="stat-applications">—</div><div class="stat-sub">Total submitted</div></div>
+        <div class="stat-card red"><div class="stat-label">Revenue</div><div class="stat-value" id="stat-revenue">—</div><div class="stat-sub">Total collected (BDT)</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Recent Users</div></div>
+        <div class="card-body"><div id="recentUsersTable"><div class="loading"><div class="spinner"></div><div>Loading...</div></div></div></div>
+      </div>
+    </div>
+
+    <!-- SCHOLARSHIPS PAGE -->
+    <div class="page" id="page-scholarships">
+      <div class="section-header">
+        <div class="section-title">Scholarships</div>
+        <button class="btn btn-primary" onclick="openScholarshipModal()">+ Add New Scholarship</button>
+      </div>
+      <div class="search-bar"><span class="search-icon">🔍</span><input type="text" placeholder="Search scholarships..." id="scholarSearch" oninput="filterScholars()"></div>
+      <div class="card">
+        <div class="card-body"><div id="scholarshipsTable"><div class="loading"><div class="spinner"></div><div>Loading...</div></div></div></div>
+      </div>
+    </div>
+
+    <!-- USERS PAGE -->
+    <div class="page" id="page-users">
+      <div class="section-header"><div class="section-title">All Users</div></div>
+      <div class="card">
+        <div class="card-body"><div id="usersTable"><div class="loading"><div class="spinner"></div><div>Loading...</div></div></div></div>
+      </div>
+    </div>
+
+    <!-- APPLICATIONS PAGE -->
+    <div class="page" id="page-applications">
+      <div class="section-header"><div class="section-title">Applications</div></div>
+      <div class="card">
+        <div class="card-body"><div id="applicationsTable"><div class="loading"><div class="spinner"></div><div>Loading...</div></div></div></div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS PAGE -->
+    <div class="page" id="page-payments">
+      <div class="section-header"><div class="section-title">Payments</div></div>
+      <div class="card">
+        <div class="card-body"><div id="paymentsTable"><div class="loading"><div class="spinner"></div><div>Loading...</div></div></div></div>
+      </div>
+    </div>
+
+    <!-- CONTACTS PAGE -->
+    <div class="page" id="page-contacts">
+      <div class="section-header"><div class="section-title">Contact Messages</div></div>
+      <div class="card">
+        <div class="card-body"><div id="contactsTable"><div class="loading"><div class="spinner"></div><div>Loading...</div></div></div></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS PAGE -->
+    <div class="page" id="page-settings">
+      <div class="section-title" style="margin-bottom:20px">Settings</div>
+      <div class="card" style="padding:24px;max-width:500px">
+        <div class="card-title" style="margin-bottom:16px">API Configuration</div>
+        <div class="form-group" style="margin-bottom:16px">
+          <label>Backend API URL</label>
+          <input type="text" id="apiUrlInput" placeholder="https://schoolar-path-backend.onrender.com/api">
+        </div>
+        <div class="form-group" style="margin-bottom:20px">
+          <label>Admin Token</label>
+          <input type="text" id="tokenDisplay" readonly style="font-family:monospace;font-size:11px">
+        </div>
+        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- SCHOLARSHIP MODAL -->
+<div class="modal-overlay" id="scholarModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Add New Scholarship</div>
+      <button class="close-btn" onclick="closeModal('scholarModal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Country Flag (emoji)</label><input type="text" id="f-flag" placeholder="🇩🇪"></div>
+      <div class="form-group"><label>Country</label><input type="text" id="f-country" placeholder="Germany"></div>
+      <div class="form-group"><label>Full Name</label><input type="text" id="f-name" placeholder="DAAD Research Scholarship 2026"></div>
+      <div class="form-group"><label>Short Name</label><input type="text" id="f-short" placeholder="DAAD"></div>
+      <div class="form-group"><label>Amount</label><input type="text" id="f-amount" placeholder="€934/month"></div>
+      <div class="form-group"><label>Deadline</label><input type="date" id="f-deadline"></div>
+      <div class="form-group"><label>Funding Type</label>
+        <select id="f-funding"><option value="FULL">Fully Funded</option><option value="PARTIAL">Partial</option><option value="TUITION">Tuition Only</option></select>
+      </div>
+      <div class="form-group"><label>Field of Study</label>
+        <select id="f-field"><option value="ENGINEERING">Engineering</option><option value="BUSINESS">Business</option><option value="MEDICAL">Medical</option><option value="ARTS">Arts & Humanities</option><option value="SOCIAL">Social Sciences</option></select>
+      </div>
+      <div class="form-group full"><label>Short Description</label><input type="text" id="f-desc" placeholder="Brief description shown on listing page"></div>
+      <div class="form-group full"><label>Overview (full detail)</label><textarea id="f-overview" rows="3" placeholder="Detailed overview of the scholarship..."></textarea></div>
+      <div class="form-group full"><label>Tags (comma separated)</label><input type="text" id="f-tags" placeholder="Master's, PhD, Engineering"></div>
+      <div class="form-group full"><label>Degree Levels (comma separated)</label><input type="text" id="f-degree" placeholder="MASTERS, PHD"></div>
+      <div class="form-group full"><label>Benefits (one per line)</label><textarea id="f-benefits" rows="3" placeholder="Monthly stipend ৳50,000&#10;Full tuition waiver&#10;Round-trip airfare"></textarea></div>
+      <div class="form-group full"><label>Eligibility Requirements (one per line)</label><textarea id="f-eligibility" rows="3" placeholder="Bangladeshi nationality&#10;CGPA ≥ 3.0&#10;IELTS 6.5"></textarea></div>
+      <div class="form-group full"><label>Required Documents (one per line)</label><textarea id="f-documents" rows="3" placeholder="Passport copy&#10;Academic transcripts&#10;Statement of Purpose"></textarea></div>
+      <div class="form-group full"><label>Application Steps (one per line)</label><textarea id="f-steps" rows="3" placeholder="Register on official website&#10;Prepare documents&#10;Submit before deadline"></textarea></div>
+      <div class="form-group"><label>Urgent Deadline?</label>
+        <select id="f-urgent"><option value="false">No</option><option value="true">Yes — show urgent badge</option></select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="saveScholarship()" id="saveScholarBtn">Save Scholarship</button>
+      <button class="btn btn-ghost" onclick="closeModal('scholarModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+const API_URL_KEY = 'sp_api_url'
+const TOKEN_KEY = 'sp_admin_token'
+
+let API = localStorage.getItem(API_URL_KEY) || 'https://schoolar-path-backend.onrender.com/api'
+let token = localStorage.getItem(TOKEN_KEY) || ''
+let allScholars = []
+let editingScholarId = null
+
+// ── AUTH ──
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value
+  const pass = document.getElementById('loginPass').value
+  document.getElementById('loginErr').style.display = 'none'
+  try {
+    const r = await fetch(`${API}/auth/login`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email, password: pass})
+    })
+    const d = await r.json()
+    if (!d.success) throw new Error(d.message)
+    if (d.data.user.role !== 'ADMIN') throw new Error('Not an admin account')
+    token = d.data.token
+    localStorage.setItem(TOKEN_KEY, token)
+    localStorage.setItem(API_URL_KEY, API)
+    showAdmin()
+  } catch(e) {
+    document.getElementById('loginErr').style.display = 'block'
+    document.getElementById('loginErr').textContent = e.message
+  }
+}
+
+function doLogout() {
+  token = ''
+  localStorage.removeItem(TOKEN_KEY)
+  document.getElementById('adminLayout').style.display = 'none'
+  document.getElementById('loginPage').style.display = 'flex'
+}
+
+function showAdmin() {
+  document.getElementById('loginPage').style.display = 'none'
+  document.getElementById('adminLayout').style.display = 'flex'
+  document.getElementById('tokenDisplay').value = token
+  document.getElementById('apiUrlInput').value = API
+  loadDashboard()
+}
+
+// Allow pressing Enter on login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') doLogin()
+})
+
+// ── NAVIGATION ──
+function showPage(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'))
+  document.getElementById('page-' + page).classList.add('active')
+  if (el) el.classList.add('active')
+  const titles = {dashboard:'Dashboard',scholarships:'Scholarships',users:'Users',applications:'Applications',payments:'Payments',contacts:'Contact Messages',settings:'Settings'}
+  document.getElementById('pageTitle').textContent = titles[page] || page
+  if (page === 'dashboard') loadDashboard()
+  if (page === 'scholarships') loadScholars()
+  if (page === 'users') loadUsers()
+  if (page === 'applications') loadApplications()
+  if (page === 'payments') loadPayments()
+  if (page === 'contacts') loadContacts()
+}
+
+function refreshPage() {
+  const active = document.querySelector('.page.active')?.id?.replace('page-','')
+  if (active) showPage(active)
+}
+
+// ── API HELPER ──
+async function api(path, opts={}) {
+  const r = await fetch(`${API}${path}`, {
+    ...opts,
+    headers: {'Content-Type':'application/json', 'Authorization':`Bearer ${token}`, ...(opts.headers||{})}
+  })
+  return r.json()
+}
+
+// ── DASHBOARD ──
+async function loadDashboard() {
+  try {
+    const d = await api('/admin/stats')
+    if (d.success) {
+      const t = d.data.totals
+      document.getElementById('stat-users').textContent = t.users || 0
+      document.getElementById('stat-scholarships').textContent = t.scholarships || 0
+      document.getElementById('stat-applications').textContent = t.applications || 0
+      document.getElementById('stat-revenue').textContent = '৳' + (t.revenue || 0).toLocaleString()
+      const users = d.data.recentUsers || []
+      document.getElementById('recentUsersTable').innerHTML = users.length ? `
+        <table><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Joined</th></tr></thead><tbody>
+        ${users.map(u=>`<tr>
+          <td>${u.firstName} ${u.lastName}</td>
+          <td class="font-mono">${u.email}</td>
+          <td><span class="badge-pill ${planBadge(u.plan)}">${u.plan}</span></td>
+          <td class="text-sm">${fmtDate(u.createdAt)}</td>
+        </tr>`).join('')}
+        </tbody></table>` : '<div class="empty"><div class="empty-icon">👥</div>No users yet</div>'
+    }
+  } catch(e) { console.error(e) }
+}
+
+// ── SCHOLARSHIPS ──
+async function loadScholars() {
+  document.getElementById('scholarshipsTable').innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading...</div></div>'
+  const d = await api('/scholarships?limit=100')
+  allScholars = d.data || []
+  renderScholarsTable(allScholars)
+}
+
+function renderScholarsTable(list) {
+  document.getElementById('scholarshipsTable').innerHTML = list.length ? `
+    <table><thead><tr><th>Flag</th><th>Name</th><th>Country</th><th>Amount</th><th>Deadline</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+    ${list.map(s=>`<tr>
+      <td style="font-size:20px">${s.flag}</td>
+      <td style="font-weight:500;color:var(--text)">${s.name}</td>
+      <td>${s.country}</td>
+      <td class="text-green font-mono">${s.amount}</td>
+      <td class="text-sm">${fmtDate(s.deadline)}</td>
+      <td><span class="badge-pill ${s.isActive?'badge-green':'badge-red'}">${s.isActive?'Active':'Hidden'}</span></td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick='editScholar(${JSON.stringify(s)})'>✏️ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteScholar('${s.id}','${s.name}')">🗑️</button>
+      </td>
+    </tr>`).join('')}
+    </tbody></table>` : '<div class="empty"><div class="empty-icon">🎓</div>No scholarships yet. Add your first one!</div>'
+}
+
+function filterScholars() {
+  const q = document.getElementById('scholarSearch').value.toLowerCase()
+  renderScholarsTable(allScholars.filter(s => s.name.toLowerCase().includes(q) || s.country.toLowerCase().includes(q)))
+}
+
+function openScholarshipModal(s=null) {
+  editingScholarId = null
+  document.getElementById('modalTitle').textContent = 'Add New Scholarship'
+  document.getElementById('saveScholarBtn').textContent = 'Save Scholarship'
+  const fields = ['flag','country','name','short','amount','deadline','funding','field','desc','overview','tags','degree','benefits','eligibility','documents','steps','urgent']
+  fields.forEach(f => { const el = document.getElementById('f-'+f); if(el) el.value = '' })
+  document.getElementById('scholarModal').classList.add('open')
+}
+
+function editScholar(s) {
+  editingScholarId = s.id
+  document.getElementById('modalTitle').textContent = 'Edit Scholarship'
+  document.getElementById('saveScholarBtn').textContent = 'Update Scholarship'
+  document.getElementById('f-flag').value = s.flag || ''
+  document.getElementById('f-country').value = s.country || ''
+  document.getElementById('f-name').value = s.name || ''
+  document.getElementById('f-short').value = s.shortName || ''
+  document.getElementById('f-amount').value = s.amount || ''
+  document.getElementById('f-deadline').value = s.deadline ? s.deadline.split('T')[0] : ''
+  document.getElementById('f-funding').value = s.funding || 'FULL'
+  document.getElementById('f-field').value = s.field || 'ENGINEERING'
+  document.getElementById('f-desc').value = s.description || ''
+  document.getElementById('f-overview').value = s.overview || ''
+  document.getElementById('f-urgent').value = s.isUrgent ? 'true' : 'false'
+  try { document.getElementById('f-tags').value = JSON.parse(s.tags||'[]').join(', ') } catch { document.getElementById('f-tags').value = s.tags || '' }
+  try { document.getElementById('f-degree').value = JSON.parse(s.degree||'[]').join(', ') } catch { document.getElementById('f-degree').value = s.degree || '' }
+  try { document.getElementById('f-benefits').value = JSON.parse(s.benefits||'[]').join('\n') } catch { document.getElementById('f-benefits').value = '' }
+  try { document.getElementById('f-eligibility').value = JSON.parse(s.eligibility||'[]').join('\n') } catch { document.getElementById('f-eligibility').value = '' }
+  try { document.getElementById('f-documents').value = JSON.parse(s.documents||'[]').join('\n') } catch { document.getElementById('f-documents').value = '' }
+  try { document.getElementById('f-steps').value = JSON.parse(s.steps||'[]').join('\n') } catch { document.getElementById('f-steps').value = '' }
+  document.getElementById('scholarModal').classList.add('open')
+}
+
+async function saveScholarship() {
+  const name = document.getElementById('f-name').value.trim()
+  if (!name) return toast('Please enter a scholarship name', 'error')
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') + '-' + Date.now()
+  const body = {
+    slug: editingScholarId ? undefined : slug,
+    flag: document.getElementById('f-flag').value || '🎓',
+    country: document.getElementById('f-country').value,
+    name,
+    shortName: document.getElementById('f-short').value,
+    amount: document.getElementById('f-amount').value,
+    deadline: new Date(document.getElementById('f-deadline').value).toISOString(),
+    funding: document.getElementById('f-funding').value,
+    field: document.getElementById('f-field').value,
+    description: document.getElementById('f-desc').value,
+    overview: document.getElementById('f-overview').value,
+    isUrgent: document.getElementById('f-urgent').value === 'true',
+    tags: JSON.stringify(document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean)),
+    degree: JSON.stringify(document.getElementById('f-degree').value.split(',').map(t=>t.trim()).filter(Boolean)),
+    benefits: JSON.stringify(document.getElementById('f-benefits').value.split('\n').map(t=>t.trim()).filter(Boolean)),
+    eligibility: JSON.stringify(document.getElementById('f-eligibility').value.split('\n').map(t=>t.trim()).filter(Boolean)),
+    documents: JSON.stringify(document.getElementById('f-documents').value.split('\n').map(t=>t.trim()).filter(Boolean)),
+    steps: JSON.stringify(document.getElementById('f-steps').value.split('\n').map(t=>t.trim()).filter(Boolean)),
+  }
+  if (editingScholarId) delete body.slug
+  const method = editingScholarId ? 'PUT' : 'POST'
+  const path = editingScholarId ? `/scholarships/${editingScholarId}` : '/scholarships'
+  const d = await api(path, {method, body: JSON.stringify(body)})
+  if (d.success) {
+    toast(editingScholarId ? 'Scholarship updated!' : 'Scholarship added!', 'success')
+    closeModal('scholarModal')
+    loadScholars()
+  } else {
+    toast(d.message || 'Error saving scholarship', 'error')
+  }
+}
+
+async function deleteScholar(id, name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return
+  const d = await api(`/scholarships/${id}`, {method:'DELETE'})
+  if (d.success) { toast('Scholarship deleted', 'success'); loadScholars() }
+  else toast(d.message, 'error')
+}
+
+// ── USERS ──
+async function loadUsers() {
+  document.getElementById('usersTable').innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading...</div></div>'
+  const d = await api('/admin/users')
+  const users = d.data || []
+  document.getElementById('usersTable').innerHTML = users.length ? `
+    <table><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Role</th><th>Applications</th><th>Joined</th></tr></thead><tbody>
+    ${users.map(u=>`<tr>
+      <td style="font-weight:500;color:var(--text)">${u.firstName} ${u.lastName}</td>
+      <td class="font-mono">${u.email}</td>
+      <td><span class="badge-pill ${planBadge(u.plan)}">${u.plan}</span></td>
+      <td><span class="badge-pill ${u.role==='ADMIN'?'badge-red':'badge-blue'}">${u.role}</span></td>
+      <td>${u._count?.applications||0}</td>
+      <td class="text-sm">${fmtDate(u.createdAt)}</td>
+    </tr>`).join('')}
+    </tbody></table>` : '<div class="empty"><div class="empty-icon">👥</div>No users yet</div>'
+}
+
+// ── APPLICATIONS ──
+async function loadApplications() {
+  document.getElementById('applicationsTable').innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading...</div></div>'
+  const d = await api('/applications')
+  const apps = d.data?.applications || d.data || []
+  document.getElementById('applicationsTable').innerHTML = apps.length ? `
+    <table><thead><tr><th>Student</th><th>Scholarship</th><th>Status</th><th>Progress</th><th>Applied Via</th><th>Date</th><th>Action</th></tr></thead><tbody>
+    ${apps.map(a=>`<tr>
+      <td style="color:var(--text)">${a.user?.firstName||''} ${a.user?.lastName||''}<br><span class="font-mono text-sm">${a.user?.email||''}</span></td>
+      <td>${a.scholarship?.flag||''} ${a.scholarship?.name||''}</td>
+      <td><span class="badge-pill ${statusBadge(a.status)}">${a.status}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="flex:1;height:4px;background:var(--bg3);border-radius:2px">
+            <div style="width:${a.progress||0}%;height:100%;background:var(--accent2);border-radius:2px"></div>
+          </div>
+          <span class="text-sm">${a.progress||0}%</span>
+        </div>
+      </td>
+      <td class="text-sm">${a.appliedVia||'self'}</td>
+      <td class="text-sm">${fmtDate(a.createdAt)}</td>
+      <td>
+        <select class="btn btn-ghost btn-sm" style="padding:4px 8px" onchange="updateAppStatus('${a.id}',this.value)">
+          <option value="">Update status</option>
+          ${['DRAFT','SUBMITTED','UNDER_REVIEW','ACCEPTED','REJECTED'].map(s=>`<option value="${s}"${a.status===s?' selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+    </tr>`).join('')}
+    </tbody></table>` : '<div class="empty"><div class="empty-icon">📋</div>No applications yet</div>'
+}
+
+async function updateAppStatus(id, status) {
+  if (!status) return
+  const d = await api(`/admin/applications/${id}/status`, {method:'PUT', body:JSON.stringify({status})})
+  if (d.success) { toast('Status updated to ' + status, 'success'); loadApplications() }
+  else toast(d.message, 'error')
+}
+
+// ── PAYMENTS ──
+async function loadPayments() {
+  document.getElementById('paymentsTable').innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading...</div></div>'
+  const d = await api('/payments')
+  const pays = d.data?.payments || d.data || []
+  document.getElementById('paymentsTable').innerHTML = pays.length ? `
+    <table><thead><tr><th>User</th><th>Plan</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr></thead><tbody>
+    ${pays.map(p=>`<tr>
+      <td style="color:var(--text)">${p.user?.firstName||''} ${p.user?.lastName||''}<br><span class="font-mono text-sm">${p.user?.email||''}</span></td>
+      <td><span class="badge-pill ${planBadge(p.plan)}">${p.plan}</span></td>
+      <td class="text-green font-mono">৳${(p.amount||0).toLocaleString()}</td>
+      <td class="text-sm">${p.method||'—'}</td>
+      <td><span class="badge-pill ${p.status==='SUCCESS'?'badge-green':p.status==='PENDING'?'badge-amber':'badge-red'}">${p.status}</span></td>
+      <td class="text-sm">${fmtDate(p.createdAt)}</td>
+    </tr>`).join('')}
+    </tbody></table>` : '<div class="empty"><div class="empty-icon">💳</div>No payments yet</div>'
+}
+
+// ── CONTACTS ──
+async function loadContacts() {
+  document.getElementById('contactsTable').innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading...</div></div>'
+  const d = await api('/contact')
+  const msgs = d.data || []
+  document.getElementById('contactsTable').innerHTML = msgs.length ? `
+    <table><thead><tr><th>Name</th><th>Email</th><th>Interest</th><th>Message</th><th>Date</th></tr></thead><tbody>
+    ${msgs.map(m=>`<tr>
+      <td style="color:var(--text)">${m.firstName} ${m.lastName||''}</td>
+      <td class="font-mono">${m.email}</td>
+      <td class="text-sm">${m.interest||'General'}</td>
+      <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.message}</td>
+      <td class="text-sm">${fmtDate(m.createdAt)}</td>
+    </tr>`).join('')}
+    </tbody></table>` : '<div class="empty"><div class="empty-icon">✉️</div>No messages yet</div>'
+}
+
+// ── SETTINGS ──
+function saveSettings() {
+  API = document.getElementById('apiUrlInput').value.trim()
+  localStorage.setItem(API_URL_KEY, API)
+  toast('Settings saved!', 'success')
+}
+
+// ── HELPERS ──
+function fmtDate(d) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'})
+}
+function planBadge(p) {
+  return {FREE:'badge-blue',BASIC:'badge-amber',STANDARD:'badge-green',PREMIUM:'badge-red'}[p] || 'badge-blue'
+}
+function statusBadge(s) {
+  return {DRAFT:'badge-blue',SUBMITTED:'badge-amber',UNDER_REVIEW:'badge-amber',ACCEPTED:'badge-green',REJECTED:'badge-red'}[s] || 'badge-blue'
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open') }
+function toast(msg, type='success') {
+  const t = document.createElement('div')
+  t.className = `toast ${type}`
+  t.innerHTML = `<span>${type==='success'?'✅':'❌'}</span><span>${msg}</span>`
+  document.getElementById('toasts').appendChild(t)
+  setTimeout(() => t.remove(), 3500)
+}
+
+// Auto-login if token exists
+window.onload = () => {
+  if (token) showAdmin()
+}
+</script>
+</body>
+</html>
