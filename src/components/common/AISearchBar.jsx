@@ -64,7 +64,10 @@ export default function AISearchBar({ className = '' }) {
           <div className="flex items-center gap-2 text-blue-600 font-bold text-sm mb-3">
             <span>✦</span> AI Scholarship Advisor
           </div>
-          <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{answer}</div>
+          <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-line" dangerouslySetInnerHTML={{ __html: answer
+  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+  .replace(/^• /gm, '&bull; ')
+}} />
         </div>
       )}
     </div>
