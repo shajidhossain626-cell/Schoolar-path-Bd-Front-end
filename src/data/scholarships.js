@@ -168,7 +168,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'fully-funded', 
     degree: ['masters'], 
-    field: 'social sciences',
+    field: 'Various'
     overview: 'The Erasmus Mundus Joint Masters (EMJM) are high-level integrated study programs delivered by an international partnership of European higher education institutions.',
     benefits: [
         'Full tuition fee waiver', 
