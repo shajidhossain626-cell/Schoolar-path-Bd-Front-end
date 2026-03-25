@@ -240,6 +240,47 @@ export const SCHOLARSHIPS = [
         'Submit application to Sending Partner (Ministry of Education)', 
         'Complete university entrance exams/interviews'
     ]
+},
+{
+    name: 'Italian Government Scholarship',
+    short: 'MAECI',
+    desc: 'Fully-funded scholarships for international students to study in Italy and promote cultural cooperation.',
+    tags: ["Master's", "PhD", 'Italy'], 
+    amount: '€9,000 yearly stipend + tuition',
+    deadline: 'March 26, 2026', 
+    deadlineDate: '2026-03-26',
+    urgent: false, 
+    funding: 'fully-funded', 
+    degree: ['masters', 'phd'], 
+    field: 'engineering & tech',
+    overview: 'The Ministry of Foreign Affairs and International Cooperation (MAECI) offers scholarships to favor international cooperation in cultural, scientific, and technological fields.',
+    benefits: [
+        'Full tuition fee waiver', 
+        'Quarterly stipend of €2,700 (total €9,000)', 
+        'Health and medical insurance', 
+        'Cultural and scientific exchange', 
+        'Italian language course support'
+    ],
+    eligibility: [
+        'Non-Italian citizen (or Italian residing abroad)', 
+        'Under 28 (Masters) / 30 (PhD) years old', 
+        'High academic degree from recognized university', 
+        'English (B2) or Italian (B2) proficiency'
+    ],
+    documents: [
+        'Valid Passport', 
+        'Academic transcripts and certificates', 
+        'Curriculum Vitae', 
+        'Proof of language proficiency', 
+        'Admission letter from Italian University'
+    ],
+    steps: [
+        'Register on the Study in Italy portal', 
+        'Identify an eligible course in an Italian institution', 
+        'Submit the online application by June deadline', 
+        'Attend interview at the local Italian Embassy', 
+        'Confirm university enrollment upon selection'
+    ]
 }
 ]
 
