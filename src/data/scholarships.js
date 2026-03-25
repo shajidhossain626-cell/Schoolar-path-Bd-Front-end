@@ -281,7 +281,7 @@ export const SCHOLARSHIPS = [
         'Attend interview at the local Italian Embassy', 
         'Confirm university enrollment upon selection'
     ]
-}
+},
 ]
 
 export const COUNTRIES = [...new Set(SCHOLARSHIPS.map(s => s.country))]
