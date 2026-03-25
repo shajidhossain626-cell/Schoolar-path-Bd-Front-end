@@ -210,7 +210,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'fully-funded', 
     degree: ['bachelors', 'masters', 'phd'], 
-    field: 'business & mba',
+    field: 'engineering'& 'business'& 'medical'& 'arts'& 'social',
     overview: 'The Stipendium Hungaricum program aims to promote cultural understanding and economic relations between Hungary and partner countries like Bangladesh.',
     benefits: [
         'Full tuition fee waiver', 
@@ -244,6 +244,6 @@ export const SCHOLARSHIPS = [
 ]
 
 export const COUNTRIES = [...new Set(SCHOLARSHIPS.map(s => s.country))]
-export const FIELDS = ['engineering', 'business', 'medical', 'arts', 'social']
+export const FIELDS = ['engineering', 'business', 'medical', 'arts', 'social','Multiple']
 export const DEGREES = ['bachelors', 'masters', 'phd']
 export const FUNDING_TYPES = ['full', 'partial', 'tuition']
