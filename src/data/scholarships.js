@@ -156,7 +156,48 @@ export const SCHOLARSHIPS = [
     documents: ['Application form', 'Passport', 'Certificates & transcripts', 'HSK certificate (recommended)', '2 recommendation letters'],
     steps: ['Identify BRI partner university', 'Contact international office', 'Submit application', 'University forwards to ministry', 'Receive admission + scholarship'],
   },
- 
+ {
+     id: 13, flag: 'EU', country: 'Europe',
+    name: 'Erasmus Mundus Joint Masters',
+    short: 'EMJM',
+    desc: 'Fully-funded integrated Master’s degrees across multiple European universities.',
+    tags: ["Master's", 'EU', 'Fully Funded'], 
+    amount: '€1,400/month stipend + full tuition',
+    deadline: 'March 01, 2027', 
+    deadlineDate: '2027-03-01',
+    urgent: false, 
+    funding: 'fully-funded', 
+    degree: ['masters'], 
+    field: 'social', 
+    overview: 'The Erasmus Mundus Joint Masters (EMJM) are high-level integrated study programs delivered by an international partnership of European higher education institutions.',
+    benefits: [
+        'Full tuition fee waiver', 
+        'Monthly stipend of €1,400', 
+        'Travel and installation costs', 
+        'Comprehensive health insurance', 
+        'Visa and administrative support'
+    ],
+    eligibility: [
+        'Bachelor’s degree in related field', 
+        'High academic standing (CGPA)', 
+        'English proficiency (IELTS 6.5+)', 
+        'Open to all nationalities'
+    ],
+    documents: [
+        'Valid Passport', 
+        'Certified transcripts and certificates', 
+        'Europass CV', 
+        'Statement of Purpose', 
+        '2 Recommendation letters'
+    ],
+    steps: [
+        'Browse the EMJM official catalogue', 
+        'Select up to 3 specific programs', 
+        'Apply directly through the program website', 
+        'Submit documents for consortium review', 
+        'Attend interview if shortlisted'
+    ]
+}
 ]
 
 export const COUNTRIES = [...new Set(SCHOLARSHIPS.map(s => s.country))]
