@@ -242,6 +242,7 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
+    id: 15, flag: '🇮🇹', country: 'Italy',
     name: 'Italian Government Scholarship',
     short: 'MAECI',
     desc: 'Fully-funded scholarships for international students to study in Italy and promote cultural cooperation.',
