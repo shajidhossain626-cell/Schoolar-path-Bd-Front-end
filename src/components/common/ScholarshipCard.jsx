@@ -29,7 +29,7 @@ export default function ScholarshipCard({ scholarship: s }) {
 
       <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
         <div className={`text-xs flex items-center gap-1 ${s.urgent ? 'text-red-500 font-semibold' : 'text-gray-400'}`}>
-          📅 {s.deadline}
+          📅 {s.deadlineFormatted || new Date(s.deadlineDate || s.deadline).toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'})}
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs font-bold text-green-600">{s.amount}</span>
