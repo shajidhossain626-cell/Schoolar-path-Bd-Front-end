@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 export default function DetailPage() {
   const { id } = useParams()
   const { scholarships, isSaved, toggleSave } = useScholarships()
-  const s = scholarships.find(x => x.id === Number(id))
+  const s = scholarships.find(x => String(x.id) === String(id) || x.slug === id)
   const navigate = useNavigate()
   const { ask, loading, answer } = useAI()
   const [aiQ, setAiQ] = useState('')
