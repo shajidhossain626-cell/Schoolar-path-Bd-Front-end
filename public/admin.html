@@ -543,21 +543,32 @@ function editScholar(s) {
   document.getElementById('f-flag').value = s.flag || ''
   document.getElementById('f-country').value = s.country || ''
   document.getElementById('f-name').value = s.name || ''
-  document.getElementById('f-short').value = s.shortName || ''
+  document.getElementById('f-short').value = s.shortName || s.short || ''
   document.getElementById('f-amount').value = s.amount || ''
-  document.getElementById('f-deadline').value = s.deadline ? s.deadline.split('T')[0] : ''
-  document.getElementById('f-funding').value = s.funding || 'FULL'
-  document.getElementById('f-field').value = s.field || 'ENGINEERING'
-  document.getElementById('f-desc').value = s.description || ''
+  // handle both ISO date string and plain date
+  const dl = s.deadline || ''
+  document.getElementById('f-deadline').value = dl ? dl.split('T')[0] : ''
+  document.getElementById('f-funding').value = (s.funding || 'FULL').toUpperCase()
+  document.getElementById('f-field').value = (s.field || 'ENGINEERING').toUpperCase()
+  document.getElementById('f-desc').value = s.description || s.desc || ''
   document.getElementById('f-overview').value = s.overview || ''
   document.getElementById('f-urgent').value = s.isUrgent ? 'true' : 'false'
-  try { document.getElementById('f-tags').value = JSON.parse(s.tags||'[]').join(', ') } catch { document.getElementById('f-tags').value = s.tags || '' }
-  try { document.getElementById('f-degree').value = JSON.parse(s.degree||'[]').join(', ') } catch { document.getElementById('f-degree').value = s.degree || '' }
-  try { document.getElementById('f-benefits').value = JSON.parse(s.benefits||'[]').join('\n') } catch { document.getElementById('f-benefits').value = '' }
-  try { document.getElementById('f-eligibility').value = JSON.parse(s.eligibility||'[]').join('\n') } catch { document.getElementById('f-eligibility').value = '' }
-  try { document.getElementById('f-documents').value = JSON.parse(s.documents||'[]').join('\n') } catch { document.getElementById('f-documents').value = '' }
-  try { document.getElementById('f-steps').value = JSON.parse(s.steps||'[]').join('\n') } catch { document.getElementById('f-steps').value = '' }
+  // parse tags - handle both array and JSON string
+  const parsedTags = tryArr(s.tags)
+  document.getElementById('f-tags').value = parsedTags.join(', ')
+  const parsedDegree = tryArr(s.degree)
+  document.getElementById('f-degree').value = parsedDegree.join(', ')
+  document.getElementById('f-benefits').value = tryArr(s.benefits).join('\n')
+  document.getElementById('f-eligibility').value = tryArr(s.eligibility).join('\n')
+  document.getElementById('f-documents').value = tryArr(s.documents).join('\n')
+  document.getElementById('f-steps').value = tryArr(s.steps).join('\n')
   document.getElementById('scholarModal').classList.add('open')
+}
+
+function tryArr(val) {
+  if (!val) return []
+  if (Array.isArray(val)) return val
+  try { return JSON.parse(val) } catch { return [val] }
 }
 
 async function saveScholarship() {
@@ -681,7 +692,9 @@ async function loadPayments() {
 // ── CONTACTS ──
 async function loadContacts() {
   document.getElementById('contactsTable').innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading...</div></div>'
-  const d = await api('/contact')
+  let d = await api('/contact')
+  // fallback if endpoint returns error
+  if (!d.success && !d.data) d = { data: [] }
   const msgs = d.data || []
   document.getElementById('contactsTable').innerHTML = msgs.length ? `
     <table><thead><tr><th>Name</th><th>Email</th><th>Interest</th><th>Message</th><th>Date</th></tr></thead><tbody>
