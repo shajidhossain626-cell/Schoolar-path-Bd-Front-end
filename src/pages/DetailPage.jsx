@@ -128,23 +128,38 @@ export default function DetailPage() {
             </div>
 
             {/* Quick facts */}
-            <div className="card p-5 mb-4">
-              <h3 className="font-head font-bold text-navy-800 text-sm mb-4">⚡ Quick Facts</h3>
-              {[
-                ['Country', `${s.flag} ${s.country}`],
-                ['Level', s.degree.map(d => d === 'bachelors' ? "BSc" : d === 'masters' ? "MSc" : 'PhD').join(' / ')],
-                ['Funding', s.funding === 'full' ? 'Fully Funded' : s.funding === 'partial' ? 'Partial' : 'Tuition'],
-                ['Deadline', s.deadline],
-                ['Amount', s.amount],
-                ['Field', s.field.charAt(0).toUpperCase() + s.field.slice(1)],
-              ].map(([k, v]) => (
-                <div key={k} className="flex justify-between text-sm py-2 border-b border-gray-50 last:border-0">
-                  <span className="text-gray-500">{k}</span>
-                  <span className={`font-semibold ${k === 'Funding' && s.funding === 'full' ? 'text-green-600' : k === 'Deadline' && s.urgent ? 'text-red-500' : 'text-gray-800'}`}>{v}</span>
-                </div>
-              ))}
-            </div>
-
+<div className="card p-5 mb-4">
+  <h3 className="font-head font-bold text-navy-800 text-sm mb-4">⚡ Quick Facts</h3>
+  {[
+    ['Country', `${s.flag} ${s.country}`],
+    ['Level', (() => {
+      const deg = typeof s.degree === 'string' ? JSON.parse(s.degree || '[]') : (s.degree || [])
+      return deg.map(d => {
+        const dl = d.toLowerCase()
+        return dl === 'bachelors' ? 'BSc' : dl === 'masters' ? 'MSc' : 'PhD'
+      }).join(' / ') || '—'
+    })()],
+    ['Funding', (() => {
+      const f = (s.funding || '').toLowerCase()
+      return f === 'full' ? 'Fully Funded' : f === 'partial' ? 'Partial' : 'Tuition Only'
+    })()],
+    ['Deadline', (() => {
+      const d = s.deadlineDate || s.deadline
+      if (!d) return '—'
+      return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+    })()],
+    ['Amount', s.amount || '—'],
+    ['Field', (() => {
+      const f = (s.field || '').toLowerCase()
+      return f.charAt(0).toUpperCase() + f.slice(1) || '—'
+    })()],
+  ].map(([k, v]) => (
+    <div key={k} className="flex justify-between text-sm py-2 border-b border-gray-50 last:border-0">
+      <span className="text-gray-500">{k}</span>
+      <span className={`font-semibold ${k === 'Funding' && (s.funding||'').toLowerCase() === 'full' ? 'text-green-600' : k === 'Deadline' && s.isUrgent ? 'text-red-500' : 'text-gray-800'}`}>{v}</span>
+    </div>
+  ))}
+</div>
             {/* Save / Counselor */}
             <div className="card p-5 mb-4">
               <button onClick={() => { toggleSave(s.id); toast.success(saved ? 'Removed from saved' : 'Saved! 🔖') }}
