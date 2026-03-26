@@ -1,18 +1,53 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { scholarshipAPI } from '../services/api'
-import { SCHOLARSHIPS } from '@data/scholarships'
+import { SCHOLARSHIPS as LOCAL_SCHOLARSHIPS } from '@data/scholarships'
 
 const ScholarshipContext = createContext(null)
 
 export function ScholarshipProvider({ children }) {
+  const [scholarships, setScholarships] = useState(LOCAL_SCHOLARSHIPS)
   const [savedIds, setSavedIds] = useState(new Set())
-  const [scholarships, setScholarships] = useState(SCHOLARSHIPS) // fallback to local data
+  const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({
     countries: [], degrees: [], funding: [], fields: [],
     deadline: '', sort: 'latest', search: '',
   })
 
-  // Load saved scholarships from backend on mount
+  // Load scholarships from backend on mount
+  useEffect(() => {
+    const loadScholarships = async () => {
+      try {
+        const res = await scholarshipAPI.list({ limit: 100 })
+        if (res.data?.success && res.data.data?.length > 0) {
+          // Normalize backend data to match local format
+          const normalized = res.data.data.map(s => ({
+            ...s,
+            // parse JSON strings back to arrays
+            tags: typeof s.tags === 'string' ? tryParse(s.tags, []) : (s.tags || []),
+            degree: typeof s.degree === 'string' ? tryParse(s.degree, []) : (s.degree || []),
+            benefits: typeof s.benefits === 'string' ? tryParse(s.benefits, []) : (s.benefits || []),
+            eligibility: typeof s.eligibility === 'string' ? tryParse(s.eligibility, []) : (s.eligibility || []),
+            documents: typeof s.documents === 'string' ? tryParse(s.documents, []) : (s.documents || []),
+            steps: typeof s.steps === 'string' ? tryParse(s.steps, []) : (s.steps || []),
+            // map backend field names to frontend field names
+            desc: s.description || s.desc || '',
+            deadlineDate: s.deadline,
+            short: s.shortName || s.short || '',
+            amount: s.amount,
+          }))
+          setScholarships(normalized)
+        }
+      } catch (err) {
+        console.log('Using local scholarships data')
+        // Keep local data as fallback
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadScholarships()
+  }, [])
+
+  // Load saved scholarships from backend
   useEffect(() => {
     const token = localStorage.getItem('sp_token')
     if (token) {
@@ -48,7 +83,6 @@ export function ScholarshipProvider({ children }) {
         })
       }
     } catch {
-      // fallback to local toggle
       setSavedIds(prev => {
         const next = new Set(prev)
         if (next.has(id)) next.delete(id)
@@ -67,12 +101,12 @@ export function ScholarshipProvider({ children }) {
 
     let result = scholarships.filter(s => {
       if (f.countries.length && !f.countries.includes(s.country)) return false
-      if (f.degrees.length && !f.degrees.some(d => {
-        const deg = typeof s.degree === 'string' ? JSON.parse(s.degree || '[]') : (s.degree || [])
-        return deg.includes(d)
-      })) return false
-      if (f.funding.length && !f.funding.includes(s.funding)) return false
-      if (f.fields.length && !f.fields.includes(s.field)) return false
+      if (f.degrees.length) {
+        const deg = Array.isArray(s.degree) ? s.degree : tryParse(s.degree, [])
+        if (!f.degrees.some(d => deg.map(x => x.toLowerCase()).includes(d.toLowerCase()))) return false
+      }
+      if (f.funding.length && !f.funding.map(x=>x.toUpperCase()).includes((s.funding||'').toUpperCase())) return false
+      if (f.fields.length && !f.fields.map(x=>x.toUpperCase()).includes((s.field||'').toUpperCase())) return false
       if (f.deadline) {
         const deadlineDate = s.deadlineDate || s.deadline
         const diff = new Date(deadlineDate) - now
@@ -81,15 +115,18 @@ export function ScholarshipProvider({ children }) {
         if (f.deadline === '6month' && diff > 180 * DAY) return false
       }
       if (f.search) {
-        const tags = typeof s.tags === 'string' ? JSON.parse(s.tags || '[]') : (s.tags || [])
+        const tags = Array.isArray(s.tags) ? s.tags : tryParse(s.tags, [])
         const hay = `${s.name} ${s.country} ${tags.join(' ')} ${s.description || s.desc || ''}`.toLowerCase()
         if (!hay.includes(f.search.toLowerCase())) return false
       }
       return true
     })
 
-    if (f.sort === 'deadline') result.sort((a, b) => new Date(a.deadlineDate || a.deadline) - new Date(b.deadlineDate || b.deadline))
-    else result.sort((a, b) => (b.id > a.id ? 1 : -1))
+    if (f.sort === 'deadline') {
+      result.sort((a, b) => new Date(a.deadlineDate || a.deadline) - new Date(b.deadlineDate || b.deadline))
+    } else {
+      result.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+    }
 
     return result
   }, [filters, scholarships])
@@ -98,12 +135,16 @@ export function ScholarshipProvider({ children }) {
 
   return (
     <ScholarshipContext.Provider value={{
-      scholarships, savedIds, savedScholarships,
+      scholarships, savedIds, savedScholarships, loading,
       filters, setFilters, toggleSave, isSaved, getFiltered,
     }}>
       {children}
     </ScholarshipContext.Provider>
   )
+}
+
+function tryParse(str, fallback) {
+  try { return JSON.parse(str) } catch { return fallback }
 }
 
 export const useScholarships = () => {
