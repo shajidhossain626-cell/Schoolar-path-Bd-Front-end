@@ -452,6 +452,177 @@ export const SCHOLARSHIPS = [
         'Wait for selection'
     ]
 },
+{
+    id: 20,
+    countryFlag: '🇸🇦',
+    country: 'Saudi Arabia',
+    name: 'King Abdulaziz University Scholarship',
+    short: 'KAU Scholarship',
+    desc: 'A fully funded scholarship for international students to pursue Master’s and PhD programs at King Abdulaziz University.',
+    tags: ["Master's",'PhD','Saudi Arabia','Fully Funded'], 
+    amount: 'Full tuition + monthly stipend + accommodation + airfare',
+    deadline: 'Dec 31, 2026', 
+    deadlineDate: '2026-12-31',
+    urgent: false, 
+    funding: 'full', 
+    degree: ['masters','phd'], 
+    field: 'engineering & tech',
+    overview: 'The KAU Scholarship offers comprehensive financial support to international students, including students from Bangladesh, to study in Saudi Arabia with advanced research facilities.',
+    benefits: [
+        'Full tuition fee coverage',
+        'Monthly stipend (approx. SAR 900–1,800)',
+        'Free accommodation',
+        'Annual airfare ticket',
+        'Healthcare services',
+        'Research facilities access'
+    ],
+    eligibility: [
+        'International student',
+        'Bachelor’s/Master’s degree with strong academic results',
+        'English proficiency (IELTS/TOEFL if required)',
+        'Good conduct and health condition'
+    ],
+    documents: [
+        'Academic transcripts and certificates',
+        'Valid passport copy',
+        'CV/Resume',
+        'Statement of purpose',
+        'Recommendation letters'
+    ],
+    steps: [
+        'Create account on KAU admission portal',
+        'Fill application form',
+        'Upload all required documents',
+        'Wait for admission decision',
+        'Receive scholarship confirmation'
+    ]
+},
+{
+    id: 21,
+    countryFlag: '🇧🇪',
+    country: 'Belgium',
+    name: 'VLIR-UOS Scholarship',
+    short: 'VLIR-UOS',
+    desc: 'A fully funded scholarship for students from developing countries to pursue Master’s programs in Belgium.',
+    tags: ["Master's",'Belgium','Fully Funded'], 
+    amount: 'Full tuition + €1,150/month stipend + travel + insurance',
+    deadline: 'Feb 01, 2026', 
+    deadlineDate: '2026-02-01',
+    urgent: true, 
+    funding: 'full', 
+    degree: ['masters'], 
+    field: 'social sciences',
+    overview: 'VLIR-UOS supports students from selected countries including Bangladesh to study development-related programs in Belgium.',
+    benefits: [
+        'Full tuition fees',
+        'Monthly stipend (€1,150 approx.)',
+        'Travel costs (round-trip)',
+        'Accommodation support',
+        'Health and travel insurance'
+    ],
+    eligibility: [
+        'Citizen of eligible developing country',
+        'Relevant bachelor’s degree',
+        'Professional experience preferred',
+        'Strong motivation for development work'
+    ],
+    documents: [
+        'Academic transcripts',
+        'Motivation letter',
+        'CV',
+        'Reference letters',
+        'Passport copy'
+    ],
+    steps: [
+        'Choose eligible VLIR-UOS program',
+        'Apply to the university',
+        'Indicate scholarship interest',
+        'Wait for selection result'
+    ]
+},
+{
+    id: 22,
+    countryFlag: '🇳🇱',
+    country: 'Netherlands',
+    name: 'Orange Knowledge Programme',
+    short: 'OKP',
+    desc: 'A fully funded Dutch government scholarship aimed at mid-career professionals from developing countries.',
+    tags: ["Master's",'Netherlands','Fully Funded'], 
+    amount: 'Full tuition + stipend + travel + visa',
+    deadline: 'Jun 01, 2026', 
+    deadlineDate: '2026-06-01',
+    urgent: false, 
+    funding: 'full', 
+    degree: ['masters'], 
+    field: 'business & mba',
+    overview: 'The OKP focuses on capacity building and professional development, targeting working professionals from eligible countries.',
+    benefits: [
+        'Full tuition coverage',
+        'Monthly living allowance',
+        'Travel expenses',
+        'Visa and insurance costs'
+    ],
+    eligibility: [
+        'Citizen of eligible country',
+        'Mid-career professional',
+        'Employer support required',
+        'Relevant work experience'
+    ],
+    documents: [
+        'Employer statement',
+        'CV',
+        'Passport',
+        'Academic certificates',
+        'Motivation letter'
+    ],
+    steps: [
+        'Apply to eligible course',
+        'Get admission',
+        'Apply for OKP through institution',
+        'Wait for final decision'
+    ]
+},
+{
+    id: 23,
+    countryFlag: '🇵🇱',
+    country: 'Poland',
+    name: 'NAWA Government Scholarship',
+    short: 'NAWA',
+    desc: 'A fully funded Polish government scholarship for international students to pursue higher education in Poland.',
+    tags: ["Master's",'Poland','Fully Funded'], 
+    amount: 'Full tuition + monthly stipend + accommodation support',
+    deadline: 'Apr 15, 2026', 
+    deadlineDate: '2026-04-15',
+    urgent: false, 
+    funding: 'full', 
+    degree: ['masters'], 
+    field: 'engineering & tech',
+    overview: 'NAWA supports international students in pursuing master’s degrees in Poland with financial support.',
+    benefits: [
+        'Full tuition fee coverage',
+        'Monthly stipend',
+        'Accommodation support',
+        'Language preparation (if required)'
+    ],
+    eligibility: [
+        'Non-Polish citizen',
+        'Bachelor’s degree',
+        'Academic excellence',
+        'Language proficiency'
+    ],
+    documents: [
+        'Academic transcripts',
+        'CV',
+        'Motivation letter',
+        'Passport copy'
+    ],
+    steps: [
+        'Apply via NAWA portal',
+        'Submit documents',
+        'Wait for evaluation',
+        'Receive admission'
+    ]
+}
 ]
 
 export const COUNTRIES = [...new Set(SCHOLARSHIPS.map(s => s.country))]
