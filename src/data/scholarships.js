@@ -168,7 +168,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'fully-funded', 
     degree: ['masters'], 
-    field: 'social', 
+    field: 'Multiple', 
     overview: 'The Erasmus Mundus Joint Masters (EMJM) are high-level integrated study programs delivered by an international partnership of European higher education institutions.',
     benefits: [
         'Full tuition fee waiver', 
@@ -251,7 +251,7 @@ export const SCHOLARSHIPS = [
     deadline: 'March 26, 2026', 
     deadlineDate: '2026-03-26',
     urgent: false, 
-    funding: 'fully-funded', 
+    funding: 'full', 
     degree: ['masters', 'phd'], 
     field: 'engineering & tech',
     overview: 'The Ministry of Foreign Affairs and International Cooperation (MAECI) offers scholarships to favor international cooperation in cultural, scientific, and technological fields.',
