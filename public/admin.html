@@ -146,6 +146,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="nav-sec">Business</div>
       <button class="nav-btn" onclick="go('payments',this)">💳 Payments</button>
       <button class="nav-btn" onclick="go('messages',this)">✉️ Messages</button>
+      <button class="nav-btn" onclick="go('documents',this)">📄 Documents</button>
       <div class="nav-sec">System</div>
       <button class="nav-btn" onclick="go('settings',this)">⚙️ Settings</button>
       <button class="nav-btn" onclick="doLogout()" style="color:var(--red)">🚪 Logout</button>
@@ -208,6 +209,18 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="page" id="page-messages">
         <div class="sec-head"><div class="sec-title">Contact Messages</div></div>
         <div class="card"><div id="msgsTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
+      </div>
+
+      <!-- DOCUMENTS -->
+      <div class="page" id="page-documents">
+        <div class="sec-head"><div class="sec-title">Client Documents</div></div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px">
+          <div class="stat blue"><div class="stat-label">Total</div><div class="stat-val" id="doc-total">—</div></div>
+          <div class="stat amber"><div class="stat-label">Pending</div><div class="stat-val" id="doc-pending">—</div></div>
+          <div class="stat green"><div class="stat-label">Verified</div><div class="stat-val" id="doc-verified">—</div></div>
+          <div class="stat red"><div class="stat-label">Rejected</div><div class="stat-val" id="doc-rejected">—</div></div>
+        </div>
+        <div class="card"><div id="docsTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
       </div>
 
       <!-- SETTINGS -->
@@ -307,7 +320,7 @@ function showAdmin() {
 }
 
 // ── NAV ──
-const titles = {dashboard:'Dashboard',scholarships:'Scholarships',users:'All Users',applications:'Applications',payments:'Payments',messages:'Contact Messages',settings:'Settings'}
+const titles = {dashboard:'Dashboard',scholarships:'Scholarships',users:'All Users',applications:'Applications',payments:'Payments',messages:'Contact Messages',documents:'Client Documents',settings:'Settings'}
 function go(page, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'))
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('on'))
@@ -320,6 +333,7 @@ function go(page, btn) {
   if (page==='applications') loadApps()
   if (page==='payments') loadPays()
   if (page==='messages') loadMsgs()
+  if (page==='documents') loadDocs()
 }
 function refresh() { go(document.querySelector('.page.on')?.id?.replace('page-','') || 'dashboard') }
 
@@ -543,6 +557,44 @@ async function loadPays() {
         <td style="font-size:12px">${fmt(p.createdAt)}</td>
       </tr>`).join('')}</tbody></table>`
     : '<div class="empty-box">No payments yet</div>'
+}
+
+// ── DOCUMENTS ──
+async function loadDocs() {
+  document.getElementById('docsTable').innerHTML = '<div class="loading-box"><div class="spin"></div><br>Loading...</div>'
+  try {
+    const d = await req('/admin/documents')
+    const docs = d.data || []
+    // update stats
+    document.getElementById('doc-total').textContent = docs.length
+    document.getElementById('doc-pending').textContent = docs.filter(d=>d.status==='PENDING').length
+    document.getElementById('doc-verified').textContent = docs.filter(d=>d.status==='VERIFIED').length
+    document.getElementById('doc-rejected').textContent = docs.filter(d=>d.status==='REJECTED').length
+
+    document.getElementById('docsTable').innerHTML = docs.length
+      ? `<table><thead><tr><th>Student</th><th>File Name</th><th>Size</th><th>Type</th><th>Status</th><th>Uploaded</th><th>Actions</th></tr></thead><tbody>${docs.map(doc=>`<tr>
+          <td style="color:var(--text)">${doc.user?.firstName||''} ${doc.user?.lastName||''}<br><span style="font-family:monospace;font-size:11px;color:var(--text3)">${doc.user?.email||''}</span></td>
+          <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)">${doc.name}</td>
+          <td style="font-size:12px">${doc.fileSize||'—'}</td>
+          <td style="font-size:11px">${doc.fileType?.split('/')[1]?.toUpperCase()||'—'}</td>
+          <td><span class="pill ${doc.status==='VERIFIED'?'pill-green':doc.status==='REJECTED'?'pill-red':'pill-amber'}">${doc.status}</span></td>
+          <td style="font-size:12px">${fmt(doc.uploadedAt)}</td>
+          <td><div style="display:flex;gap:5px">
+            <a href="${doc.fileUrl}" target="_blank" class="btn btn-ghost btn-sm">👁️ View</a>
+            <button class="btn btn-success btn-sm" style="background:var(--green);color:#fff" onclick="updateDoc('${doc.id}','VERIFIED')">✅</button>
+            <button class="btn btn-danger btn-sm" onclick="updateDoc('${doc.id}','REJECTED')">❌</button>
+          </div></td>
+        </tr>`).join('')}</tbody></table>`
+      : '<div class="empty-box">📄 No documents uploaded yet</div>'
+  } catch(e) {
+    document.getElementById('docsTable').innerHTML = '<div class="empty-box">Could not load documents</div>'
+  }
+}
+
+async function updateDoc(id, status) {
+  const d = await req(`/documents/${id}/status`, {method:'PUT', body:JSON.stringify({status})})
+  if (d.success) { toast(`✅ Document marked as ${status}`, 'ok'); loadDocs() }
+  else toast(d.message||'Error', 'err')
 }
 
 // ── MESSAGES ──
