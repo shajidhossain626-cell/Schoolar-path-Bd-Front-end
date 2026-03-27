@@ -442,6 +442,7 @@ export const SCHOLARSHIPS = [
         'Academic transcripts',
         'Motivation letter',
         'CV',
+        'Financial Documents: Evidence of economic need or personal financial statements',
         'Passport'
     ],
     steps: [
