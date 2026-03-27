@@ -622,6 +622,85 @@ export const SCHOLARSHIPS = [
         'Wait for evaluation',
         'Receive admission'
     ]
+},
+{
+    id: 24,
+    countryFlag: '🇫🇷',
+    country: 'France',
+    name: 'Eiffel Excellence Scholarship',
+    short: 'Eiffel',
+    desc: 'A prestigious French government scholarship for top international students pursuing Master’s and PhD programs.',
+    tags: ["Master's",'PhD','France','Fully Funded'], 
+    amount: '€1,181/month (Master’s) + travel + insurance',
+    deadline: 'Jan 10, 2026', 
+    deadlineDate: '2026-01-10',
+    urgent: true, 
+    funding: 'full', 
+    degree: ['masters','phd'], 
+    field: 'engineering & tech',
+    overview: 'The Eiffel Scholarship is designed to attract top international students to French institutions.',
+    benefits: [
+        'Monthly stipend (€1,181 for Master’s)',
+        'International travel costs',
+        'Health insurance',
+        'Cultural activities'
+    ],
+    eligibility: [
+        'International student',
+        'Strong academic profile',
+        'Must be nominated by French university'
+    ],
+    documents: [
+        'CV',
+        'Academic transcripts',
+        'Statement of purpose',
+        'Recommendation letters'
+    ],
+    steps: [
+        'Apply to French university',
+        'Get nominated',
+        'University submits application',
+        'Wait for result'
+    ]
+},
+{
+    id: 25,
+    countryFlag: '🇦🇹',
+    country: 'Austria',
+    name: 'Austrian Development Cooperation Scholarship',
+    short: 'ADC Scholarship',
+    desc: 'A fully funded scholarship for students from developing countries to study in Austria.',
+    tags: ["Master's",'Austria','Fully Funded'], 
+    amount: 'Full tuition + monthly stipend + accommodation',
+    deadline: 'Mar 31, 2026', 
+    deadlineDate: '2026-03-31',
+    urgent: false, 
+    funding: 'full', 
+    degree: ['masters'], 
+    field: 'social sciences',
+    overview: 'ADC scholarships aim to support development-related education for students from eligible countries.',
+    benefits: [
+        'Full tuition fees',
+        'Monthly stipend',
+        'Accommodation support',
+        'Insurance'
+    ],
+    eligibility: [
+        'Citizen of developing country',
+        'Relevant academic background',
+        'English proficiency'
+    ],
+    documents: [
+        'Transcripts',
+        'CV',
+        'Motivation letter',
+        'Passport'
+    ],
+    steps: [
+        'Apply to ADC-supported institution',
+        'Submit scholarship application',
+        'Wait for selection'
+    ]
 }
 ]
 
