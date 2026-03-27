@@ -5,7 +5,7 @@ export const SCHOLARSHIPS = [
     name: 'DAAD Research Scholarship 2025', short: 'DAAD',
     desc: 'Fully funded for Master\'s & PhD. Covers tuition, living costs, insurance, and travel.',
     tags: ["Master's", 'PhD', 'Engineering'], amount: '€934/month',
-    deadline: 'Mar 31, 2025', deadlineDate: '2025-03-31',
+    deadline: 'october 15, 2026', deadlineDate: '2026-10-15',
     urgent: true, funding: 'full', degree: ['masters', 'phd'], field: 'engineering',
     overview: 'The DAAD Scholarship is one of the world\'s most prestigious funding programs, supporting over 100,000 individuals globally each year. Bangladeshi students with excellent academic records and a clear research plan are strongly encouraged to apply.',
     benefits: ['Monthly stipend €934 (graduates) / €1,200 (doctoral)', 'Full tuition waiver', 'Round-trip airfare', 'Health & personal liability insurance', 'German language course funding'],
