@@ -143,11 +143,7 @@ export default function DetailPage() {
       const f = (s.funding || '').toLowerCase()
       return f === 'full' ? 'Fully Funded' : f === 'partial' ? 'Partial' : 'Tuition Only'
     })()],
-    ['Deadline', (() => {
-      const d = s.deadlineDate || s.deadline
-      if (!d) return '—'
-      return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-    })()],
+    ['Deadline', s.deadlineFormatted || new Date(s.deadlineDate || s.deadline).toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'})],,
     ['Amount', s.amount || '—'],
     ['Field', (() => {
       const f = (s.field || '').toLowerCase()
