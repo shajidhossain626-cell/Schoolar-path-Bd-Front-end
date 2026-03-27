@@ -409,6 +409,47 @@ export const SCHOLARSHIPS = [
         'Submit all required documents using the mandatory SI templates', 
         'Wait for university admission (March) and scholarship results (April)'
     ]
+}
+,
+{
+    id: 19,
+    countryFlag: '🇪🇸',
+    country: 'Spain',
+    name: 'Spanish Government Scholarship',
+    short: 'Spain Gov',
+    desc: 'A fully funded scholarship program supporting international students to study in Spain.',
+    tags: ["Master's",'Spain','Fully Funded'], 
+    amount: 'Full tuition + stipend + travel',
+    deadline: 'May 20, 2026', 
+    deadlineDate: '2026-05-20',
+    urgent: false, 
+    funding: 'full', 
+    degree: ['masters'], 
+    field: 'social sciences',
+    overview: 'Spain offers various government-funded scholarships for international students in multiple disciplines.',
+    benefits: [
+        'Full tuition fees',
+        'Monthly stipend',
+        'Travel allowance',
+        'Insurance'
+    ],
+    eligibility: [
+        'International student',
+        'Bachelor’s degree',
+        'Academic merit'
+    ],
+    documents: [
+        'Academic transcripts',
+        'Motivation letter',
+        'CV',
+        'Passport'
+    ],
+    steps: [
+        'Apply to Spanish university',
+        'Apply for scholarship',
+        'Submit documents',
+        'Wait for selection'
+    ]
 },
 ]
 
