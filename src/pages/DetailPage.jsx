@@ -24,37 +24,48 @@ export default function DetailPage() {
   return (
     <>
       {/* Hero */}
-      <div className="bg-gradient-to-br from-navy-900 to-navy-600 py-12 text-white">
-        <div className="container">
-          <div className="breadcrumb">
-            <span onClick={() => navigate('/')}>Home</span>
-            <span className="opacity-40">›</span>
-            <span onClick={() => navigate('/scholarships')}>Scholarships</span>
-            <span className="opacity-40">›</span>
-            <span>{s.short}</span>
-          </div>
-          <div className="flex gap-6 items-start mt-2">
-            <div className="text-6xl md:text-7xl flex-shrink-0">{s.flag}</div>
-            <div>
-              <div className="flex gap-2 flex-wrap mb-3">
-                <span className={`badge text-[10px] ${s.funding === 'full' ? 'badge-green' : 'badge-gold'}`}>
-                  {s.funding === 'full' ? '✓ Fully Funded' : 'Partial Funding'}
-                </span>
-                {s.urgent && <span className="badge badge-red text-[10px]">🔥 Urgent</span>}
-              </div>
-              <h1 className="font-head font-black text-2xl md:text-3xl mb-2">{s.name}</h1>
-              <p className="text-white/65 text-sm mb-4">{s.country} · {s.funding === 'full' ? 'Fully Funded' : 'Partial Funding'}</p>
-              <div className="flex flex-wrap gap-5 text-sm text-white/75">
-                <span>🎓 {s.degree.map(d => d === 'bachelors' ? "Bachelor's" : d === 'masters' ? "Master's" : 'PhD').join(' / ')}</span>
-                <span>📅 {s.deadline}</span>
-                <span>💰 {s.amount}</span>
-                <span>🌍 {s.country}</span>
-              </div>
-            </div>
-          </div>
+<div className="bg-gradient-to-br from-navy-900 to-navy-600 py-12 text-white">
+  <div className="container">
+    <div className="breadcrumb">
+      <span onClick={() => navigate('/')}>Home</span>
+      <span className="opacity-40">›</span>
+      <span onClick={() => navigate('/scholarships')}>Scholarships</span>
+      <span className="opacity-40">›</span>
+      <span>{s.short || s.shortName}</span>
+    </div>
+    <div className="flex gap-6 items-start mt-2">
+      <div className="text-6xl md:text-7xl flex-shrink-0">{s.flag}</div>
+      <div>
+        <div className="flex gap-2 flex-wrap mb-3">
+          <span className={`badge text-[10px] ${(s.funding||'').toLowerCase() === 'full' ? 'badge-green' : 'badge-gold'}`}>
+            {(s.funding||'').toLowerCase() === 'full' ? '✓ Fully Funded' : (s.funding||'').toLowerCase() === 'partial' ? 'Partial Funding' : 'Tuition Only'}
+          </span>
+          {(s.isUrgent || s.urgent) && <span className="badge badge-red text-[10px]">🔥 Urgent</span>}
+        </div>
+        <h1 className="font-head font-black text-2xl md:text-3xl mb-2">{s.name}</h1>
+        <p className="text-white/65 text-sm mb-4">
+          {s.country} · {(s.funding||'').toLowerCase() === 'full' ? 'Fully Funded' : (s.funding||'').toLowerCase() === 'partial' ? 'Partial Funding' : 'Tuition Only'}
+        </p>
+        <div className="flex flex-wrap gap-5 text-sm text-white/75">
+          <span>🎓 {(() => {
+            const deg = typeof s.degree === 'string' ? JSON.parse(s.degree || '[]') : (s.degree || [])
+            return deg.map(d => {
+              const dl = d.toLowerCase()
+              return dl === 'bachelors' ? "Bachelor's" : dl === 'masters' ? "Master's" : 'PhD'
+            }).join(' / ') || '—'
+          })()}</span>
+          <span>📅 {(() => {
+            const d = s.deadlineDate || s.deadline
+            if (!d) return '—'
+            return new Date(d).toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'})
+          })()}</span>
+          <span>💰 {s.amount}</span>
+          <span>🌍 {s.country}</span>
         </div>
       </div>
-
+    </div>
+  </div>
+</div>
       <div className="container">
         <div className="grid md:grid-cols-[1fr_310px] gap-7 py-9">
           {/* Main */}
