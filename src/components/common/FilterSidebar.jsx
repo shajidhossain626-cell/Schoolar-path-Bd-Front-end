@@ -1,11 +1,23 @@
 import { useFilters } from '@hooks/useFilters'
+import { useScholarships } from '@context/ScholarshipContext'
 
-const COUNTRY_OPTIONS = ['Germany', 'United Kingdom', 'United States', 'Canada', 'Australia', 'Japan', 'South Korea', 'China']
-const FLAGS = { Germany:'🇩🇪', 'United Kingdom':'🇬🇧', 'United States':'🇺🇸', Canada:'🇨🇦', Australia:'🇦🇺', Japan:'🇯🇵', 'South Korea':'🇰🇷', China:'🇨🇳' }
 const DEGREE_OPTIONS = [['bachelors', "Bachelor's"], ['masters', "Master's"], ['phd', 'PhD / Doctorate']]
 const FUNDING_OPTIONS = [['full', 'Fully Funded'], ['partial', 'Partial Funding'], ['tuition', 'Tuition Only']]
 const DEADLINE_OPTIONS = [['month', 'This Month'], ['3month', 'Next 3 Months'], ['6month', 'Next 6 Months'], ['', 'Any Time']]
 const FIELD_OPTIONS = [['engineering', 'Engineering & Tech'], ['business', 'Business & MBA'], ['medical', 'Medical & Health'], ['arts', 'Arts & Humanities'], ['social', 'Social Sciences']]
+
+// common flag map — add more as needed
+const FLAGS = {
+  'Germany':'🇩🇪','United Kingdom':'🇬🇧','United States':'🇺🇸','Canada':'🇨🇦',
+  'Australia':'🇦🇺','Japan':'🇯🇵','South Korea':'🇰🇷','China':'🇨🇳',
+  'France':'🇫🇷','Netherlands':'🇳🇱','Sweden':'🇸🇪','Norway':'🇳🇴',
+  'Denmark':'🇩🇰','Finland':'🇫🇮','Switzerland':'🇨🇭','Austria':'🇦🇹',
+  'Belgium':'🇧🇪','Italy':'🇮🇹','Spain':'🇪🇸','Portugal':'🇵🇹',
+  'Turkey':'🇹🇷','Hungary':'🇭🇺','Poland':'🇵🇱','Czech Republic':'🇨🇿',
+  'New Zealand':'🇳🇿','Singapore':'🇸🇬','Malaysia':'🇲🇾','Taiwan':'🇹🇼',
+  'India':'🇮🇳','Russia':'🇷🇺','Europe':'🇪🇺','UAE':'🇦🇪',
+  'Saudi Arabia':'🇸🇦','Egypt':'🇪🇬','Brazil':'🇧🇷','Mexico':'🇲🇽',
+}
 
 function FilterGroup({ title, children }) {
   return (
@@ -27,6 +39,14 @@ function Checkbox({ checked, onChange, label }) {
 
 export default function FilterSidebar() {
   const { filters, toggleArrayFilter, updateFilter, clearAll, resultCount } = useFilters()
+  const { scholarships } = useScholarships()
+
+  // ── dynamic countries from actual scholarship data ──
+  const COUNTRY_OPTIONS = [...new Set(
+    scholarships
+      .map(s => s.country)
+      .filter(Boolean)
+  )].sort()
 
   const hasFilters = filters.countries.length || filters.degrees.length || filters.funding.length ||
     filters.fields.length || filters.deadline || filters.search
@@ -52,12 +72,12 @@ export default function FilterSidebar() {
         />
       </div>
 
-      <FilterGroup title="Destination">
+      <FilterGroup title={`Destination (${COUNTRY_OPTIONS.length})`}>
         {COUNTRY_OPTIONS.map(c => (
           <Checkbox key={c}
             checked={filters.countries.includes(c)}
             onChange={() => toggleArrayFilter('countries', c)}
-            label={`${FLAGS[c] || ''} ${c}`}
+            label={`${FLAGS[c] || '🌍'} ${c}`}
           />
         ))}
       </FilterGroup>
