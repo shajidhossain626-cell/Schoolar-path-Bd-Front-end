@@ -283,6 +283,48 @@ export const SCHOLARSHIPS = [
         'Confirm university enrollment upon selection'
     ]
 },
+{
+    id: 16, flag: '🇫🇮', country: 'Finland',
+    name: 'University of Helsinki Scholarship',
+    short: 'UH Scholarship',
+    desc: 'Tuition waivers and relocation grants for outstanding non-EU/EEA students pursuing a Master’s degree.',
+    tags: ["Master's", 'Finland', 'Merit Based'], 
+    amount: '100% Tuition + €5,000 grant',
+    deadline: 'January 15, 2027', 
+    deadlineDate: '2027-01-15',
+    urgent: false, 
+    funding: 'full', 
+    degree: ['masters'], 
+    field: 'engineering & tech',
+    overview: 'The University of Helsinki offers scholarships to top-tier international students. This includes the Finland Scholarship, which covers full tuition plus a one-time relocation allowance.',
+    benefits: [
+        'Full tuition fee waiver (100%)', 
+        'One-time relocation grant of €5,000 (Finland Scholarship)', 
+        'Renewable for the second year based on 55 ECTS progress', 
+        'Membership in the Helsinki Alumni network', 
+        'Student healthcare and library access'
+    ],
+    eligibility: [
+        'Non-EU/EEA/Swiss citizenship', 
+        'Applying to an English-taught Master’s program', 
+        'Top 10-20% academic ranking in previous studies', 
+        'English proficiency (IELTS 6.5+ / TOEFL 92+)'
+    ],
+    documents: [
+        'Bachelor’s Degree Certificate', 
+        'Academic Transcripts (translated if not in English/Finnish)', 
+        'Proof of English language proficiency', 
+        'Copy of Passport ID page', 
+        'Motivation Letter (submitted via the application form)'
+    ],
+    steps: [
+        'Find your preferred Master’s program on Studyinfo.fi', 
+        'Prepare all mandatory academic attachments in PDF', 
+        'Complete the online application form during the January window', 
+        'Tick the "I want to apply for a scholarship" box on the form', 
+        'Pay the €100 application fee (for non-EU applicants)'
+    ]
+},
 ]
 
 export const COUNTRIES = [...new Set(SCHOLARSHIPS.map(s => s.country))]
