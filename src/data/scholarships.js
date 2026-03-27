@@ -335,7 +335,7 @@ export const SCHOLARSHIPS = [
     deadline: 'March 31, 2026', 
     deadlineDate: '2026-03-31',
     urgent: true, 
-    funding: 'fully-funded', 
+    funding: 'full', 
     degree: ['bachelors', 'masters', 'phd'], 
     field: 'engineering & tech',
     overview: 'The Romanian state provides scholarships to foreign citizens from non-EU countries to promote Romanian culture and language. Bachelor and Master studies are conducted in the Romanian language with a preparatory year included.',
@@ -367,7 +367,7 @@ export const SCHOLARSHIPS = [
         'Submit the application before the March 31st deadline', 
         'Receive selection results via email in July'
     ]
-}
+},
 ]
 
 export const COUNTRIES = [...new Set(SCHOLARSHIPS.map(s => s.country))]
