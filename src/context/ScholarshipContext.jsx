@@ -1,10 +1,8 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
-import { scholarshipAPI } from '../services/api'
 import { SCHOLARSHIPS as LOCAL_SCHOLARSHIPS } from '@data/scholarships'
 
 const ScholarshipContext = createContext(null)
 
-// ── helpers ──
 function toArr(v) {
   if (!v) return []
   if (Array.isArray(v)) return v
@@ -20,20 +18,18 @@ function fmtDeadline(v) {
 function normalizeScholarship(s) {
   return {
     ...s,
-    tags:        toArr(s.tags),
-    degree:      toArr(s.degree),
-    benefits:    toArr(s.benefits),
-    eligibility: toArr(s.eligibility),
-    documents:   toArr(s.documents),
-    steps:       toArr(s.steps),
-    desc:        s.description || s.desc || '',
-    short:       s.shortName || s.short || '',
-    deadlineDate: s.deadlineDate || s.deadline || '',
-    // human-readable deadline for display
+    tags:             toArr(s.tags),
+    degree:           toArr(s.degree),
+    benefits:         toArr(s.benefits),
+    eligibility:      toArr(s.eligibility),
+    documents:        toArr(s.documents),
+    steps:            toArr(s.steps),
+    desc:             s.description || s.desc || '',
+    short:            s.shortName || s.short || '',
+    deadlineDate:     s.deadlineDate || s.deadline || '',
     deadlineFormatted: fmtDeadline(s.deadlineDate || s.deadline),
-    // normalize funding & field to lowercase for filter comparisons
-    fundingNorm: (s.funding || '').toLowerCase(),
-    fieldNorm:   (s.field   || '').toLowerCase(),
+    fundingNorm:      (s.funding || '').toLowerCase(),
+    fieldNorm:        (s.field   || '').toLowerCase(),
   }
 }
 
@@ -41,101 +37,52 @@ export function ScholarshipProvider({ children }) {
   const [scholarships, setScholarships] = useState(
     LOCAL_SCHOLARSHIPS.map(normalizeScholarship)
   )
-  const [savedIds, setSavedIds]   = useState(new Set())
-  const [loading,  setLoading]    = useState(true)
-  const [filters,  setFilters]    = useState({
+  const [savedIds, setSavedIds] = useState(new Set())
+  const [loading,  setLoading]  = useState(false)
+  const [filters,  setFilters]  = useState({
     countries: [], degrees: [], funding: [], fields: [],
     deadline: '', sort: 'latest', search: '',
   })
 
-  // ── load scholarships from backend ──
+  // Using local data only — backend disabled temporarily
   useEffect(() => {
-    const load = async () => {
-      try {
-  // temporarily disabled - using local data only
-  // const res = await scholarshipAPI.list({ limit: 100 })
-} catch {
-} finally {
-  setLoading(false)
-}
-    }
-    load()
+    setScholarships(LOCAL_SCHOLARSHIPS.map(normalizeScholarship))
+    setLoading(false)
   }, [])
 
-  // ── load saved ids ──
-  useEffect(() => {
-    const token = localStorage.getItem('sp_token')
-    if (!token) return
-    scholarshipAPI.saved()
-      .then(res => {
-        if (res.data?.success) {
-          setSavedIds(new Set(res.data.data.map(s => s.id || s.slug)))
-        }
-      })
-      .catch(() => {})
-  }, [])
-
-  // ── toggle save ──
-  const toggleSave = useCallback(async (id) => {
-    const token = localStorage.getItem('sp_token')
-    if (!token) {
-      setSavedIds(prev => {
-        const next = new Set(prev)
-        next.has(id) ? next.delete(id) : next.add(id)
-        return next
-      })
-      return
-    }
-    try {
-      const res = await scholarshipAPI.save(id)
-      if (res.data?.success) {
-        const saved = res.data.data.saved
-        setSavedIds(prev => {
-          const next = new Set(prev)
-          saved ? next.add(id) : next.delete(id)
-          return next
-        })
-      }
-    } catch {
-      setSavedIds(prev => {
-        const next = new Set(prev)
-        next.has(id) ? next.delete(id) : next.add(id)
-        return next
-      })
-    }
+  const toggleSave = useCallback((id) => {
+    setSavedIds(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
   }, [])
 
   const isSaved = useCallback((id) => savedIds.has(id), [savedIds])
 
-  // ── filter & sort ──
   const getFiltered = useCallback((overrides = {}) => {
     const f   = { ...filters, ...overrides }
     const DAY = 86_400_000
     const now = Date.now()
 
     let result = scholarships.filter(s => {
-      // country
       if (f.countries.length &&
           !f.countries.map(x => x.toLowerCase()).includes(s.country.toLowerCase()))
         return false
 
-      // degree  — compare lowercase both sides
       if (f.degrees.length) {
         const deg = toArr(s.degree).map(d => d.toLowerCase())
         if (!f.degrees.some(d => deg.includes(d.toLowerCase()))) return false
       }
 
-      // funding — compare lowercase
       if (f.funding.length &&
           !f.funding.some(x => x.toLowerCase() === s.fundingNorm))
         return false
 
-      // field — compare lowercase
       if (f.fields.length &&
           !f.fields.some(x => x.toLowerCase() === s.fieldNorm))
         return false
 
-      // deadline window
       if (f.deadline) {
         const dl   = s.deadlineDate || s.deadline
         const diff = new Date(dl) - now
@@ -144,7 +91,6 @@ export function ScholarshipProvider({ children }) {
         if (f.deadline === '6month' && diff > 180 * DAY) return false
       }
 
-      // search
       if (f.search) {
         const hay = [s.name, s.country, ...toArr(s.tags), s.desc || '']
           .join(' ').toLowerCase()
@@ -154,7 +100,6 @@ export function ScholarshipProvider({ children }) {
       return true
     })
 
-    // sort
     if (f.sort === 'deadline') {
       result.sort((a, b) =>
         new Date(a.deadlineDate || a.deadline || 0) -
@@ -176,8 +121,7 @@ export function ScholarshipProvider({ children }) {
   return (
     <ScholarshipContext.Provider value={{
       scholarships, savedIds, savedScholarships, loading,
-      filters, setFilters, toggleSave, isSaved, getFiltered,
-      fmtDeadline, // export helper so any page can use it
+      filters, setFilters, toggleSave, isSaved, getFiltered, fmtDeadline,
     }}>
       {children}
     </ScholarshipContext.Provider>
