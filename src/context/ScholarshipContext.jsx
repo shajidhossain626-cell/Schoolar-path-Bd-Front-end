@@ -54,8 +54,14 @@ export function ScholarshipProvider({ children }) {
       try {
         const res = await scholarshipAPI.list({ limit: 100 })
         if (res.data?.success && res.data.data?.length > 0) {
-          setScholarships(res.data.data.map(normalizeScholarship))
-        }
+  const backendSchols = res.data.data.map(normalizeScholarship)
+  const backendSlugs = new Set(backendSchols.map(s => s.slug))
+  // merge: backend first, then local ones not already in backend
+  const localOnly = LOCAL_SCHOLARSHIPS
+    .map(normalizeScholarship)
+    .filter(s => !backendSlugs.has(s.slug))
+  setScholarships([...backendSchols, ...localOnly])
+}
       } catch {
         // keep local fallback
       } finally {
