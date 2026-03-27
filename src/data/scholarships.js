@@ -324,7 +324,50 @@ export const SCHOLARSHIPS = [
         'Tick the "I want to apply for a scholarship" box on the form', 
         'Pay the €100 application fee (for non-EU applicants)'
     ]
-},
+  },
+  {
+    id: 17, flag: '🇷🇴', country: 'Romania',
+    name: 'Romanian Government Scholarship',
+    short: 'Romania MFA',
+    desc: 'Fully-funded scholarships offered by the Ministry of Foreign Affairs to non-EU citizens for studies in Romania.',
+    tags: ["Bachelor's", "Master's", "PhD", 'Romania', 'Fully Funded'], 
+    amount: 'Full tuition + monthly stipend + accommodation',
+    deadline: 'March 31, 2026', 
+    deadlineDate: '2026-03-31',
+    urgent: true, 
+    funding: 'fully-funded', 
+    degree: ['bachelors', 'masters', 'phd'], 
+    field: 'engineering & tech',
+    overview: 'The Romanian state provides scholarships to foreign citizens from non-EU countries to promote Romanian culture and language. Bachelor and Master studies are conducted in the Romanian language with a preparatory year included.',
+    benefits: [
+        'Exemption from tuition fees', 
+        'Free accommodation in student dormitories', 
+        'Monthly stipend (up to €85 for PhD students)', 
+        'Full coverage of Romanian language preparatory year', 
+        'Medical assistance in case of emergencies'
+    ],
+    eligibility: [
+        'Non-EU citizen from any nationality', 
+        'Academic average of at least 7 (out of 10) in previous studies', 
+        'Not more than 35 years old (Bachelors/Masters) or 45 (PhD)', 
+        'Willing to study in Romanian (except for PhD)'
+    ],
+    documents: [
+        'Valid Passport (first 3 pages)', 
+        'Birth Certificate', 
+        'Academic Diplomas and Transcripts', 
+        'Curriculum Vitae (CV)', 
+        'Medical Certificate (for final enrollment)', 
+        'Research Proposal and Tutor Agreement (PhD only)'
+    ],
+    steps: [
+        'Create an account on the Study in Romania online platform', 
+        'Fill in the application form and select up to two universities', 
+        'Upload all required documents in PDF format', 
+        'Submit the application before the March 31st deadline', 
+        'Receive selection results via email in July'
+    ]
+}
 ]
 
 export const COUNTRIES = [...new Set(SCHOLARSHIPS.map(s => s.country))]
