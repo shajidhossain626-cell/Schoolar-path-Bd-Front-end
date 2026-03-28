@@ -186,6 +186,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="section">
       <div class="sec-title">💳 Choose Your Package</div>
       <div class="pkg-grid" id="pkgGrid"></div>
+      <div id="pricingNote" style="margin-top:12px;background:#eff6ff;border-radius:9px;padding:12px;font-size:12px;color:#1d4ed8;display:none">
+        <strong>➕ Extra scholarship charge:</strong> You selected <span id="extraCount">0</span> target countries. Standard & Premium include 1 free application. Extra applications: <span id="extraTotal">৳0</span>
+      </div>
     </div>
     <div class="nav-row"><button class="btn btn-ghost" onclick="prev(3)">← Back</button><button class="btn btn-primary" onclick="next(3)">Next: Upload Documents →</button></div>
   </div>
@@ -297,8 +300,7 @@ const DOC_GROUPS = [
 ]
 
 let selectedCountries = new Set()
-const urlPkg = new URLSearchParams(window.location.search).get('package')
-let selectedPkg = urlPkg === 'basic' ? 'Basic' : urlPkg === 'standard' ? 'Standard' : urlPkg === 'premium' ? 'Premium' : ''
+let selectedPkg = 'Standard'
 let uploadedFiles = {} // {slotId: [{name, size, type, data}]}
 
 // ── INIT ──
@@ -310,7 +312,7 @@ function init() {
 
   // packages
   document.getElementById('pkgGrid').innerHTML = PKGS.map(p=>
-    `<div class="pkg" onclick="selPkg('${p.val}',this)">
+    `<div class="pkg${p.val==='Standard'?' sel':''}" onclick="selPkg('${p.val}',this)">
       <div class="pkg-icon">${p.icon}</div>
       <div class="pkg-name">${p.val}</div>
       <div class="pkg-price">${p.price}</div>
@@ -353,11 +355,29 @@ function init() {
 
 function toggleC(name, el) {
   selectedCountries.has(name) ? (selectedCountries.delete(name), el.classList.remove('sel')) : (selectedCountries.add(name), el.classList.add('sel'))
+  updatePricingNote()
+}
+
+function updatePricingNote() {
+  const note = document.getElementById('pricingNote')
+  const extraCount = document.getElementById('extraCount')
+  const extraTotal = document.getElementById('extraTotal')
+  if (!note) return
+  const count = selectedCountries.size
+  const extras = Math.max(0, count - 1)
+  if (count > 1 && selectedPkg !== 'Basic' && selectedPkg !== '') {
+    note.style.display = 'block'
+    extraCount.textContent = count
+    extraTotal.textContent = '৳' + (extras * 2500).toLocaleString()
+  } else {
+    note.style.display = 'none'
+  }
 }
 function selPkg(val, el) {
   selectedPkg = val
   document.querySelectorAll('.pkg').forEach(p=>p.classList.remove('sel'))
   el.classList.add('sel')
+  updatePricingNote()
 }
 
 // ── FILE HANDLER ──
@@ -490,7 +510,7 @@ async function submitForm() {
     scholarships:g('p-schols'), motivation:g('p-why'),
     targetCountries:[...selectedCountries],
     package:selectedPkg,
-    packageAmount:selectedPkg==='Basic'?2500:selectedPkg==='Standard'?5000:selectedPkg==='Premium'?8000:0,
+    packageAmount:selectedPkg==='Basic'?2500:selectedPkg==='Standard'?5000:8000,
     documents:docSummary,
     totalFilesUploaded:totalFiles,
     notes:g('p-notes'),
@@ -506,8 +526,8 @@ async function submitForm() {
   } catch(e){}
 
   // send to Google Sheets + Drive if configured
-const settings = { sheetsUrl: 'https://script.google.com/macros/s/AKfycbzdH4qOsUowPdO_vFhAdu3Ip9z7NMSQ_ZHPtru4yYSXYA9UESlBhZ-DMde2VPb5SQVC/exec' }
-if(settings.sheetsUrl){
+  const settings=JSON.parse(localStorage.getItem('sp_crm_settings')||'{}')
+  if(settings.sheetsUrl){
     try{
       // build documents object with actual file data for Drive upload
       const docsWithData = {}
@@ -531,6 +551,7 @@ if(settings.sheetsUrl){
     <div class="sum-row"><span style="color:var(--text3)">Name</span><strong>${data.firstName} ${data.lastName}</strong></div>
     <div class="sum-row"><span style="color:var(--text3)">WhatsApp</span><span>${data.phone}</span></div>
     <div class="sum-row"><span style="color:var(--text3)">Package</span><strong style="color:var(--accent)">${data.package} — ৳${data.packageAmount.toLocaleString()}</strong></div>
+    ${data.extraScholarships>0?`<div class="sum-row"><span style="color:var(--text3)">Extra scholarships</span><span style="color:var(--accent)">+${data.extraScholarships} × ৳2,500</span></div>`:''}
     <div class="sum-row"><span style="color:var(--text3)">Target</span><span>${data.targetDegree}</span></div>
     <div class="sum-row"><span style="color:var(--text3)">Countries</span><span>${[...selectedCountries].slice(0,3).join(', ')}</span></div>
     <div class="sum-row"><span style="color:var(--text3)">Files Uploaded</span><strong style="color:var(--green)">${totalFiles} document(s)</strong></div>
