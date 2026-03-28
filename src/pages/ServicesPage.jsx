@@ -12,7 +12,7 @@ const PACKAGES = [
     tagColor: 'bg-gray-100 text-gray-600',
     features: [
       'Full scholarship database access',
-      'AI-powered scholarship matching',
+      
       'Personalised document checklist',
       '1× 30-min counseling session',
       'SOP template + writing guide',
@@ -25,7 +25,7 @@ const PACKAGES = [
     href: '/intake.html?package=basic',
   },
   {
-    id: 'standard', icon: '🚀', name: 'Standard', price: '5,000', period: 'per scholarship',
+    id: 'standard', icon: '🚀', name: 'Standard', price: '7,500', period: 'per scholarship',
     color: 'border-blue-600',
     badge: '⭐ Most Popular',
     badgeColor: 'bg-blue-600 text-white',
@@ -50,7 +50,7 @@ const PACKAGES = [
     href: '/intake.html?package=standard',
   },
   {
-    id: 'premium', icon: '👑', name: 'Premium', price: '8,000', period: 'per scholarship',
+    id: 'premium', icon: '👑', name: 'Premium', price: '10,000', period: 'per scholarship',
     color: 'border-amber-400',
     badge: '👑 Best Service',
     badgeColor: 'bg-amber-500 text-white',
@@ -61,13 +61,12 @@ const PACKAGES = [
       'Everything in Standard',
       'Dedicated personal advisor',
       'Full application submission',
-      'Document translation & notarization',
       'Visa guidance & support letter',
-      'Unlimited counseling sessions',
+      '5 counseling sessions',
       'WhatsApp priority support',
       '✅ 1 scholarship application included',
       'Post-acceptance guidance',
-      'Money-back guarantee*',
+      
     ],
     extra: true,
     note: '➕ Additional scholarships: ৳2,500 each',
@@ -227,7 +226,7 @@ export default function ServicesPage() {
             { q: 'Why does Basic not include application submission?', a: 'Basic is a self-guided package. We prepare all your documents and guide you step by step, but you submit the application yourself. This keeps the cost low for students who are confident applying independently.' },
             { q: 'Why is there an extra charge per scholarship?', a: 'Each scholarship requires a customized SOP, separate application portal login, different documents, and individual tracking. Applying to 3 scholarships is genuinely 3 times the work.' },
             { q: 'Can I upgrade my package later?', a: 'Yes! Contact us on WhatsApp and we will upgrade your package at any time. You only pay the difference.' },
-            { q: 'What if I am rejected?', a: 'Premium package includes a money-back guarantee. Standard and Basic do not, but we work hard to maximize your chances with professional applications.' },
+           
           ].map((item, i) => (
             <div key={i} className="mb-4 border border-gray-200 rounded-xl overflow-hidden">
               <div className="p-4 font-bold text-sm text-navy-800 bg-gray-50">{item.q}</div>
