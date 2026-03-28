@@ -297,7 +297,8 @@ const DOC_GROUPS = [
 ]
 
 let selectedCountries = new Set()
-let selectedPkg = ''
+const urlPkg = new URLSearchParams(window.location.search).get('package')
+let selectedPkg = urlPkg === 'basic' ? 'Basic' : urlPkg === 'standard' ? 'Standard' : urlPkg === 'premium' ? 'Premium' : ''
 let uploadedFiles = {} // {slotId: [{name, size, type, data}]}
 
 // ── INIT ──
