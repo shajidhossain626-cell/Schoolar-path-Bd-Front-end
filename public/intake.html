@@ -504,12 +504,25 @@ async function submitForm() {
     localStorage.setItem('sp_crm_clients',JSON.stringify(existing))
   } catch(e){}
 
-  // send to Google Sheets if configured
+  // send to Google Sheets + Drive if configured
   const settings=JSON.parse(localStorage.getItem('sp_crm_settings')||'{}')
   if(settings.sheetsUrl){
     try{
-      await fetch(settings.sheetsUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({...data,documents:Object.keys(docSummary).join(', ')})})
-    }catch(e){}
+      // build documents object with actual file data for Drive upload
+      const docsWithData = {}
+      DOC_GROUPS.forEach(grp=>{
+        grp.slots.forEach(slot=>{
+          const files = uploadedFiles[slot.id]||[]
+          if(files.length>0) docsWithData[slot.label] = files
+        })
+      })
+      await fetch(settings.sheetsUrl,{
+        method:'POST',
+        mode:'no-cors',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({...data, documents:docsWithData})
+      })
+    }catch(e){ console.log('Sheet sync error:',e) }
   }
 
   // show success
