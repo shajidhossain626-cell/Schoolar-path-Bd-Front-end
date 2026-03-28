@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 
 const PACKAGES = [
   {
-    id: 'basic', icon: '🌱', name: 'Basic', price: '2,500', period: 'one-time',
+    id: 'basic', icon: '🌱', name: 'Basic', price: '3000', period: 'one-time',
     color: 'border-gray-200',
     badge: null,
     desc: 'Document preparation & self-guided support',
@@ -16,6 +16,7 @@ const PACKAGES = [
       'Personalised document checklist',
       '1× 30-min counseling session',
       'SOP template + writing guide',
+      'Recommendation letter guidance',
       'CV template',
       'Email support (5 business days)',
     ],
@@ -82,7 +83,7 @@ export default function ServicesPage() {
   const [extraSchols, setExtraSchols] = useState({ standard: 0, premium: 0 })
 
   const totalPrice = (pkg) => {
-    const base = pkg.id === 'basic' ? 2500 : pkg.id === 'standard' ? 5000 : 8000
+    const base = pkg.id === 'basic' ? 3000 : pkg.id === 'standard' ? 7500 : 10000
     const extras = (extraSchols[pkg.id] || 0) * EXTRA_PRICE
     return base + extras
   }
