@@ -339,7 +339,7 @@ function delClient(id){
   if(!confirm('Delete this client?')) return
   const c=getClients().filter(x=>x.id!==id)
   localStorage.setItem(SK,JSON.stringify(c))
-  renderClients(); toast('Deleted','ok')
+  renderClients(c); toast('Deleted','ok')
 }
 
 // DETAIL
