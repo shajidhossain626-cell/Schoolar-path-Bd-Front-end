@@ -45,7 +45,7 @@ const PACKAGES = [
       'Priority support (24 hrs)',
     ],
     extra: true,
-    note: '➕ Additional scholarships: ৳2,500 each',
+    note: '➕ Additional scholarships: ৳3,500 each',
     cta: 'Apply Now →',
     ctaStyle: 'btn-primary',
     href: '/intake.html?package=standard',
