@@ -126,17 +126,72 @@ export default function DetailPage() {
           {/* Sidebar */}
           <div>
             {/* Apply card */}
-            <div className="bg-gradient-to-br from-navy-900 to-navy-600 rounded-2xl p-5 text-white text-center mb-5">
-              <h3 className="font-head font-bold text-base mb-2">Apply With Our Experts</h3>
-              <p className="text-xs text-white/60 mb-3">Full service — docs, SOP, submission tracking</p>
-              <div className="font-head font-black text-4xl text-green-400">৳8,000</div>
-              <div className="text-[10px] text-white/40 mb-4">Premium Package · All-inclusive</div>
-              <Link to="/services" className="btn btn-primary btn-block mb-2">🚀 Apply With Us</Link>
-              <button className="btn btn-outline btn-block text-white border-white/20 hover:bg-white/10 hover:text-white hover:border-white/30"
-                onClick={() => toast.success('Opening official scholarship website...')}>
-                Apply Yourself ↗
-              </button>
-            </div>
+            <div className="rounded-2xl overflow-hidden mb-5 border border-gray-200 shadow-card">
+  <div className="bg-gradient-to-br from-navy-900 to-navy-600 p-5 text-white text-center">
+    <div className="text-2xl mb-2">🎓</div>
+    <h3 className="font-head font-bold text-base mb-1">Apply With ScholarPath BD</h3>
+    <p className="text-xs text-white/60">Our experts handle everything — docs, SOP, submission</p>
+  </div>
+  <div className="bg-white p-4">
+    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 text-center">Choose Your Package</p>
+    <a href="/intake.html" className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all cursor-pointer mb-2 group no-underline">
+      <span className="text-xl">🌱</span>
+      <div className="flex-1 min-w-0">
+        <div className="font-bold text-sm text-navy-800 group-hover:text-blue-700">Basic</div>
+        <div className="text-[11px] text-gray-500">Document checklist + guidance</div>
+      </div>
+      <div className="text-right flex-shrink-0">
+        <div className="font-black text-sm text-navy-800">৳2,500</div>
+        <div className="text-[10px] text-gray-400">one-time</div>
+      </div>
+    </a>
+    <a href="/intake.html" className="flex items-center gap-3 p-3 rounded-xl border-2 border-blue-600 bg-blue-50 cursor-pointer mb-2 group no-underline relative">
+      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">⭐ Most Popular</span>
+      <span className="text-xl">🚀</span>
+      <div className="flex-1 min-w-0">
+        <div className="font-bold text-sm text-blue-700">Standard</div>
+        <div className="text-[11px] text-gray-500">SOP writing + full support</div>
+      </div>
+      <div className="text-right flex-shrink-0">
+        <div className="font-black text-sm text-blue-700">৳5,000</div>
+        <div className="text-[10px] text-gray-400">per scholarship</div>
+      </div>
+    </a>
+    <a href="/intake.html" className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-amber-400 hover:bg-amber-50 transition-all cursor-pointer mb-4 group no-underline">
+      <span className="text-xl">👑</span>
+      <div className="flex-1 min-w-0">
+        <div className="font-bold text-sm text-navy-800 group-hover:text-amber-700">Premium</div>
+        <div className="text-[11px] text-gray-500">End-to-end concierge service</div>
+      </div>
+      <div className="text-right flex-shrink-0">
+        <div className="font-black text-sm text-navy-800">৳8,000</div>
+        <div className="text-[10px] text-gray-400">per scholarship</div>
+      </div>
+    </a>
+    <a href="/intake.html" className="btn btn-primary btn-block text-center no-underline flex items-center justify-center gap-2 mb-3">
+      📋 Start Your Application
+    </a>
+    <div className="flex items-center justify-center gap-3 text-[10px] text-gray-400">
+      <span>✅ 24hr response</span>
+      <span>·</span>
+      <span>🔒 Secure</span>
+      <span>·</span>
+      <span>💬 WhatsApp support</span>
+    </div>
+  </div>
+  <div className="bg-gray-50 border-t border-gray-100 px-4 py-3 text-center">
+    <Link to="/services" className="text-xs text-blue-600 font-semibold hover:text-blue-700">
+      View full package details →
+    </Link>
+  </div>
+</div>
+```
+
+Press `Ctrl+S` → push:
+```
+git add .
+git commit -m "replace apply card with package selector"
+git push
 
             {/* Quick facts */}
 <div className="card p-5 mb-4">
