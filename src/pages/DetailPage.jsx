@@ -141,7 +141,7 @@ export default function DetailPage() {
         <div className="text-[11px] text-gray-500">Document checklist + guidance</div>
       </div>
       <div className="text-right flex-shrink-0">
-        <div className="font-black text-sm text-navy-800">৳2,500</div>
+        <div className="font-black text-sm text-navy-800">৳3,000</div>
         <div className="text-[10px] text-gray-400">one-time</div>
       </div>
     </a>
@@ -153,7 +153,7 @@ export default function DetailPage() {
         <div className="text-[11px] text-gray-500">SOP writing + full support</div>
       </div>
       <div className="text-right flex-shrink-0">
-        <div className="font-black text-sm text-blue-700">৳5,000</div>
+        <div className="font-black text-sm text-blue-700">৳7,500</div>
         <div className="text-[10px] text-gray-400">per scholarship</div>
       </div>
     </a>
@@ -164,7 +164,7 @@ export default function DetailPage() {
         <div className="text-[11px] text-gray-500">End-to-end concierge service</div>
       </div>
       <div className="text-right flex-shrink-0">
-        <div className="font-black text-sm text-navy-800">৳8,000</div>
+        <div className="font-black text-sm text-navy-800">৳10,000</div>
         <div className="text-[10px] text-gray-400">per scholarship</div>
       </div>
     </a>
