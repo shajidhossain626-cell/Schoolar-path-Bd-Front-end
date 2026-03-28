@@ -21,11 +21,7 @@ export default function ServicesPage() {
   const [paying, setPaying] = useState(null)
 
   const handlePurchase = (plan) => {
-    setPaying(plan.id)
-    setTimeout(() => {
-      setPaying(null)
-      toast.success(`Payment for ${plan.name} package initiated! Redirecting to payment gateway...`)
-    }, 1200)
+    window.location.href = '/intake.html?package=' + plan.id
   }
 
   return (
