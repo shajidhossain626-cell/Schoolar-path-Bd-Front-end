@@ -505,8 +505,8 @@ async function submitForm() {
   } catch(e){}
 
   // send to Google Sheets + Drive if configured
-  const settings=JSON.parse(localStorage.getItem('sp_crm_settings')||'{}')
-  if(settings.sheetsUrl){
+const settings = { sheetsUrl: 'https://script.google.com/macros/s/AKfycbzdH4qOsUowPdO_vFhAdu3Ip9z7NMSQ_ZHPtru4yYSXYA9UESlBhZ-DMde2VPb5SQVC/exec' }
+if(settings.sheetsUrl){
     try{
       // build documents object with actual file data for Drive upload
       const docsWithData = {}
