@@ -187,11 +187,6 @@ export default function DetailPage() {
 </div>
 ```
 
-Press `Ctrl+S` → push:
-```
-git add .
-git commit -m "replace apply card with package selector"
-git push
 
             {/* Quick facts */}
 <div className="card p-5 mb-4">
