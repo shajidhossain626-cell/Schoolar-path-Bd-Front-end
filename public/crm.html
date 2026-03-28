@@ -406,7 +406,7 @@ function viewClient(id) {
   if (!cl) return
   document.getElementById('detailTitle').textContent = cl.firstName+' '+cl.lastName
   const prog = {New:10,'In Progress':35,'Documents Ready':60,'Applied':80,'Accepted':100,'Rejected':5}[cl.status||'New']||10
-  const basePrice = cl.package==='Basic'?2500:cl.package==='Standard'?5000:cl.package==='Premium'?8000:0
+  const basePrice = cl.package==='Basic'?3000:cl.package==='Standard'?7500:cl.package==='Premium'?10000:0
   const extras = cl.extraScholarships||0
   const total = basePrice + extras*2500
 
