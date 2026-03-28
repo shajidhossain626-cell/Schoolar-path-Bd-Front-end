@@ -3,893 +3,482 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ScholarPath BD — Client CRM</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono&display=swap" rel="stylesheet">
+<title>ScholarPath BD — Apply Now</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f8f7f4;--bg2:#ffffff;--bg3:#f2f0ec;
-  --navy:#0f2444;--navy2:#1a3a6b;
-  --accent:#1A6BF5;--green:#059669;--amber:#d97706;--red:#dc2626;
-  --border:#e5e2dc;--border2:#d0ccc4;
-  --text:#1a1a1a;--text2:#5a5550;--text3:#9a9590;
-  --r:14px;--shadow:0 2px 20px rgba(0,0,0,.07);
-}
+:root{--navy:#0f2444;--accent:#1A6BF5;--green:#059669;--amber:#d97706;--red:#dc2626;--bg:#f8f7f4;--bg2:#fff;--border:#e5e2dc;--text:#1a1a1a;--text2:#5a5550;--text3:#9a9590;--r:12px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
-input,select,textarea,button{font-family:'DM Sans',sans-serif;font-size:14px}
-
-/* ── LAYOUT ── */
-.shell{display:flex;min-height:100vh}
-.side{width:230px;background:var(--navy);display:flex;flex-direction:column;position:fixed;height:100vh;z-index:10}
-.main{margin-left:230px;flex:1}
-
-/* ── SIDEBAR ── */
-.logo{padding:22px 20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px}
-.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.logo-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2}
-.logo-sub{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em}
-.nav{flex:1;padding:14px 10px;overflow-y:auto}
-.nav-sec{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.12em;padding:14px 12px 6px}
-.nav-btn{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;cursor:pointer;color:rgba(255,255,255,.55);font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
-.nav-btn:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9)}
-.nav-btn.on{background:rgba(26,107,245,.25);color:#fff}
-.nav-btn .ic{font-size:15px;width:20px;text-align:center;flex-shrink:0}
-.side-foot{padding:16px;border-top:1px solid rgba(255,255,255,.08)}
-.side-foot-info{font-size:12px;color:rgba(255,255,255,.4);line-height:1.6}
-
-/* ── TOPBAR ── */
-.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
-.topbar-left{display:flex;align-items:center;gap:12px}
-.page-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--navy)}
-.topbar-right{display:flex;align-items:center;gap:10px}
-.btn{padding:8px 16px;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s}
-.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#1557d4}
-.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--border2);color:var(--text)}
-.btn-sm{padding:5px 11px;font-size:12px}
-.btn-green{background:var(--green);color:#fff}
-.btn-red{background:var(--red);color:#fff}
-
-/* ── CONTENT ── */
-.content{padding:26px 28px}
-.page{display:none}.page.on{display:block}
-
-/* ── STATS ── */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
-.stat::after{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:2px 0 0 2px}
-.stat.blue::after{background:var(--accent)}.stat.green::after{background:var(--green)}.stat.amber::after{background:var(--amber)}.stat.red::after{background:var(--red)}
-.stat-icon{font-size:22px;margin-bottom:10px}
-.stat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--navy);margin-bottom:2px}
-.stat-label{font-size:12px;color:var(--text3);font-weight:500}
-
-/* ── CARD ── */
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-.card-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--navy)}
-.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.sec-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--navy)}
-
-/* ── TABLE ── */
-table{width:100%;border-collapse:collapse}
-th{padding:10px 16px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);background:var(--bg3)}
-td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text2);font-size:13px;vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(26,107,245,.02)}
-.td-name{font-weight:600;color:var(--navy);font-size:13px}
-.td-mono{font-family:'DM Mono',monospace;font-size:11px}
-
-/* ── PILLS ── */
-.pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;gap:4px}
-.pill-blue{background:#eff6ff;color:#1d4ed8}
-.pill-green{background:#f0fdf4;color:#15803d}
-.pill-amber{background:#fffbeb;color:#b45309}
-.pill-red{background:#fef2f2;color:#b91c1c}
-.pill-gray{background:#f3f4f6;color:#4b5563}
-.pill-navy{background:#eff6ff;color:var(--navy2)}
-
-/* ── FORM ── */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.fg{display:flex;flex-direction:column;gap:6px}
-.fg.full{grid-column:1/-1}
-.fg.third{grid-column:span 1}
-label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em}
-.fg input,.fg select,.fg textarea{background:var(--bg);border:1.5px solid var(--border);border-radius:9px;color:var(--text);padding:10px 13px;width:100%;transition:border .15s}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px}
+/* header */
+.header{background:var(--navy);padding:20px 24px;display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.header-icon{width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.header-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#fff}
+.header-sub{font-size:11px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em}
+/* wrap */
+.wrap{max-width:700px;margin:0 auto;padding:0 20px}
+/* hero */
+.hero{text-align:center;margin-bottom:32px}
+.hero-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--navy);margin-bottom:8px}
+.hero-sub{font-size:14px;color:var(--text2);line-height:1.7;max-width:480px;margin:0 auto}
+/* steps */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:32px}
+.step{display:flex;align-items:center;gap:8px}
+.step-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .3s;flex-shrink:0}
+.step-num.done{background:var(--green);color:#fff}
+.step-num.active{background:var(--navy);color:#fff}
+.step-num.wait{background:var(--border);color:var(--text3)}
+.step-label{font-size:11px;font-weight:600;color:var(--text3);white-space:nowrap}
+.step-label.active{color:var(--navy)}
+.step-line{width:40px;height:2px;background:var(--border);margin:0 4px;transition:background .3s;flex-shrink:0}
+.step-line.done{background:var(--green)}
+/* page */
+.form-page{display:none}.form-page.on{display:block}
+/* section */
+.section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:16px}
+.section-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+/* grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}
+/* fields */
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em}
+.fg input,.fg select,.fg textarea{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:10px 12px;width:100%;transition:border .15s;font-family:'DM Sans',sans-serif;font-size:13px}
 .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent);background:#fff}
 .fg textarea{resize:vertical;min-height:80px}
-.form-section{background:var(--bg3);border-radius:var(--r);padding:18px;margin-bottom:16px}
-.form-section-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:7px}
-
-/* ── MODAL ── */
-.overlay{position:fixed;inset:0;background:rgba(15,36,68,.6);backdrop-filter:blur(4px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
-.overlay.on{display:flex}
-.modal{background:var(--bg2);border-radius:16px;width:100%;max-width:740px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border)}
-.modal-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--navy)}
-.close-btn{background:var(--bg3);border:none;color:var(--text2);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
-.close-btn:hover{background:var(--border);color:var(--text)}
-.form-actions{display:flex;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
-
-/* ── CLIENT DETAIL ── */
-.detail-grid{display:grid;grid-template-columns:300px 1fr;gap:20px}
-.profile-card{background:var(--navy);border-radius:var(--r);padding:24px;color:#fff}
-.avatar-big{width:64px;height:64px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:14px}
-.profile-name{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:4px}
-.profile-email{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:16px}
-.profile-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:12px}
-.profile-row:last-child{border-bottom:none}
-.profile-row-label{color:rgba(255,255,255,.4)}
-.profile-row-val{color:#fff;font-weight:500;text-align:right}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.info-item{background:var(--bg3);border-radius:10px;padding:14px}
-.info-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
-.info-val{font-size:13px;font-weight:500;color:var(--navy)}
-.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:6px}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:3px;transition:width .5s}
-.notes-area{background:var(--bg3);border:1.5px solid var(--border);border-radius:9px;color:var(--text);padding:12px;width:100%;min-height:100px;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px}
-.notes-area:focus{outline:none;border-color:var(--accent)}
-
-/* ── INTAKE FORM ── */
-.intake-wrap{max-width:680px;margin:0 auto}
-.intake-header{text-align:center;margin-bottom:32px}
-.intake-logo{width:56px;height:56px;background:var(--navy);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 14px}
-.intake-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--navy);margin-bottom:6px}
-.intake-sub{font-size:14px;color:var(--text2);line-height:1.6}
-.step-indicator{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:32px}
-.step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .3s}
-.step-dot.done{background:var(--green);color:#fff}
-.step-dot.active{background:var(--navy);color:#fff}
-.step-dot.pending{background:var(--border);color:var(--text3)}
-.step-line{height:2px;width:40px;background:var(--border);transition:background .3s}
-.step-line.done{background:var(--green)}
-.intake-step{display:none}.intake-step.on{display:block}
-.success-wrap{text-align:center;padding:40px 20px}
+.required{color:var(--red)}
+/* nav */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+.btn{padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#1557d4}
+.btn-ghost{background:var(--bg);color:var(--text2);border:1.5px solid var(--border)}.btn-ghost:hover{border-color:var(--accent);color:var(--text)}
+.btn-big{padding:13px 32px;font-size:14px}
+.btn-green{background:var(--green);color:#fff}
+/* country checkboxes */
+.country-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.country-opt{display:flex;align-items:center;gap:7px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:12px;transition:all .15s}
+.country-opt:hover{border-color:var(--accent)}
+.country-opt.sel{border-color:var(--accent);background:#eff6ff;color:var(--accent);font-weight:600}
+.country-opt input{display:none}
+/* packages */
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pkg{border:2px solid var(--border);border-radius:var(--r);padding:16px;cursor:pointer;text-align:center;transition:all .2s}
+.pkg:hover{border-color:var(--accent)}
+.pkg.sel{border-color:var(--accent);background:#eff6ff}
+.pkg-icon{font-size:26px;margin-bottom:6px}
+.pkg-name{font-family:'Syne',sans-serif;font-weight:700;color:var(--navy);margin-bottom:4px}
+.pkg-price{font-size:22px;font-weight:800;color:var(--accent);margin-bottom:4px}
+.pkg-desc{font-size:11px;color:var(--text3)}
+/* doc upload */
+.doc-upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.doc-item{border:1.5px solid var(--border);border-radius:9px;padding:12px;position:relative;transition:all .2s}
+.doc-item.uploaded{border-color:var(--green);background:#f0fdf4}
+.doc-name{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:2px}
+.doc-sub{font-size:11px;color:var(--text3);margin-bottom:8px}
+.doc-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px;border:1.5px dashed var(--border);border-radius:7px;cursor:pointer;font-size:11px;color:var(--text2);transition:all .15s;background:var(--bg)}
+.doc-btn:hover{border-color:var(--accent);color:var(--accent)}
+.doc-item.uploaded .doc-btn{border-color:var(--green);color:var(--green);background:#dcfce7}
+.doc-status{font-size:11px;color:var(--green);font-weight:600;margin-top:5px;display:none}
+.doc-item.uploaded .doc-status{display:block}
+.doc-filename{font-size:10px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+/* success */
+.success{text-align:center;padding:48px 20px;background:var(--bg2);border-radius:var(--r);border:1px solid var(--border)}
 .success-icon{font-size:64px;margin-bottom:16px}
-.success-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--navy);margin-bottom:8px}
-.success-sub{color:var(--text2);line-height:1.7;max-width:400px;margin:0 auto}
-
-/* ── SHARE BOX ── */
-.share-box{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:var(--r);padding:20px 24px;color:#fff;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.share-text .share-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px}
-.share-text .share-sub{font-size:12px;color:rgba(255,255,255,.6)}
-.share-url{font-family:'DM Mono',monospace;font-size:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:8px 12px;color:rgba(255,255,255,.8);min-width:280px}
-
-/* ── LOADING ── */
-.loading-box{text-align:center;padding:48px;color:var(--text3)}
-.spin{display:inline-block;width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:10px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty{text-align:center;padding:48px;color:var(--text3)}
-.empty-icon{font-size:40px;margin-bottom:12px}
-
-/* ── TOAST ── */
-.toasts{position:fixed;bottom:22px;right:22px;z-index:999;display:flex;flex-direction:column;gap:8px}
-.toast{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:13px;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow);animation:slideIn .25s ease;min-width:250px}
+.success-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--navy);margin-bottom:10px}
+.success-sub{font-size:14px;color:var(--text2);line-height:1.8;max-width:440px;margin:0 auto 24px}
+.success-card{background:var(--bg);border-radius:10px;padding:16px;display:inline-block;text-align:left;min-width:260px;margin-bottom:20px}
+.success-row{display:flex;justify-content:space-between;gap:20px;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)}
+.success-row:last-child{border:none}
+/* error */
+.err{background:#fef2f2;border:1px solid #fecaca;color:var(--red);padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none}
+/* progress bar */
+.upload-progress{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:5px;display:none}
+.upload-progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s}
+/* toast */
+.toasts{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px}
+.toast{background:#fff;border:1px solid var(--border);border-radius:9px;padding:11px 16px;font-size:13px;box-shadow:0 4px 20px rgba(0,0,0,.1);animation:slideIn .25s ease;min-width:220px}
 .toast.ok{border-color:#86efac}.toast.err{border-color:#fca5a5}
-@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-.search-row{display:flex;gap:10px;margin-bottom:16px}
-.search-input{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:9px;color:var(--text);padding:9px 14px}
-.search-input:focus{outline:none;border-color:var(--accent)}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}.country-grid{grid-template-columns:1fr 1fr}.pkg-grid{grid-template-columns:1fr}.doc-upload-grid{grid-template-columns:1fr}.steps{gap:0}.step-label{display:none}}
 </style>
 </head>
 <body>
-<div class="shell">
 
-<!-- SIDEBAR -->
-<div class="side">
-  <div class="logo">
-    <div class="logo-icon">🎓</div>
-    <div><div class="logo-name">ScholarPath BD</div><div class="logo-sub">Client CRM</div></div>
-  </div>
-  <nav class="nav">
-    <div class="nav-sec">Overview</div>
-    <button class="nav-btn on" onclick="go('dashboard',this)"><span class="ic">📊</span> Dashboard</button>
-    <div class="nav-sec">Clients</div>
-    <button class="nav-btn" onclick="go('clients',this)"><span class="ic">👥</span> All Clients</button>
-    <button class="nav-btn" onclick="go('intake',this)"><span class="ic">📋</span> Intake Form</button>
-    <button class="nav-btn" onclick="go('share',this)"><span class="ic">🔗</span> Share Form Link</button>
-    <div class="nav-sec">Track</div>
-    <button class="nav-btn" onclick="go('applications',this)"><span class="ic">📄</span> Applications</button>
-    <button class="nav-btn" onclick="go('payments',this)"><span class="ic">💳</span> Payments</button>
-    <div class="nav-sec">Settings</div>
-    <button class="nav-btn" onclick="go('settings',this)"><span class="ic">⚙️</span> Settings</button>
-  </nav>
-  <div class="side-foot">
-    <div class="side-foot-info">ScholarPath BD CRM<br>Powered by Google Sheets</div>
-  </div>
+<div class="header">
+  <div class="header-icon">🎓</div>
+  <div><div class="header-name">ScholarPath BD</div><div class="header-sub">Scholarship Application Service</div></div>
 </div>
 
-<!-- MAIN -->
-<div class="main">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="page-title" id="pageTitle">Dashboard</div>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="hero-title">Start Your Scholarship Journey</div>
+    <div class="hero-sub">Fill out this form and upload your documents. Our team will contact you within 24 hours on WhatsApp with a personalised scholarship plan.</div>
+  </div>
+
+  <!-- STEP INDICATOR -->
+  <div class="steps">
+    <div class="step"><div class="step-num active" id="sn1">1</div><div class="step-label active" id="sl1">Personal</div></div>
+    <div class="step-line" id="sl12"></div>
+    <div class="step"><div class="step-num wait" id="sn2">2</div><div class="step-label" id="sl2">Academic</div></div>
+    <div class="step-line" id="sl23"></div>
+    <div class="step"><div class="step-num wait" id="sn3">3</div><div class="step-label" id="sl3">Goals</div></div>
+    <div class="step-line" id="sl34"></div>
+    <div class="step"><div class="step-num wait" id="sn4">4</div><div class="step-label" id="sl4">Documents</div></div>
+  </div>
+
+  <div id="formErr" class="err"></div>
+
+  <!-- PAGE 1: PERSONAL -->
+  <div class="form-page on" id="fp1">
+    <div class="section">
+      <div class="section-title">👤 Personal Information</div>
+      <div class="grid2">
+        <div class="fg"><label>First Name <span class="required">*</span></label><input type="text" id="p-fname" placeholder="Rafiqul"></div>
+        <div class="fg"><label>Last Name <span class="required">*</span></label><input type="text" id="p-lname" placeholder="Alam"></div>
+        <div class="fg"><label>Email Address <span class="required">*</span></label><input type="email" id="p-email" placeholder="rafiqul@gmail.com"></div>
+        <div class="fg"><label>WhatsApp Number <span class="required">*</span></label><input type="tel" id="p-phone" placeholder="+880 1711-000000"></div>
+        <div class="fg"><label>Date of Birth</label><input type="date" id="p-dob"></div>
+        <div class="fg"><label>Gender</label><select id="p-gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="fg full"><label>Current City / Address</label><input type="text" id="p-address" placeholder="Dhaka, Bangladesh"></div>
+      </div>
     </div>
-    <div class="topbar-right">
-      <button class="btn btn-ghost btn-sm" onclick="refresh()">↻ Refresh</button>
-      <button class="btn btn-primary btn-sm" onclick="go('intake',document.querySelector('.nav-btn:nth-child(3))'))">+ Add Client</button>
+    <div class="nav-row">
+      <div></div>
+      <button class="btn btn-primary" onclick="next(1)">Next: Academic Info →</button>
     </div>
   </div>
 
-  <div class="content">
-
-    <!-- DASHBOARD -->
-    <div class="page on" id="page-dashboard">
-      <div class="stats">
-        <div class="stat blue"><div class="stat-icon">👥</div><div class="stat-val" id="s-total">0</div><div class="stat-label">Total Clients</div></div>
-        <div class="stat amber"><div class="stat-icon">⏳</div><div class="stat-val" id="s-active">0</div><div class="stat-label">In Progress</div></div>
-        <div class="stat green"><div class="stat-icon">🎉</div><div class="stat-val" id="s-accepted">0</div><div class="stat-label">Accepted</div></div>
-        <div class="stat red"><div class="stat-icon">💰</div><div class="stat-val" id="s-revenue">৳0</div><div class="stat-label">Total Revenue</div></div>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">Recent Clients</div>
-          <button class="btn btn-ghost btn-sm" onclick="go('clients',null)">View All →</button>
-        </div>
-        <div id="dash-clients"><div class="loading-box"><div class="spin"></div><br>Loading clients...</div></div>
+  <!-- PAGE 2: ACADEMIC -->
+  <div class="form-page" id="fp2">
+    <div class="section">
+      <div class="section-title">🎓 Academic Background</div>
+      <div class="grid2">
+        <div class="fg"><label>University / College <span class="required">*</span></label><input type="text" id="p-uni" placeholder="BUET / Dhaka University / NSU"></div>
+        <div class="fg"><label>Degree Completed</label><select id="p-deg"><option value="">Select</option><option>BSc / Bachelor's</option><option>MSc / Master's</option><option>Diploma</option><option>Other</option></select></div>
+        <div class="fg"><label>Subject / Major <span class="required">*</span></label><input type="text" id="p-major" placeholder="Computer Science, EEE, Business..."></div>
+        <div class="fg"><label>CGPA <span class="required">*</span></label><input type="text" id="p-cgpa" placeholder="3.75 / 4.00 or 75%"></div>
+        <div class="fg"><label>Graduation Year</label><input type="text" id="p-gradyear" placeholder="2022"></div>
+        <div class="fg"><label>Work Experience</label><input type="text" id="p-work" placeholder="2 years at XYZ / Fresher"></div>
+        <div class="fg"><label>IELTS Score (if available)</label><input type="text" id="p-ielts" placeholder="6.5 overall"></div>
+        <div class="fg"><label>TOEFL Score (if available)</label><input type="text" id="p-toefl" placeholder="90"></div>
+        <div class="fg full"><label>Research / Publications / Achievements (optional)</label><textarea id="p-research" placeholder="List any research papers, awards, extra-curricular achievements..."></textarea></div>
       </div>
     </div>
-
-    <!-- CLIENTS -->
-    <div class="page" id="page-clients">
-      <div class="sec-head">
-        <div class="sec-title">All Clients</div>
-        <button class="btn btn-primary" onclick="openAdd()">+ Add New Client</button>
-      </div>
-      <div class="search-row">
-        <input class="search-input" placeholder="🔍 Search by name, email, phone..." id="clientSearch" oninput="filterClients()">
-        <select class="search-input" style="flex:0;width:160px" id="statusFilter" onchange="filterClients()">
-          <option value="">All Status</option>
-          <option value="New">New</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Documents Ready">Documents Ready</option>
-          <option value="Applied">Applied</option>
-          <option value="Accepted">Accepted</option>
-          <option value="Rejected">Rejected</option>
-        </select>
-      </div>
-      <div class="card"><div id="clientsTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="prev(2)">← Back</button>
+      <button class="btn btn-primary" onclick="next(2)">Next: Scholarship Goals →</button>
     </div>
-
-    <!-- INTAKE FORM -->
-    <div class="page" id="page-intake">
-      <div class="intake-wrap">
-        <div class="intake-header">
-          <div class="intake-logo">🎓</div>
-          <div class="intake-title">Client Intake Form</div>
-          <div class="intake-sub">Fill out this form to get started with ScholarPath BD's scholarship application service</div>
-        </div>
-        <div class="step-indicator">
-          <div class="step-dot active" id="sd1">1</div>
-          <div class="step-line" id="sl1"></div>
-          <div class="step-dot pending" id="sd2">2</div>
-          <div class="step-line" id="sl2"></div>
-          <div class="step-dot pending" id="sd3">3</div>
-          <div class="step-line" id="sl3"></div>
-          <div class="step-dot pending" id="sd4">4</div>
-        </div>
-
-        <!-- Step 1: Personal -->
-        <div class="intake-step on" id="step1">
-          <div class="form-section">
-            <div class="form-section-title">👤 Personal Information</div>
-            <div class="form-grid">
-              <div class="fg"><label>First Name *</label><input type="text" id="i-fname" placeholder="Rafiqul"></div>
-              <div class="fg"><label>Last Name *</label><input type="text" id="i-lname" placeholder="Alam"></div>
-              <div class="fg"><label>Email *</label><input type="email" id="i-email" placeholder="rafiqul@email.com"></div>
-              <div class="fg"><label>Phone / WhatsApp *</label><input type="tel" id="i-phone" placeholder="+880 1XXX-XXXXXX"></div>
-              <div class="fg"><label>Date of Birth</label><input type="date" id="i-dob"></div>
-              <div class="fg"><label>Gender</label>
-                <select id="i-gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select>
-              </div>
-              <div class="fg full"><label>Current Address</label><input type="text" id="i-address" placeholder="Dhaka, Bangladesh"></div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:flex-end">
-            <button class="btn btn-primary" onclick="nextStep(1)">Next: Academic Info →</button>
-          </div>
-        </div>
-
-        <!-- Step 2: Academic -->
-        <div class="intake-step" id="step2">
-          <div class="form-section">
-            <div class="form-section-title">🎓 Academic Background</div>
-            <div class="form-grid">
-              <div class="fg"><label>Current/Last University *</label><input type="text" id="i-uni" placeholder="BUET / Dhaka University"></div>
-              <div class="fg"><label>Degree Completed</label>
-                <select id="i-deg"><option value="">Select</option><option>BSc / Bachelor's</option><option>MSc / Master's</option><option>Other</option></select>
-              </div>
-              <div class="fg"><label>Subject / Major *</label><input type="text" id="i-major" placeholder="Computer Science"></div>
-              <div class="fg"><label>CGPA</label><input type="text" id="i-cgpa" placeholder="3.75 / 4.00"></div>
-              <div class="fg"><label>Graduation Year</label><input type="text" id="i-gradyear" placeholder="2023"></div>
-              <div class="fg"><label>IELTS Score</label><input type="text" id="i-ielts" placeholder="6.5 (if available)"></div>
-              <div class="fg"><label>TOEFL Score</label><input type="text" id="i-toefl" placeholder="90 (if available)"></div>
-              <div class="fg"><label>Work Experience</label><input type="text" id="i-work" placeholder="2 years at XYZ Company"></div>
-              <div class="fg full"><label>Research / Publications (if any)</label><textarea id="i-research" placeholder="List any research papers, projects, or publications..."></textarea></div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between">
-            <button class="btn btn-ghost" onclick="prevStep(2)">← Back</button>
-            <button class="btn btn-primary" onclick="nextStep(2)">Next: Target Scholarships →</button>
-          </div>
-        </div>
-
-        <!-- Step 3: Scholarships -->
-        <div class="intake-step" id="step3">
-          <div class="form-section">
-            <div class="form-section-title">🌍 Target Scholarships & Goals</div>
-            <div class="form-grid">
-              <div class="fg"><label>Target Degree *</label>
-                <select id="i-targetdeg"><option value="">Select</option><option>Master's (MSc)</option><option>PhD</option><option>Bachelor's</option><option>Postdoc</option></select>
-              </div>
-              <div class="fg"><label>Preferred Start Year</label><input type="text" id="i-startyear" placeholder="2025 / 2026"></div>
-              <div class="fg full"><label>Target Countries (select all that apply)</label>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px" id="countryCheckboxes"></div>
-              </div>
-              <div class="fg full"><label>Target Field of Study</label><input type="text" id="i-targetfield" placeholder="Computer Science, Engineering, Business..."></div>
-              <div class="fg full"><label>Specific Scholarships Interested In</label><textarea id="i-scholarships" placeholder="DAAD, Chevening, MEXT, Fulbright, GKS..."></textarea></div>
-              <div class="fg full"><label>Why do you want to study abroad?</label><textarea id="i-motivation" placeholder="Your motivation and career goals..."></textarea></div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between">
-            <button class="btn btn-ghost" onclick="prevStep(3)">← Back</button>
-            <button class="btn btn-primary" onclick="nextStep(3)">Next: Documents & Package →</button>
-          </div>
-        </div>
-
-        <!-- Step 4: Documents & Package -->
-        <div class="intake-step" id="step4">
-          <div class="form-section">
-            <div class="form-section-title">📄 Documents Status</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="docChecks"></div>
-          </div>
-          <div class="form-section">
-            <div class="form-section-title">💳 Service Package</div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px" id="packageSelect">
-              <div class="pkg-opt" data-val="Basic" onclick="selectPkg(this)" style="border:2px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;text-align:center;transition:all .2s">
-                <div style="font-size:24px;margin-bottom:6px">🌱</div>
-                <div style="font-weight:700;color:var(--navy);margin-bottom:3px">Basic</div>
-                <div style="font-size:20px;font-weight:800;color:var(--accent)">৳2,500</div>
-                <div style="font-size:11px;color:var(--text3);margin-top:4px">Self-guided + direction</div>
-              </div>
-              <div class="pkg-opt" data-val="Standard" onclick="selectPkg(this)" style="border:2px solid var(--accent);border-radius:10px;padding:16px;cursor:pointer;text-align:center;background:#eff6ff;transition:all .2s">
-                <div style="font-size:24px;margin-bottom:6px">🚀</div>
-                <div style="font-weight:700;color:var(--navy);margin-bottom:3px">Standard</div>
-                <div style="font-size:20px;font-weight:800;color:var(--accent)">৳5,000</div>
-                <div style="font-size:11px;color:var(--text3);margin-top:4px">Full application support</div>
-              </div>
-              <div class="pkg-opt" data-val="Premium" onclick="selectPkg(this)" style="border:2px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;text-align:center;transition:all .2s">
-                <div style="font-size:24px;margin-bottom:6px">👑</div>
-                <div style="font-weight:700;color:var(--navy);margin-bottom:3px">Premium</div>
-                <div style="font-size:20px;font-weight:800;color:var(--accent)">৳8,000</div>
-                <div style="font-size:11px;color:var(--text3);margin-top:4px">End-to-end concierge</div>
-              </div>
-            </div>
-          </div>
-          <div class="form-section">
-            <div class="form-section-title">📝 Additional Notes</div>
-            <div class="fg"><textarea id="i-notes" placeholder="Any special requirements, questions, or additional information..."></textarea></div>
-          </div>
-          <div style="display:flex;justify-content:space-between">
-            <button class="btn btn-ghost" onclick="prevStep(4)">← Back</button>
-            <button class="btn btn-primary" onclick="submitIntake()" id="submitBtn" style="padding:10px 28px">✓ Submit Application</button>
-          </div>
-        </div>
-
-        <!-- Success -->
-        <div class="intake-step" id="stepDone">
-          <div class="success-wrap">
-            <div class="success-icon">🎉</div>
-            <div class="success-title">Application Received!</div>
-            <div class="success-sub">Thank you for choosing ScholarPath BD. Our team will contact you within 24 hours on WhatsApp to discuss your scholarship plan.</div>
-            <button class="btn btn-primary" style="margin-top:24px" onclick="resetIntake()">Submit Another</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SHARE FORM -->
-    <div class="page" id="page-share">
-      <div class="sec-title" style="margin-bottom:20px">Share Intake Form</div>
-      <div class="share-box">
-        <div class="share-text">
-          <div class="share-title">📋 Client Intake Form Link</div>
-          <div class="share-sub">Share this link with potential clients — they fill it out and data saves automatically</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input class="share-url" id="formLink" readonly value="Loading...">
-          <button class="btn btn-primary btn-sm" onclick="copyLink()">Copy</button>
-        </div>
-      </div>
-      <div class="card" style="padding:24px">
-        <div class="card-title" style="margin-bottom:16px">How to share with clients</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
-          <div style="background:var(--bg3);border-radius:10px;padding:16px;text-align:center">
-            <div style="font-size:28px;margin-bottom:8px">💬</div>
-            <div style="font-weight:600;color:var(--navy);margin-bottom:4px">WhatsApp</div>
-            <div style="font-size:12px;color:var(--text2)">Send the link directly in your WhatsApp group or personal chat</div>
-          </div>
-          <div style="background:var(--bg3);border-radius:10px;padding:16px;text-align:center">
-            <div style="font-size:28px;margin-bottom:8px">📘</div>
-            <div style="font-weight:600;color:var(--navy);margin-bottom:4px">Facebook</div>
-            <div style="font-size:12px;color:var(--text2)">Post in scholarship groups with "Fill this form to get started"</div>
-          </div>
-          <div style="background:var(--bg3);border-radius:10px;padding:16px;text-align:center">
-            <div style="font-size:28px;margin-bottom:8px">✉️</div>
-            <div style="font-weight:600;color:var(--navy);margin-bottom:4px">Email</div>
-            <div style="font-size:12px;color:var(--text2)">Send after initial contact to collect all information at once</div>
-          </div>
-        </div>
-      </div>
-      <div class="card" style="padding:24px;margin-top:16px">
-        <div class="card-title" style="margin-bottom:12px">📊 Google Sheets Setup</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.9">
-          To save form submissions to Google Sheets automatically:<br>
-          <strong>1.</strong> Go to <a href="https://sheets.google.com" target="_blank" style="color:var(--accent)">sheets.google.com</a> → Create new sheet named <strong>"ScholarPath CRM"</strong><br>
-          <strong>2.</strong> Go to <strong>Extensions → Apps Script</strong> → paste the script below → Save & Deploy<br>
-          <strong>3.</strong> Copy the Web App URL → paste it in Settings below<br>
-          <strong>4.</strong> Done! Every form submission now saves to your Google Sheet automatically
-        </div>
-        <div style="background:#1e293b;border-radius:9px;padding:16px;margin-top:14px;font-family:'DM Mono',monospace;font-size:11px;color:#94a3b8;overflow-x:auto;white-space:pre" id="scriptCode"></div>
-        <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="copyScript()">Copy Script</button>
-      </div>
-    </div>
-
-    <!-- APPLICATIONS -->
-    <div class="page" id="page-applications">
-      <div class="sec-head"><div class="sec-title">Application Tracker</div></div>
-      <div class="card"><div id="appsTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
-    </div>
-
-    <!-- PAYMENTS -->
-    <div class="page" id="page-payments">
-      <div class="sec-head"><div class="sec-title">Payment Records</div></div>
-      <div class="card"><div id="paysTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
-    </div>
-
-    <!-- SETTINGS -->
-    <div class="page" id="page-settings">
-      <div class="sec-title" style="margin-bottom:20px">Settings</div>
-      <div class="card" style="padding:24px;max-width:520px">
-        <div class="card-title" style="margin-bottom:16px">Google Sheets Integration</div>
-        <div class="fg" style="margin-bottom:14px"><label>Google Apps Script Web App URL</label><input type="text" id="sheetsUrl" placeholder="https://script.google.com/macros/s/..."></div>
-        <div class="fg" style="margin-bottom:20px"><label>Your Name (shown in form)</label><input type="text" id="yourName" placeholder="ScholarPath BD"></div>
-        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
-        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
-          <div class="card-title" style="margin-bottom:10px;font-size:13px">Danger Zone</div>
-          <button class="btn btn-sm" style="background:#fef2f2;color:var(--red);border:1px solid #fecaca" onclick="clearData()">Clear All Local Data</button>
-        </div>
-      </div>
-    </div>
-
   </div>
-</div>
-</div>
 
-<!-- CLIENT DETAIL MODAL -->
-<div class="overlay" id="detailModal">
-  <div class="modal" style="max-width:860px">
-    <div class="modal-head">
-      <div class="modal-title" id="detailName">Client Profile</div>
-      <button class="close-btn" onclick="closeModal('detailModal')">✕</button>
+  <!-- PAGE 3: GOALS -->
+  <div class="form-page" id="fp3">
+    <div class="section">
+      <div class="section-title">🌍 Target Countries</div>
+      <div class="country-grid" id="countryGrid"></div>
     </div>
-    <div id="detailContent"></div>
+    <div class="section">
+      <div class="section-title">🎯 Scholarship Goals</div>
+      <div class="grid2">
+        <div class="fg"><label>Target Degree <span class="required">*</span></label><select id="p-tdeg"><option value="">Select</option><option>Master's (MSc/MA)</option><option>PhD / Doctorate</option><option>Bachelor's</option><option>Postdoc / Research</option></select></div>
+        <div class="fg"><label>Preferred Start</label><input type="text" id="p-start" placeholder="Sep 2025 / Mar 2026"></div>
+        <div class="fg"><label>Target Field</label><input type="text" id="p-tfield" placeholder="CS, Engineering, Business, Medicine..."></div>
+        <div class="fg"><label>Budget for Application</label><select id="p-budget"><option value="">Select</option><option>Self-funded (full)</option><option>Partial support needed</option><option>Fully funded only</option></select></div>
+        <div class="fg full"><label>Scholarships You Know About</label><textarea id="p-schols" placeholder="DAAD, Chevening, MEXT, Fulbright, GKS..."></textarea></div>
+        <div class="fg full"><label>Why do you want to study abroad? <span class="required">*</span></label><textarea id="p-why" placeholder="Your motivation, career goals, what you hope to achieve..."></textarea></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">💳 Service Package</div>
+      <div class="pkg-grid" id="pkgGrid"></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="prev(3)">← Back</button>
+      <button class="btn btn-primary" onclick="next(3)">Next: Upload Documents →</button>
+    </div>
   </div>
+
+  <!-- PAGE 4: DOCUMENTS -->
+  <div class="form-page" id="fp4">
+    <div class="section">
+      <div class="section-title">📄 Upload Your Documents</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7">Upload your available documents below. <strong>PDF, JPG, PNG</strong> accepted. Max 10MB per file. You can skip documents you don't have yet — just upload what you have now.</p>
+      <div class="doc-upload-grid" id="docGrid"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">📝 Anything else to tell us?</div>
+      <div class="fg"><textarea id="p-notes" placeholder="Special requirements, questions, or additional information for our team..."></textarea></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="prev(4)">← Back</button>
+      <button class="btn btn-green btn-big" onclick="submitForm()" id="submitBtn">🚀 Submit Application</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="form-page" id="fpDone">
+    <div class="success">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">Application Submitted!</div>
+      <div class="success-sub">Thank you for choosing ScholarPath BD! Our team will review your profile and contact you on <strong>WhatsApp within 24 hours</strong> with a personalised scholarship plan.</div>
+      <div class="success-card" id="summaryCard"></div>
+      <br>
+      <button class="btn btn-primary" onclick="location.reload()">Submit Another Application</button>
+    </div>
+  </div>
+
 </div>
 
 <div class="toasts" id="toasts"></div>
 
 <script>
-// ── STORAGE ──
-const SK = 'sp_crm_clients'
-const SS = 'sp_crm_settings'
+const COUNTRIES = [
+  {flag:'🇩🇪',name:'Germany'},{flag:'🇬🇧',name:'United Kingdom'},
+  {flag:'🇺🇸',name:'United States'},{flag:'🇨🇦',name:'Canada'},
+  {flag:'🇦🇺',name:'Australia'},{flag:'🇯🇵',name:'Japan'},
+  {flag:'🇰🇷',name:'South Korea'},{flag:'🇨🇳',name:'China'},
+  {flag:'🇫🇷',name:'France'},{flag:'🇸🇪',name:'Sweden'},
+  {flag:'🇳🇴',name:'Norway'},{flag:'🇳🇱',name:'Netherlands'},
+  {flag:'🇹🇷',name:'Turkey'},{flag:'🇭🇺',name:'Hungary'},
+  {flag:'🇳🇿',name:'New Zealand'},{flag:'🇸🇬',name:'Singapore'},
+  {flag:'🇹🇼',name:'Taiwan'},{flag:'🇪🇺',name:'Europe (Any)'},
+]
 
-function getClients() { try { return JSON.parse(localStorage.getItem(SK)||'[]') } catch { return [] } }
-function saveClients(c) { localStorage.setItem(SK, JSON.stringify(c)) }
-function getSettings() { try { return JSON.parse(localStorage.getItem(SS)||'{}') } catch { return {} } }
-function saveSettingsData(s) { localStorage.setItem(SS, JSON.stringify(s)) }
+const DOCS = [
+  {id:'passport', name:'Passport', sub:'Valid passport (photo page)', required:true},
+  {id:'transcript', name:'Academic Transcripts', sub:'All semester mark sheets', required:true},
+  {id:'certificate', name:'Degree Certificate', sub:'Bachelor\'s or Master\'s certificate', required:true},
+  {id:'ielts', name:'IELTS / TOEFL', sub:'English proficiency certificate', required:false},
+  {id:'cv', name:'CV / Resume', sub:'Updated curriculum vitae', required:false},
+  {id:'sop', name:'Statement of Purpose', sub:'If already written', required:false},
+  {id:'recommendation', name:'Recommendation Letters', sub:'From professor or employer', required:false},
+  {id:'nid', name:'National ID', sub:'NID card copy', required:false},
+  {id:'photo', name:'Passport Photo', sub:'Recent photo (white background)', required:false},
+  {id:'other', name:'Other Documents', sub:'Any other relevant files', required:false},
+]
 
-let allClients = getClients()
-let selectedPkg = 'Standard'
+const PACKAGES = [
+  {val:'Basic', icon:'🌱', price:'৳2,500', desc:'Self-guided with expert direction'},
+  {val:'Standard', icon:'🚀', price:'৳5,000', desc:'Full application support & SOP writing'},
+  {val:'Premium', icon:'👑', price:'৳8,000', desc:'End-to-end concierge service'},
+]
+
 let selectedCountries = new Set()
+let selectedPkg = 'Standard'
+let uploadedFiles = {}
+let currentStep = 1
 
-// ── NAV ──
-const titles = {dashboard:'Dashboard',clients:'All Clients',intake:'Client Intake Form',share:'Share Form Link',applications:'Application Tracker',payments:'Payment Records',settings:'Settings'}
-function go(page, btn) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'))
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'))
-  document.getElementById('page-'+page).classList.add('on')
-  if (btn) btn.classList.add('on')
-  else {
-    document.querySelectorAll('.nav-btn').forEach(b=>{
-      if (b.textContent.toLowerCase().includes(page.substring(0,4))) b.classList.add('on')
-    })
-  }
-  document.getElementById('pageTitle').textContent = titles[page]||page
-  if (page==='dashboard') renderDashboard()
-  if (page==='clients') renderClients()
-  if (page==='applications') renderApps()
-  if (page==='payments') renderPays()
-  if (page==='share') renderShare()
-  if (page==='settings') loadSettings()
-  if (page==='intake') initIntake()
-}
-function refresh() { go(document.querySelector('.page.on')?.id?.replace('page-','')||'dashboard') }
-
-// ── DASHBOARD ──
-function renderDashboard() {
-  const c = getClients()
-  const total = c.length
-  const active = c.filter(x=>x.status==='In Progress'||x.status==='Applied'||x.status==='Documents Ready').length
-  const accepted = c.filter(x=>x.status==='Accepted').length
-  const revenue = c.reduce((s,x)=>s+(x.packagePaid||0),0)
-  document.getElementById('s-total').textContent = total
-  document.getElementById('s-active').textContent = active
-  document.getElementById('s-accepted').textContent = accepted
-  document.getElementById('s-revenue').textContent = '৳'+revenue.toLocaleString()
-  const recent = [...c].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,8)
-  document.getElementById('dash-clients').innerHTML = recent.length
-    ? `<table><thead><tr><th>Client</th><th>Package</th><th>Target</th><th>Status</th><th>Date</th></tr></thead><tbody>
-        ${recent.map(cl=>`<tr style="cursor:pointer" onclick="viewClient('${cl.id}')">
-          <td><div class="td-name">${cl.firstName} ${cl.lastName}</div><div class="td-mono">${cl.email}</div></td>
-          <td><span class="pill ${pkgPill(cl.package)}">${cl.package||'—'}</span></td>
-          <td style="font-size:12px">${cl.targetDegree||'—'} · ${(cl.targetCountries||[]).slice(0,2).join(', ')||'—'}</td>
-          <td><span class="pill ${statPill(cl.status)}">${cl.status||'New'}</span></td>
-          <td style="font-size:12px">${fmt(cl.createdAt)}</td>
-        </tr>`).join('')}
-      </tbody></table>`
-    : '<div class="empty"><div class="empty-icon">👥</div>No clients yet — share your intake form to get started!</div>'
-}
-
-// ── CLIENTS ──
-function renderClients(list) {
-  const c = list || getClients()
-  document.getElementById('clientsTable').innerHTML = c.length
-    ? `<table><thead><tr><th>Client</th><th>Phone</th><th>University</th><th>CGPA</th><th>IELTS</th><th>Package</th><th>Status</th><th>Actions</th></tr></thead><tbody>
-        ${c.map(cl=>`<tr>
-          <td><div class="td-name">${cl.firstName} ${cl.lastName}</div><div class="td-mono">${cl.email}</div></td>
-          <td class="td-mono">${cl.phone||'—'}</td>
-          <td style="font-size:12px">${cl.university||'—'}</td>
-          <td style="font-weight:600;color:var(--navy)">${cl.cgpa||'—'}</td>
-          <td style="font-weight:600;color:${cl.ielts?'var(--green)':'var(--text3)'}">${cl.ielts||'—'}</td>
-          <td><span class="pill ${pkgPill(cl.package)}">${cl.package||'—'}</span></td>
-          <td>
-            <select class="btn btn-ghost btn-sm" onchange="updateStatus('${cl.id}',this.value);this.value=cl.status||'New'" style="padding:4px 8px">
-              ${['New','In Progress','Documents Ready','Applied','Accepted','Rejected'].map(s=>`<option value="${s}"${(cl.status||'New')===s?' selected':''}>${s}</option>`).join('')}
-            </select>
-          </td>
-          <td><div style="display:flex;gap:5px">
-            <button class="btn btn-ghost btn-sm" onclick="viewClient('${cl.id}')">👁️</button>
-            <button class="btn btn-sm" style="background:#fef2f2;color:var(--red);border:1px solid #fecaca" onclick="deleteClient('${cl.id}')">🗑️</button>
-          </div></td>
-        </tr>`).join('')}
-      </tbody></table>`
-    : '<div class="empty"><div class="empty-icon">👥</div>No clients yet</div>'
-}
-
-function filterClients() {
-  const q = document.getElementById('clientSearch').value.toLowerCase()
-  const s = document.getElementById('statusFilter').value
-  const c = getClients().filter(cl => {
-    const match = `${cl.firstName} ${cl.lastName} ${cl.email} ${cl.phone}`.toLowerCase().includes(q)
-    const statusMatch = !s || (cl.status||'New') === s
-    return match && statusMatch
-  })
-  renderClients(c)
-}
-
-function updateStatus(id, status) {
-  const clients = getClients()
-  const i = clients.findIndex(c=>c.id===id)
-  if (i>=0) { clients[i].status = status; saveClients(clients); toast('✅ Status updated to '+status,'ok') }
-  renderClients()
-}
-
-function deleteClient(id) {
-  if (!confirm('Delete this client? This cannot be undone.')) return
-  const c = getClients().filter(cl=>cl.id!==id)
-  saveClients(c)
-  renderClients()
-  toast('Client deleted','ok')
-}
-
-// ── VIEW CLIENT ──
-function viewClient(id) {
-  const cl = getClients().find(c=>c.id===id)
-  if (!cl) return
-  document.getElementById('detailName').textContent = cl.firstName+' '+cl.lastName
-  const progress = {New:10,'In Progress':35,'Documents Ready':60,'Applied':80,'Accepted':100,'Rejected':0}[cl.status||'New']||10
-  document.getElementById('detailContent').innerHTML = `
-    <div class="detail-grid">
-      <div>
-        <div class="profile-card">
-          <div class="avatar-big">${cl.firstName?.[0]||'?'}${cl.lastName?.[0]||''}</div>
-          <div class="profile-name">${cl.firstName} ${cl.lastName}</div>
-          <div class="profile-email">${cl.email}</div>
-          <div class="profile-row"><span class="profile-row-label">Phone</span><span class="profile-row-val">${cl.phone||'—'}</span></div>
-          <div class="profile-row"><span class="profile-row-label">Package</span><span class="profile-row-val">${cl.package||'—'}</span></div>
-          <div class="profile-row"><span class="profile-row-label">Status</span><span class="profile-row-val">${cl.status||'New'}</span></div>
-          <div class="profile-row"><span class="profile-row-label">Added</span><span class="profile-row-val">${fmt(cl.createdAt)}</span></div>
-        </div>
-        <div style="margin-top:14px">
-          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;margin-bottom:6px">Progress</div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
-          <div style="font-size:11px;color:var(--text3);margin-top:4px">${cl.status||'New'} — ${progress}%</div>
-        </div>
-      </div>
-      <div>
-        <div class="info-grid" style="margin-bottom:14px">
-          <div class="info-item"><div class="info-label">University</div><div class="info-val">${cl.university||'—'}</div></div>
-          <div class="info-item"><div class="info-label">CGPA</div><div class="info-val">${cl.cgpa||'—'}</div></div>
-          <div class="info-item"><div class="info-label">IELTS</div><div class="info-val">${cl.ielts||'—'}</div></div>
-          <div class="info-item"><div class="info-label">Target Degree</div><div class="info-val">${cl.targetDegree||'—'}</div></div>
-          <div class="info-item"><div class="info-label">Target Countries</div><div class="info-val">${(cl.targetCountries||[]).join(', ')||'—'}</div></div>
-          <div class="info-item"><div class="info-label">Scholarships</div><div class="info-val">${cl.scholarships||'—'}</div></div>
-        </div>
-        <div style="margin-bottom:14px">
-          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Documents Status</div>
-          <div style="display:flex;flex-wrap:wrap;gap:7px">
-            ${Object.entries(cl.documents||{}).map(([k,v])=>`<span class="pill ${v?'pill-green':'pill-gray'}">${v?'✅':'⏳'} ${k}</span>`).join('')||'<span style="color:var(--text3);font-size:12px">No document info</span>'}
-          </div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;margin-bottom:6px">Notes</div>
-          <textarea class="notes-area" id="notesFor_${id}" placeholder="Add notes about this client...">${cl.notes||''}</textarea>
-          <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="saveNotes('${id}')">Save Notes</button>
-        </div>
-      </div>
+// ── INIT ──
+function init() {
+  // countries
+  document.getElementById('countryGrid').innerHTML = COUNTRIES.map(c=>
+    `<div class="country-opt" id="co_${c.name.replace(/\s/g,'_')}" onclick="toggleCountry('${c.name}',this)">
+      <span>${c.flag}</span><span>${c.name}</span>
     </div>`
-  document.getElementById('detailModal').classList.add('on')
-}
-
-function saveNotes(id) {
-  const notes = document.getElementById('notesFor_'+id)?.value
-  const clients = getClients()
-  const i = clients.findIndex(c=>c.id===id)
-  if (i>=0) { clients[i].notes = notes; saveClients(clients); toast('✅ Notes saved','ok') }
-}
-
-// ── INTAKE FORM ──
-const COUNTRIES = ['Germany','United Kingdom','United States','Canada','Australia','Japan','South Korea','China','France','Netherlands','Sweden','Norway','Turkey','Hungary','New Zealand','Singapore','Taiwan']
-const DOCS = ['Passport','Academic Transcripts','IELTS/TOEFL Certificate','Bachelor\'s Certificate','CV/Resume','Statement of Purpose','Recommendation Letters','Birth Certificate','National ID','Police Clearance']
-
-function initIntake() {
-  // country checkboxes
-  document.getElementById('countryCheckboxes').innerHTML = COUNTRIES.map(c=>
-    `<label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:4px 8px;background:var(--bg2);border-radius:6px;border:1px solid var(--border)">
-      <input type="checkbox" value="${c}" onchange="toggleCountry('${c}',this.checked)"> ${c}
-    </label>`
   ).join('')
-  // doc checkboxes
-  document.getElementById('docChecks').innerHTML = DOCS.map(d=>
-    `<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;padding:10px 12px;background:var(--bg2);border-radius:8px;border:1px solid var(--border)">
-      <input type="checkbox" id="doc_${d.replace(/[^a-z]/gi,'_')}" style="width:15px;height:15px;accent-color:var(--green)"> ${d}
-    </label>`
+
+  // packages
+  document.getElementById('pkgGrid').innerHTML = PACKAGES.map(p=>
+    `<div class="pkg${p.val==='Standard'?' sel':''}" onclick="selPkg('${p.val}',this)">
+      <div class="pkg-icon">${p.icon}</div>
+      <div class="pkg-name">${p.val}</div>
+      <div class="pkg-price">${p.price}</div>
+      <div class="pkg-desc">${p.desc}</div>
+    </div>`
+  ).join('')
+
+  // docs
+  document.getElementById('docGrid').innerHTML = DOCS.map(d=>
+    `<div class="doc-item" id="di_${d.id}">
+      <div class="doc-name">${d.name}${d.required?' <span style="color:var(--red)">*</span>':''}</div>
+      <div class="doc-sub">${d.sub}</div>
+      <label class="doc-btn" for="df_${d.id}">
+        <span id="dbtn_${d.id}">📎 Choose File</span>
+      </label>
+      <input type="file" id="df_${d.id}" style="display:none" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="handleFile('${d.id}',this)">
+      <div class="upload-progress" id="dp_${d.id}"><div class="upload-progress-fill" id="dpf_${d.id}" style="width:0"></div></div>
+      <div class="doc-status" id="ds_${d.id}">✅ Uploaded</div>
+      <div class="doc-filename" id="df2_${d.id}"></div>
+    </div>`
   ).join('')
 }
 
-function toggleCountry(c, checked) {
-  checked ? selectedCountries.add(c) : selectedCountries.delete(c)
+// ── COUNTRIES ──
+function toggleCountry(name, el) {
+  if (selectedCountries.has(name)) {
+    selectedCountries.delete(name)
+    el.classList.remove('sel')
+  } else {
+    selectedCountries.add(name)
+    el.classList.add('sel')
+  }
 }
 
-function selectPkg(el) {
-  document.querySelectorAll('.pkg-opt').forEach(p=>{p.style.borderColor='var(--border)';p.style.background='';})
-  el.style.borderColor = 'var(--accent)'
-  el.style.background = '#eff6ff'
-  selectedPkg = el.dataset.val
+// ── PACKAGE ──
+function selPkg(val, el) {
+  selectedPkg = val
+  document.querySelectorAll('.pkg').forEach(p=>p.classList.remove('sel'))
+  el.classList.add('sel')
 }
 
-function nextStep(current) {
-  if (current===1) {
-    if (!v('i-fname')||!v('i-lname')||!v('i-email')||!v('i-phone'))
-      return toast('Please fill all required fields (*)','err')
+// ── FILE UPLOAD ──
+function handleFile(docId, input) {
+  const file = input.files[0]
+  if (!file) return
+  if (file.size > 10 * 1024 * 1024) { toast('File too large! Max 10MB','err'); return }
+
+  // show progress
+  const prog = document.getElementById('dp_'+docId)
+  const fill = document.getElementById('dpf_'+docId)
+  prog.style.display = 'block'
+
+  // simulate upload progress
+  let width = 0
+  const interval = setInterval(()=>{
+    width += Math.random()*25
+    if (width >= 100) { width = 100; clearInterval(interval) }
+    fill.style.width = width + '%'
+  }, 100)
+
+  // read file as base64
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    uploadedFiles[docId] = {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      data: e.target.result, // base64
+    }
+    setTimeout(()=>{
+      document.getElementById('di_'+docId).classList.add('uploaded')
+      document.getElementById('dbtn_'+docId).textContent = '✏️ Change File'
+      document.getElementById('ds_'+docId).style.display = 'block'
+      document.getElementById('df2_'+docId).textContent = file.name
+      toast('✅ '+file.name+' uploaded','ok')
+    }, 800)
   }
-  if (current===2) {
-    if (!v('i-uni')) return toast('Please enter your university','err')
-  }
-  showStep(current+1)
+  reader.readAsDataURL(file)
 }
-function prevStep(current) { showStep(current-1) }
+
+// ── NAVIGATION ──
+function next(step) {
+  // validate
+  if (step===1) {
+    if (!g('p-fname')||!g('p-lname')||!g('p-email')||!g('p-phone'))
+      return showErr('Please fill all required fields (marked with *)')
+    if (!g('p-email').includes('@'))
+      return showErr('Please enter a valid email address')
+  }
+  if (step===2) {
+    if (!g('p-uni')||!g('p-major')||!g('p-cgpa'))
+      return showErr('Please fill all required fields (marked with *)')
+  }
+  if (step===3) {
+    if (!g('p-tdeg'))
+      return showErr('Please select your target degree level')
+    if (!g('p-why'))
+      return showErr('Please tell us why you want to study abroad')
+    if (selectedCountries.size === 0)
+      return showErr('Please select at least one target country')
+  }
+  hideErr()
+  showStep(step+1)
+}
+
+function prev(step) { hideErr(); showStep(step-1) }
 
 function showStep(n) {
-  document.querySelectorAll('.intake-step').forEach(s=>s.classList.remove('on'))
-  document.getElementById('step'+n)?.classList.add('on')
-  for(let i=1;i<=4;i++){
-    const dot=document.getElementById('sd'+i)
-    if(i<n){dot.className='step-dot done';dot.textContent='✓'}
-    else if(i===n){dot.className='step-dot active';dot.textContent=i}
-    else{dot.className='step-dot pending';dot.textContent=i}
-    if(i<4){document.getElementById('sl'+i).className='step-line'+(i<n?' done':'')}
+  currentStep = n
+  document.querySelectorAll('.form-page').forEach(p=>p.classList.remove('on'))
+  document.getElementById('fp'+(n==='Done'?'Done':n)).classList.add('on')
+  for (let i=1;i<=4;i++) {
+    const num = document.getElementById('sn'+i)
+    const lbl = document.getElementById('sl'+i)
+    if (!num) continue
+    if (i < n) { num.className='step-num done'; num.textContent='✓' }
+    else if (i === n) { num.className='step-num active'; num.textContent=i; lbl.className='step-label active' }
+    else { num.className='step-num wait'; num.textContent=i; lbl.className='step-label' }
+    if (i < 4) { const line=document.getElementById('sl'+i+(i+1)); if(line) line.className='step-line'+(i<n?' done':'') }
   }
+  window.scrollTo({top:0,behavior:'smooth'})
 }
 
-function submitIntake() {
+// ── SUBMIT ──
+async function submitForm() {
   const btn = document.getElementById('submitBtn')
-  btn.textContent = '⏳ Saving...'
+  btn.textContent = '⏳ Submitting...'
   btn.disabled = true
 
-  const docStatus = {}
-  DOCS.forEach(d=>{
-    const el = document.getElementById('doc_'+d.replace(/[^a-z]/gi,'_'))
-    if(el) docStatus[d] = el.checked
-  })
-
-  const client = {
+  const data = {
     id: 'cl_'+Date.now(),
-    firstName: v('i-fname'), lastName: v('i-lname'),
-    email: v('i-email'), phone: v('i-phone'),
-    dob: v('i-dob'), gender: v('i-gender'), address: v('i-address'),
-    university: v('i-uni'), degree: v('i-deg'), major: v('i-major'),
-    cgpa: v('i-cgpa'), gradYear: v('i-gradyear'),
-    ielts: v('i-ielts'), toefl: v('i-toefl'),
-    workExp: v('i-work'), research: v('i-research'),
-    targetDegree: v('i-targetdeg'), startYear: v('i-startyear'),
+    // personal
+    firstName: g('p-fname'), lastName: g('p-lname'),
+    email: g('p-email'), phone: g('p-phone'),
+    dob: g('p-dob'), gender: g('p-gender'), address: g('p-address'),
+    // academic
+    university: g('p-uni'), degree: g('p-deg'), major: g('p-major'),
+    cgpa: g('p-cgpa'), gradYear: g('p-gradyear'), workExp: g('p-work'),
+    ielts: g('p-ielts'), toefl: g('p-toefl'), research: g('p-research'),
+    // goals
+    targetDegree: g('p-tdeg'), startDate: g('p-start'),
+    targetField: g('p-tfield'), budget: g('p-budget'),
+    scholarships: g('p-schols'), motivation: g('p-why'),
     targetCountries: [...selectedCountries],
-    targetField: v('i-targetfield'),
-    scholarships: v('i-scholarships'),
-    motivation: v('i-motivation'),
-    documents: docStatus,
+    // package
     package: selectedPkg,
-    packagePaid: selectedPkg==='Basic'?2500:selectedPkg==='Standard'?5000:8000,
-    notes: v('i-notes'),
+    packageAmount: selectedPkg==='Basic'?2500:selectedPkg==='Standard'?5000:8000,
+    // documents list (without base64 for storage)
+    documents: Object.fromEntries(Object.entries(uploadedFiles).map(([k,v])=>[k,v.name])),
+    notes: g('p-notes'),
     status: 'New',
     createdAt: new Date().toISOString(),
   }
 
-  // save locally
-  const clients = getClients()
-  clients.unshift(client)
-  saveClients(clients)
+  // save to localStorage (CRM will read this)
+  try {
+    const existing = JSON.parse(localStorage.getItem('sp_crm_clients')||'[]')
+    existing.unshift(data)
+    localStorage.setItem('sp_crm_clients', JSON.stringify(existing))
+  } catch(e) {}
 
-  // try to send to Google Sheets if configured
-  const settings = getSettings()
+  // try sending to Google Sheets if configured
+  const settings = JSON.parse(localStorage.getItem('sp_crm_settings')||'{}')
   if (settings.sheetsUrl) {
-    fetch(settings.sheetsUrl, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(client)
-    }).catch(()=>{})
+    try {
+      await fetch(settings.sheetsUrl, {
+        method:'POST', mode:'no-cors',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({...data, documents: Object.keys(uploadedFiles).join(', ')})
+      })
+    } catch(e) {}
   }
 
-  setTimeout(()=>{
-    btn.textContent = '✓ Submit Application'
-    btn.disabled = false
-    showStep('Done')
-    toast('✅ Client added successfully!','ok')
-  }, 800)
-}
+  // show success
+  document.getElementById('summaryCard').innerHTML = `
+    <div class="success-row"><span style="color:var(--text3)">Name</span><strong>${data.firstName} ${data.lastName}</strong></div>
+    <div class="success-row"><span style="color:var(--text3)">Email</span><span>${data.email}</span></div>
+    <div class="success-row"><span style="color:var(--text3)">WhatsApp</span><span>${data.phone}</span></div>
+    <div class="success-row"><span style="color:var(--text3)">Package</span><strong style="color:var(--accent)">${data.package} (${data.packageAmount.toLocaleString()} BDT)</strong></div>
+    <div class="success-row"><span style="color:var(--text3)">Target</span><span>${data.targetDegree} · ${[...selectedCountries].slice(0,3).join(', ')}</span></div>
+    <div class="success-row"><span style="color:var(--text3)">Documents</span><span>${Object.keys(uploadedFiles).length} file(s) uploaded</span></div>
+  `
 
-function resetIntake() {
-  showStep(1)
-  selectedCountries = new Set()
-  selectedPkg = 'Standard'
-  ;['i-fname','i-lname','i-email','i-phone','i-dob','i-address','i-uni','i-major','i-cgpa','i-gradyear','i-ielts','i-toefl','i-work','i-research','i-targetfield','i-scholarships','i-motivation','i-notes'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.value=''
-  })
-  initIntake()
-}
-
-// ── APPLICATIONS ──
-function renderApps() {
-  const c = getClients()
-  const rows = c.flatMap(cl=>(cl.targetCountries||[]).map(country=>({
-    name: cl.firstName+' '+cl.lastName,
-    email: cl.email,
-    country,
-    scholarship: cl.scholarships?.split(',')[0]?.trim()||'TBD',
-    status: cl.status||'New',
-    package: cl.package,
-    id: cl.id
-  })))
-  document.getElementById('appsTable').innerHTML = rows.length
-    ? `<table><thead><tr><th>Client</th><th>Target Country</th><th>Scholarship</th><th>Package</th><th>Status</th></tr></thead><tbody>
-        ${rows.map(r=>`<tr style="cursor:pointer" onclick="viewClient('${r.id}')">
-          <td><div class="td-name">${r.name}</div><div class="td-mono">${r.email}</div></td>
-          <td>${r.country}</td>
-          <td style="font-size:12px">${r.scholarship}</td>
-          <td><span class="pill ${pkgPill(r.package)}">${r.package||'—'}</span></td>
-          <td><span class="pill ${statPill(r.status)}">${r.status}</span></td>
-        </tr>`).join('')}
-      </tbody></table>`
-    : '<div class="empty"><div class="empty-icon">📄</div>No applications tracked yet</div>'
-}
-
-// ── PAYMENTS ──
-function renderPays() {
-  const c = getClients().filter(cl=>cl.package)
-  document.getElementById('paysTable').innerHTML = c.length
-    ? `<table><thead><tr><th>Client</th><th>Package</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>
-        ${c.map(cl=>`<tr>
-          <td><div class="td-name">${cl.firstName} ${cl.lastName}</div><div class="td-mono">${cl.email}</div></td>
-          <td><span class="pill ${pkgPill(cl.package)}">${cl.package}</span></td>
-          <td style="font-weight:700;color:var(--green)">৳${(cl.packagePaid||0).toLocaleString()}</td>
-          <td><span class="pill pill-amber">Pending</span></td>
-          <td style="font-size:12px">${fmt(cl.createdAt)}</td>
-        </tr>`).join('')}
-      </tbody></table>`
-    : '<div class="empty"><div class="empty-icon">💳</div>No payments yet</div>'
-}
-
-// ── SHARE ──
-function renderShare() {
-  const url = window.location.href.replace('#','').split('?')[0]
-  document.getElementById('formLink').value = url + '?intake=1'
-  // show Google Apps Script code
-  document.getElementById('scriptCode').textContent = `function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet()
-    .getSheetByName('Clients') || 
-    SpreadsheetApp.getActiveSpreadsheet().insertSheet('Clients');
-  var data = JSON.parse(e.postData.contents);
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['ID','Name','Email','Phone','University',
-      'CGPA','IELTS','Package','Amount','Target Countries',
-      'Scholarships','Status','Date']);
-  }
-  sheet.appendRow([
-    data.id, data.firstName+' '+data.lastName,
-    data.email, data.phone, data.university,
-    data.cgpa, data.ielts, data.package, data.packagePaid,
-    (data.targetCountries||[]).join(', '),
-    data.scholarships, data.status, data.createdAt
-  ]);
-  return ContentService.createTextOutput(
-    JSON.stringify({success:true})
-  ).setMimeType(ContentService.MimeType.JSON);
-}`
-}
-
-function copyLink() {
-  const v = document.getElementById('formLink').value
-  navigator.clipboard.writeText(v).then(()=>toast('✅ Link copied!','ok'))
-}
-
-function copyScript() {
-  const v = document.getElementById('scriptCode').textContent
-  navigator.clipboard.writeText(v).then(()=>toast('✅ Script copied!','ok'))
-}
-
-// ── SETTINGS ──
-function loadSettings() {
-  const s = getSettings()
-  document.getElementById('sheetsUrl').value = s.sheetsUrl||''
-  document.getElementById('yourName').value = s.yourName||'ScholarPath BD'
-}
-function saveSettings() {
-  saveSettingsData({
-    sheetsUrl: document.getElementById('sheetsUrl').value.trim(),
-    yourName: document.getElementById('yourName').value.trim()
-  })
-  toast('✅ Settings saved','ok')
-}
-function clearData() {
-  if (confirm('Delete ALL client data? This cannot be undone!')) {
-    localStorage.removeItem(SK)
-    toast('All data cleared','ok')
-    renderDashboard()
-  }
+  btn.textContent = '🚀 Submit Application'
+  btn.disabled = false
+  showStep('Done')
 }
 
 // ── HELPERS ──
-function v(id) { return document.getElementById(id)?.value?.trim()||'' }
-function fmt(d) { if(!d) return '—'; return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) }
-function pkgPill(p) { return {Basic:'pill-blue',Standard:'pill-green',Premium:'pill-navy'}[p]||'pill-gray' }
-function statPill(s) { return {'New':'pill-blue','In Progress':'pill-amber','Documents Ready':'pill-amber','Applied':'pill-amber','Accepted':'pill-green','Rejected':'pill-red'}[s]||'pill-gray' }
-function closeModal(id) { document.getElementById(id).classList.remove('on') }
-function openAdd() { go('intake', document.querySelectorAll('.nav-btn')[3]); setTimeout(()=>document.getElementById('i-fname')?.focus(),100) }
+function g(id) { return document.getElementById(id)?.value?.trim()||'' }
+function showErr(msg) { const e=document.getElementById('formErr'); e.style.display='block'; e.textContent=msg; window.scrollTo({top:0,behavior:'smooth'}) }
+function hideErr() { document.getElementById('formErr').style.display='none' }
 function toast(msg, type='ok') {
   const t=document.createElement('div')
-  t.className='toast '+type
-  t.textContent=msg
+  t.className='toast '+type; t.textContent=msg
   document.getElementById('toasts').appendChild(t)
   setTimeout(()=>t.remove(),3000)
 }
 
-// auto-open intake if ?intake=1
-window.onload = () => {
-  renderDashboard()
-  if (window.location.search.includes('intake=1')) {
-    go('intake', document.querySelectorAll('.nav-btn')[3])
-  }
-}
+init()
 </script>
 </body>
 </html>
