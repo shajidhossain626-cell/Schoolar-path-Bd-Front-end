@@ -70,7 +70,7 @@ const PACKAGES = [
       
     ],
     extra: true,
-    note: '➕ Additional scholarships: ৳2,500 each',
+    note: '➕ Additional scholarships: ৳3,500 each',
     cta: 'Get Premium →',
     ctaStyle: 'btn-blue',
     href: '/intake.html?package=premium',
@@ -158,7 +158,7 @@ export default function ServicesPage() {
                       </div>
                       {(extraSchols[pkg.id]||0) > 0 && (
                         <div className="text-[11px] text-blue-600 mt-2 font-medium">
-                          1 included + {extraSchols[pkg.id]} extra × ৳2,500 = ৳{totalPrice(pkg).toLocaleString()}
+                          1 included + {extraSchols[pkg.id]} extra × ৳3,500 = ৳{totalPrice(pkg).toLocaleString()}
                         </div>
                       )}
                     </div>
@@ -210,13 +210,13 @@ export default function ServicesPage() {
                 <div className="text-sm font-bold text-navy-800 mb-1">{item.schol}</div>
                 {item.included
                   ? <div className="text-xs text-green-600 font-bold">✅ Included in package</div>
-                  : <div className="text-xs text-blue-600 font-bold">➕ +৳2,500</div>
+                  : <div className="text-xs text-blue-600 font-bold">➕ +৳3,500</div>
                 }
               </div>
             ))}
           </div>
           <div className="text-center mt-4">
-            <div className="text-sm text-gray-600">Standard ৳5,000 + 2 extra scholarships × ৳2,500 = <strong className="text-navy-800">৳10,000 total</strong></div>
+            <div className="text-sm text-gray-600">Standard ৳7,500 + 2 extra scholarships × ৳3,500 = <strong className="text-navy-800">৳14,500 total</strong></div>
           </div>
         </div>
 
