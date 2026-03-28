@@ -255,6 +255,7 @@ async function loadFromSheets() {
     const res = await fetch(SHEETS_URL)
     const d = await res.json()
     if (d.success && d.data && d.data.length > 0) {
+      const existing = getClients()
       const clients = d.data.map(row => ({
         id: row['ID'] || ('cl_'+Math.random()),
         firstName: (row['Full Name']||'').split(' ')[0]||'',
@@ -270,9 +271,19 @@ async function loadFromSheets() {
         totalFilesUploaded: Number(row['Files Uploaded'])||0,
         documents: {}, notes: row['Notes']||'',
         status: row['Status']||'New',
+        paymentStatus: row['Payment Status']||'Pending',
         createdAt: row['Date']||new Date().toISOString(),
         driveFolder: row['Drive Folder']||'',
       }))
+      // preserve locally saved status changes (they override sheet)
+      clients.forEach(cl => {
+        const local = existing.find(e => e.id === cl.id)
+        if (local) {
+          if (local.status && local.status !== 'New') cl.status = local.status
+          if (local.paymentStatus) cl.paymentStatus = local.paymentStatus
+          if (local.notes) cl.notes = local.notes
+        }
+      })
       localStorage.setItem('sp_crm_clients', JSON.stringify(clients))
       return clients
     }
@@ -368,7 +379,29 @@ function filterClients(){
 
 function updStatus(id,status){
   const c=getClients(); const i=c.findIndex(x=>x.id===id)
-  if(i>=0){c[i].status=status;localStorage.setItem(SK,JSON.stringify(c));toast('✅ Updated to '+status,'ok')}
+  if(i>=0){
+    c[i].status=status
+    localStorage.setItem(SK,JSON.stringify(c))
+    toast('✅ Updated to '+status,'ok')
+    // sync status back to Google Sheets
+    syncStatusToSheets(id, status)
+    // refresh current page
+    const page=document.querySelector('.page.on')?.id?.replace('page-','')||'dashboard'
+    if(page==='clients') renderClients(c)
+    if(page==='applications') renderApps()
+    if(page==='dashboard') renderDash()
+  }
+}
+
+async function syncStatusToSheets(clientId, status) {
+  try {
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({action:'updateStatus', id:clientId, status:status})
+    })
+  } catch(e) { console.log('Sheets sync error:', e) }
 }
 
 function delClient(id){
@@ -474,15 +507,20 @@ function renderPays(){
   document.getElementById('paysTable').innerHTML=c.length
     ?`<div style="padding:14px 16px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
         <span style="font-size:13px;color:var(--text2)">Total Expected Revenue</span>
-        <span style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green)">৳${total.toLocaleString()}</span>
+        <span style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green)">৳${total.toLocaleString()} &nbsp;·&nbsp; <span style="font-size:14px">Paid: ৳${c.filter(x=>x.paymentStatus==='Paid').reduce((s,x)=>s+(x.packageAmount||0),0).toLocaleString()}</span></span>
       </div>
-      <table><thead><tr><th>Client</th><th>Package</th><th>Amount</th><th>Files Uploaded</th><th>Status</th><th>Date</th></tr></thead><tbody>
+      <table><thead><tr><th>Client</th><th>Package</th><th>Scholarships</th><th>Amount</th><th>Files</th><th>Payment</th><th>Date</th></tr></thead><tbody>
       ${c.map(cl=>`<tr>
         <td><div style="font-weight:600;color:var(--navy)">${cl.firstName} ${cl.lastName}</div><div style="font-size:11px;color:var(--text3)">${cl.phone||cl.email}</div></td>
         <td><span class="pill ${ppill(cl.package)}">${cl.package||'—'}</span></td>
-        <td style="font-weight:700;color:var(--green)">৳${(cl.packageAmount||0).toLocaleString()}${(cl.extraScholarships||0)>0?` <span style="font-size:10px;color:var(--text3)">(incl. ${cl.extraScholarships} extra)</span>`:''}</td>
-        <td style="color:var(--green);font-weight:600">${cl.totalFilesUploaded||0} file(s)</td>
-        <td><span class="pill pill-amber">Pending Payment</span></td>
+        <td style="font-size:12px">${1+(cl.extraScholarships||0)} scholarship${(1+(cl.extraScholarships||0))>1?'s':''}</td>
+        <td style="font-weight:700;color:var(--green)">৳${(cl.packageAmount||0).toLocaleString()}${(cl.extraScholarships||0)>0?` <span style="font-size:10px;color:var(--text3)">(+${cl.extraScholarships}×৳2,500)</span>`:''}</td>
+        <td style="color:var(--green);font-weight:600">${cl.totalFilesUploaded||0}</td>
+        <td>
+          <select class="btn btn-ghost btn-sm" onchange="updPayStatus('${cl.id}',this.value)" style="padding:4px 8px">
+            ${['Pending','Paid','Partial','Refunded'].map(s=>`<option${(cl.paymentStatus||'Pending')===s?' selected':''}>${s}</option>`).join('')}
+          </select>
+        </td>
         <td style="font-size:11px">${fmt(cl.createdAt)}</td>
       </tr>`).join('')}
     </tbody></table>`
@@ -524,6 +562,16 @@ function saveSettings(){localStorage.setItem(SS,JSON.stringify({sheetsUrl:docume
 function clearAll(){if(!confirm('Delete ALL client data? Cannot be undone!'))return;localStorage.removeItem(SK);renderDash();toast('Data cleared','ok')}
 
 // HELPERS
+function updPayStatus(id, status) {
+  const c=getClients(); const i=c.findIndex(x=>x.id===id)
+  if(i>=0){
+    c[i].paymentStatus=status
+    localStorage.setItem(SK,JSON.stringify(c))
+    toast('✅ Payment status: '+status,'ok')
+    renderPays()
+  }
+}
+
 function fmt(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}
 function ppill(p){return{Basic:'pill-blue',Standard:'pill-green',Premium:'pill-navy'}[p]||'pill-gray'}
 function spill(s){return{'New':'pill-blue','In Progress':'pill-amber','Documents Ready':'pill-amber','Applied':'pill-amber','Accepted':'pill-green','Rejected':'pill-red'}[s]||'pill-gray'}
