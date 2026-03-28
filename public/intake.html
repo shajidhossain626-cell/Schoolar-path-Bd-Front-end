@@ -297,7 +297,7 @@ const DOC_GROUPS = [
 ]
 
 let selectedCountries = new Set()
-let selectedPkg = 'Standard'
+let selectedPkg = ''
 let uploadedFiles = {} // {slotId: [{name, size, type, data}]}
 
 // ── INIT ──
@@ -309,7 +309,7 @@ function init() {
 
   // packages
   document.getElementById('pkgGrid').innerHTML = PKGS.map(p=>
-    `<div class="pkg${p.val==='Standard'?' sel':''}" onclick="selPkg('${p.val}',this)">
+    `<div class="pkg" onclick="selPkg('${p.val}',this)">
       <div class="pkg-icon">${p.icon}</div>
       <div class="pkg-name">${p.val}</div>
       <div class="pkg-price">${p.price}</div>
@@ -489,7 +489,7 @@ async function submitForm() {
     scholarships:g('p-schols'), motivation:g('p-why'),
     targetCountries:[...selectedCountries],
     package:selectedPkg,
-    packageAmount:selectedPkg==='Basic'?2500:selectedPkg==='Standard'?5000:8000,
+    packageAmount:selectedPkg==='Basic'?2500:selectedPkg==='Standard'?5000:selectedPkg==='Premium'?8000:0,
     documents:docSummary,
     totalFilesUploaded:totalFiles,
     notes:g('p-notes'),
