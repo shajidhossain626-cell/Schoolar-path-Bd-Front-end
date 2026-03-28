@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScholarPath BD — CRM Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f2444;--navy2:#1a3a6b;--accent:#1A6BF5;--green:#059669;--amber:#d97706;--red:#dc2626;--bg:#f8f7f4;--bg2:#fff;--bg3:#f2f0ec;--border:#e5e2dc;--text:#1a1a1a;--text2:#5a5550;--text3:#9a9590;--r:12px;--shadow:0 2px 16px rgba(0,0,0,.07)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+input,select,textarea,button{font-family:'DM Sans',sans-serif;font-size:14px}
+.shell{display:flex;min-height:100vh}
+.side{width:220px;background:var(--navy);display:flex;flex-direction:column;position:fixed;height:100vh;z-index:10}
+.main{margin-left:220px;flex:1}
+.logo{padding:20px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+.logo-icon{width:34px;height:34px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.logo-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+.logo-sub{font-size:10px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.08em}
+.nav{flex:1;padding:12px 8px}
+.nsec{font-size:9px;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.12em;padding:12px 12px 5px}
+.nbtn{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.5);font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
+.nbtn:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9)}
+.nbtn.on{background:rgba(26,107,245,.3);color:#fff}
+.side-foot{padding:14px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:rgba(255,255,255,.35);line-height:1.6}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 26px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+.topbar-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--navy)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#1557d4}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{color:var(--text)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-red{background:#fef2f2;color:var(--red);border:1px solid #fecaca}
+.content{padding:24px 26px}
+.page{display:none}.page.on{display:block}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.stat::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
+.stat.blue::after{background:var(--accent)}.stat.green::after{background:var(--green)}.stat.amber::after{background:var(--amber)}.stat.red::after{background:var(--red)}
+.stat-icon{font-size:20px;margin-bottom:8px}
+.stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--navy);margin-bottom:2px}
+.stat-label{font-size:11px;color:var(--text3);font-weight:500}
+/* card */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);margin-bottom:16px}
+.card-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--navy)}
+/* table */
+table{width:100%;border-collapse:collapse}
+th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);background:var(--bg3)}
+td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text2);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(26,107,245,.02)}
+/* pills */
+.pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.pill-blue{background:#eff6ff;color:#1d4ed8}
+.pill-green{background:#f0fdf4;color:#15803d}
+.pill-amber{background:#fffbeb;color:#b45309}
+.pill-red{background:#fef2f2;color:#b91c1c}
+.pill-gray{background:#f3f4f6;color:#4b5563}
+.pill-navy{background:#e0f2fe;color:var(--navy2)}
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(15,36,68,.65);backdrop-filter:blur(4px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:30px 20px;overflow-y:auto}
+.overlay.on{display:flex}
+.modal{background:var(--bg2);border-radius:14px;width:100%;max-width:820px;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.modal-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--navy)}
+.close-btn{background:var(--bg3);border:none;color:var(--text2);width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:15px}
+.close-btn:hover{background:var(--border)}
+/* detail */
+.detail-layout{display:grid;grid-template-columns:260px 1fr;gap:18px}
+.profile-side{background:var(--navy);border-radius:var(--r);padding:22px;color:#fff}
+.avatar{width:56px;height:56px;background:var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:12px}
+.p-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:3px}
+.p-email{font-size:11px;color:rgba(255,255,255,.45);margin-bottom:14px}
+.p-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:12px}
+.p-row:last-child{border:none}
+.p-lbl{color:rgba(255,255,255,.4)}
+.p-val{color:#fff;font-weight:500;text-align:right;max-width:140px;word-break:break-word}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.ibox{background:var(--bg3);border-radius:9px;padding:12px}
+.ilbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.ival{font-size:13px;font-weight:500;color:var(--navy)}
+.doc-pills{display:flex;flex-wrap:wrap;gap:6px}
+.prog-wrap{margin:12px 0}
+.prog-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:3px;transition:width .5s}
+.notes-ta{background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:10px;width:100%;min-height:90px;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px}
+.notes-ta:focus{outline:none;border-color:var(--accent)}
+/* search */
+.search-row{display:flex;gap:10px;margin-bottom:14px}
+.search-in{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:8px 12px}
+.search-in:focus{outline:none;border-color:var(--accent)}
+/* share */
+.share-card{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:var(--r);padding:20px 22px;color:#fff;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.share-url-box{font-family:monospace;font-size:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:7px 11px;color:rgba(255,255,255,.85);min-width:260px}
+/* empty/loading */
+.empty{text-align:center;padding:44px;color:var(--text3)}
+.empty-icon{font-size:38px;margin-bottom:10px}
+.loading{text-align:center;padding:44px;color:var(--text3)}
+/* toasts */
+.toasts{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:7px}
+.toast{background:#fff;border:1px solid var(--border);border-radius:9px;padding:10px 14px;font-size:12px;box-shadow:var(--shadow);animation:slideIn .2s ease;min-width:220px}
+.toast.ok{border-color:#86efac}.toast.err{border-color:#fca5a5}
+@keyframes slideIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+</style>
+</head>
+<body>
+<div class="shell">
+<div class="side">
+  <div class="logo">
+    <div class="logo-icon">🎓</div>
+    <div><div class="logo-name">ScholarPath BD</div><div class="logo-sub">CRM Dashboard</div></div>
+  </div>
+  <nav class="nav">
+    <div class="nsec">Overview</div>
+    <button class="nbtn on" onclick="go('dashboard',this)">📊 Dashboard</button>
+    <div class="nsec">Clients</div>
+    <button class="nbtn" onclick="go('clients',this)">👥 All Clients</button>
+    <button class="nbtn" onclick="go('applications',this)">📄 Applications</button>
+    <button class="nbtn" onclick="go('payments',this)">💳 Payments</button>
+    <div class="nsec">Form</div>
+    <button class="nbtn" onclick="go('share',this)">🔗 Share Intake Form</button>
+    <div class="nsec">System</div>
+    <button class="nbtn" onclick="go('settings',this)">⚙️ Settings</button>
+  </nav>
+  <div class="side-foot">ScholarPath BD CRM<br>All data stored locally</div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="pageTitle">Dashboard</div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost btn-sm" onclick="refresh()">↻ Refresh</button>
+      <a href="intake.html" target="_blank" class="btn btn-primary btn-sm" style="text-decoration:none">+ Open Intake Form</a>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page on" id="page-dashboard">
+      <div class="stats">
+        <div class="stat blue"><div class="stat-icon">👥</div><div class="stat-val" id="s-total">0</div><div class="stat-label">Total Clients</div></div>
+        <div class="stat amber"><div class="stat-icon">⏳</div><div class="stat-val" id="s-active">0</div><div class="stat-label">In Progress</div></div>
+        <div class="stat green"><div class="stat-icon">🎉</div><div class="stat-val" id="s-won">0</div><div class="stat-label">Accepted</div></div>
+        <div class="stat red"><div class="stat-icon">💰</div><div class="stat-val" id="s-rev">৳0</div><div class="stat-label">Expected Revenue</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Recent Clients</div><button class="btn btn-ghost btn-sm" onclick="go('clients',null)">View All →</button></div>
+        <div id="d-recent"><div class="loading">Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div class="page" id="page-clients">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--navy)">All Clients</div>
+        <a href="intake.html" target="_blank" class="btn btn-primary btn-sm" style="text-decoration:none">+ Add New Client</a>
+      </div>
+      <div class="search-row">
+        <input class="search-in" placeholder="🔍 Search name, email, phone..." id="clientSearch" oninput="filterClients()">
+        <select class="search-in" style="flex:0;width:150px" id="statusFilter" onchange="filterClients()">
+          <option value="">All Status</option>
+          <option>New</option><option>In Progress</option><option>Documents Ready</option>
+          <option>Applied</option><option>Accepted</option><option>Rejected</option>
+        </select>
+        <select class="search-in" style="flex:0;width:140px" id="pkgFilter" onchange="filterClients()">
+          <option value="">All Packages</option>
+          <option>Basic</option><option>Standard</option><option>Premium</option>
+        </select>
+      </div>
+      <div class="card"><div id="clientsTable"><div class="loading">Loading...</div></div></div>
+    </div>
+
+    <!-- APPLICATIONS -->
+    <div class="page" id="page-applications">
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--navy);margin-bottom:14px">Application Tracker</div>
+      <div class="card"><div id="appsTable"><div class="loading">Loading...</div></div></div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div class="page" id="page-payments">
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--navy);margin-bottom:14px">Payment Records</div>
+      <div class="card"><div id="paysTable"><div class="loading">Loading...</div></div></div>
+    </div>
+
+    <!-- SHARE -->
+    <div class="page" id="page-share">
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--navy);margin-bottom:14px">Share Intake Form</div>
+      <div class="share-card">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px">📋 Client Intake Form</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55)">Send this link to clients — they fill the form and upload documents</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="share-url-box" id="shareLink" readonly value="">
+          <button class="btn btn-primary btn-sm" onclick="copyLink()">Copy</button>
+          <a id="openLink" href="#" target="_blank" class="btn btn-ghost btn-sm" style="text-decoration:none">Open</a>
+        </div>
+      </div>
+      <div class="card" style="padding:22px">
+        <div class="card-title" style="margin-bottom:14px">📊 Auto-sync to Google Sheets (optional)</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.9;margin-bottom:14px">
+          Every form submission can automatically save to your Google Sheet.<br>
+          <strong>1.</strong> Go to <a href="https://sheets.google.com" target="_blank" style="color:var(--accent)">sheets.google.com</a> → Create new sheet → name it <strong>"ScholarPath CRM"</strong><br>
+          <strong>2.</strong> Click <strong>Extensions → Apps Script</strong> → paste the script below → Save → Deploy as Web App<br>
+          <strong>3.</strong> Copy the Web App URL → paste in Settings → Save
+        </div>
+        <div style="background:#1e293b;border-radius:9px;padding:14px;font-family:monospace;font-size:11px;color:#94a3b8;overflow-x:auto;white-space:pre;margin-bottom:10px" id="scriptBox"></div>
+        <button class="btn btn-ghost btn-sm" onclick="copyScript()">Copy Script</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--navy);margin-bottom:14px">Settings</div>
+      <div class="card" style="padding:22px;max-width:500px">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <label style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em">Google Sheets Web App URL</label>
+            <input type="text" id="sheetsUrl" style="background:var(--bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:9px 11px" placeholder="https://script.google.com/macros/s/...">
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+          <div style="padding-top:14px;border-top:1px solid var(--border)">
+            <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px">Danger Zone</div>
+            <button class="btn btn-red btn-sm" onclick="clearAll()">Clear All Client Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- CLIENT DETAIL MODAL -->
+<div class="overlay" id="detailOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="detailTitle">Client Profile</div>
+      <button class="close-btn" onclick="closeDetail()">✕</button>
+    </div>
+    <div id="detailBody"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+const SK = 'sp_crm_clients'
+const SS = 'sp_crm_settings'
+function getClients(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch{return[]}}
+function getSettings(){try{return JSON.parse(localStorage.getItem(SS)||'{}')}catch{return{}}}
+
+const TITLES = {dashboard:'Dashboard',clients:'All Clients',applications:'Application Tracker',payments:'Payment Records',share:'Share Intake Form',settings:'Settings'}
+
+function go(page, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'))
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'))
+  document.getElementById('page-'+page).classList.add('on')
+  if(btn) btn.classList.add('on')
+  document.getElementById('pageTitle').textContent = TITLES[page]||page
+  if(page==='dashboard') renderDash()
+  if(page==='clients') renderClients()
+  if(page==='applications') renderApps()
+  if(page==='payments') renderPays()
+  if(page==='share') renderShare()
+  if(page==='settings') loadSettings()
+}
+function refresh(){go(document.querySelector('.page.on')?.id?.replace('page-','')||'dashboard')}
+
+// DASHBOARD
+function renderDash(){
+  const c=getClients()
+  document.getElementById('s-total').textContent=c.length
+  document.getElementById('s-active').textContent=c.filter(x=>['In Progress','Applied','Documents Ready'].includes(x.status)).length
+  document.getElementById('s-won').textContent=c.filter(x=>x.status==='Accepted').length
+  document.getElementById('s-rev').textContent='৳'+c.reduce((s,x)=>s+(x.packageAmount||0),0).toLocaleString()
+  const recent=[...c].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,8)
+  document.getElementById('d-recent').innerHTML=recent.length
+    ?`<table><thead><tr><th>Client</th><th>Package</th><th>Target</th><th>Documents</th><th>Status</th><th>Date</th></tr></thead><tbody>
+      ${recent.map(cl=>`<tr style="cursor:pointer" onclick="viewClient('${cl.id}')">
+        <td><div style="font-weight:600;color:var(--navy)">${cl.firstName} ${cl.lastName}</div><div style="font-size:11px;color:var(--text3)">${cl.email}</div></td>
+        <td><span class="pill ${ppill(cl.package)}">${cl.package||'—'}</span></td>
+        <td style="font-size:12px">${cl.targetDegree||'—'}</td>
+        <td style="font-size:12px;color:var(--green)">${cl.totalFilesUploaded||0} file(s)</td>
+        <td><span class="pill ${spill(cl.status)}">${cl.status||'New'}</span></td>
+        <td style="font-size:11px">${fmt(cl.createdAt)}</td>
+      </tr>`).join('')}
+    </tbody></table>`
+    :'<div class="empty"><div class="empty-icon">👥</div>No clients yet — share your intake form!</div>'
+}
+
+// CLIENTS
+function renderClients(list){
+  const c=list||getClients()
+  document.getElementById('clientsTable').innerHTML=c.length
+    ?`<table><thead><tr><th>Client</th><th>Phone</th><th>University</th><th>CGPA</th><th>IELTS</th><th>Package</th><th>Files</th><th>Status</th><th></th></tr></thead><tbody>
+      ${c.map(cl=>`<tr>
+        <td><div style="font-weight:600;color:var(--navy)">${cl.firstName} ${cl.lastName}</div><div style="font-size:11px;font-family:monospace;color:var(--text3)">${cl.email}</div></td>
+        <td style="font-size:12px;font-family:monospace">${cl.phone||'—'}</td>
+        <td style="font-size:12px">${cl.university||'—'}</td>
+        <td style="font-weight:600;color:var(--navy)">${cl.cgpa||'—'}</td>
+        <td style="font-weight:600;color:${cl.ielts?'var(--green)':'var(--text3)'}">${cl.ielts||'—'}</td>
+        <td><span class="pill ${ppill(cl.package)}">${cl.package||'—'}</span></td>
+        <td style="color:var(--green);font-weight:600">${cl.totalFilesUploaded||0}</td>
+        <td><select class="btn btn-ghost btn-sm" onchange="updStatus('${cl.id}',this.value)" style="padding:4px 7px">
+          ${['New','In Progress','Documents Ready','Applied','Accepted','Rejected'].map(s=>`<option${(cl.status||'New')===s?' selected':''}>${s}</option>`).join('')}
+        </select></td>
+        <td><div style="display:flex;gap:5px">
+          <button class="btn btn-ghost btn-sm" onclick="viewClient('${cl.id}')">👁️</button>
+          <button class="btn btn-sm btn-red" onclick="delClient('${cl.id}')">🗑️</button>
+        </div></td>
+      </tr>`).join('')}
+    </tbody></table>`
+    :'<div class="empty"><div class="empty-icon">👥</div>No clients yet</div>'
+}
+
+function filterClients(){
+  const q=document.getElementById('clientSearch').value.toLowerCase()
+  const s=document.getElementById('statusFilter').value
+  const p=document.getElementById('pkgFilter').value
+  const c=getClients().filter(cl=>{
+    const m=`${cl.firstName} ${cl.lastName} ${cl.email} ${cl.phone||''}`.toLowerCase().includes(q)
+    const sm=!s||(cl.status||'New')===s
+    const pm=!p||cl.package===p
+    return m&&sm&&pm
+  })
+  renderClients(c)
+}
+
+function updStatus(id,status){
+  const c=getClients(); const i=c.findIndex(x=>x.id===id)
+  if(i>=0){c[i].status=status;localStorage.setItem(SK,JSON.stringify(c));toast('✅ Updated to '+status,'ok')}
+}
+
+function delClient(id){
+  if(!confirm('Delete this client?')) return
+  const c=getClients().filter(x=>x.id!==id)
+  localStorage.setItem(SK,JSON.stringify(c))
+  renderClients(); toast('Deleted','ok')
+}
+
+// DETAIL
+function viewClient(id){
+  const cl=getClients().find(c=>c.id===id)
+  if(!cl) return
+  document.getElementById('detailTitle').textContent=cl.firstName+' '+cl.lastName
+  const prog={New:10,'In Progress':35,'Documents Ready':60,'Applied':80,'Accepted':100,'Rejected':5}[cl.status||'New']||10
+  const docEntries = Object.entries(cl.documents||{})
+  document.getElementById('detailBody').innerHTML=`
+    <div class="detail-layout">
+      <div>
+        <div class="profile-side">
+          <div class="avatar">${cl.firstName?.[0]||'?'}${cl.lastName?.[0]||''}</div>
+          <div class="p-name">${cl.firstName} ${cl.lastName}</div>
+          <div class="p-email">${cl.email}</div>
+          <div class="p-row"><span class="p-lbl">WhatsApp</span><span class="p-val">${cl.phone||'—'}</span></div>
+          <div class="p-row"><span class="p-lbl">Package</span><span class="p-val">${cl.package||'—'}</span></div>
+          <div class="p-row"><span class="p-lbl">Amount</span><span class="p-val" style="color:#6ee7b7">৳${(cl.packageAmount||0).toLocaleString()}</span></div>
+          <div class="p-row"><span class="p-lbl">Status</span><span class="p-val">${cl.status||'New'}</span></div>
+          <div class="p-row"><span class="p-lbl">Submitted</span><span class="p-val">${fmt(cl.createdAt)}</span></div>
+        </div>
+        <div class="prog-wrap">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:5px">Application Progress</div>
+          <div class="prog-bar"><div class="prog-fill" style="width:${prog}%"></div></div>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px">${prog}% — ${cl.status||'New'}</div>
+        </div>
+      </div>
+      <div>
+        <div class="info-grid">
+          <div class="ibox"><div class="ilbl">University</div><div class="ival">${cl.university||'—'}</div></div>
+          <div class="ibox"><div class="ilbl">CGPA</div><div class="ival">${cl.cgpa||'—'}</div></div>
+          <div class="ibox"><div class="ilbl">IELTS</div><div class="ival">${cl.ielts||'—'}</div></div>
+          <div class="ibox"><div class="ilbl">Target Degree</div><div class="ival">${cl.targetDegree||'—'}</div></div>
+          <div class="ibox"><div class="ilbl">Target Countries</div><div class="ival">${(cl.targetCountries||[]).join(', ')||'—'}</div></div>
+          <div class="ibox"><div class="ilbl">Start Date</div><div class="ival">${cl.startDate||'—'}</div></div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Uploaded Documents (${cl.totalFilesUploaded||0} files)</div>
+          ${docEntries.length
+            ?`<div class="doc-pills">${docEntries.map(([k,v])=>`<span class="pill pill-green" title="${v}">✅ ${k}</span>`).join('')}</div>`
+            :'<div style="font-size:12px;color:var(--text3)">No documents uploaded</div>'
+          }
+        </div>
+        ${cl.motivation?`<div style="margin-bottom:14px"><div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Motivation</div><div style="font-size:13px;color:var(--text2);background:var(--bg3);border-radius:8px;padding:10px;line-height:1.7">${cl.motivation}</div></div>`:''}
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Notes</div>
+          <textarea class="notes-ta" id="notes_${id}">${cl.notes||''}</textarea>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn btn-primary btn-sm" onclick="saveNotes('${id}')">Save Notes</button>
+            <select class="btn btn-ghost btn-sm" onchange="updStatus('${id}',this.value);document.querySelector('.prog-fill').style.width=({New:10,'In Progress':35,'Documents Ready':60,'Applied':80,'Accepted':100,'Rejected':5}[this.value]||10)+'%'" style="padding:4px 10px">
+              ${['New','In Progress','Documents Ready','Applied','Accepted','Rejected'].map(s=>`<option${(cl.status||'New')===s?' selected':''}>${s}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>`
+  document.getElementById('detailOverlay').classList.add('on')
+}
+
+function saveNotes(id){
+  const c=getClients(); const i=c.findIndex(x=>x.id===id)
+  const notes=document.getElementById('notes_'+id)?.value||''
+  if(i>=0){c[i].notes=notes;localStorage.setItem(SK,JSON.stringify(c));toast('✅ Notes saved','ok')}
+}
+function closeDetail(){document.getElementById('detailOverlay').classList.remove('on')}
+
+// APPLICATIONS
+function renderApps(){
+  const c=getClients()
+  const rows=c.flatMap(cl=>(cl.targetCountries||['Unknown']).map(country=>({...cl,country})))
+  document.getElementById('appsTable').innerHTML=rows.length
+    ?`<table><thead><tr><th>Client</th><th>CGPA</th><th>IELTS</th><th>Target Country</th><th>Scholarship Interest</th><th>Package</th><th>Status</th></tr></thead><tbody>
+      ${rows.map(r=>`<tr style="cursor:pointer" onclick="viewClient('${r.id}')">
+        <td><div style="font-weight:600;color:var(--navy)">${r.firstName} ${r.lastName}</div><div style="font-size:11px;color:var(--text3)">${r.email}</div></td>
+        <td style="font-weight:600">${r.cgpa||'—'}</td>
+        <td style="font-weight:600;color:${r.ielts?'var(--green)':'var(--text3)'}">${r.ielts||'—'}</td>
+        <td>${r.country}</td>
+        <td style="font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.scholarships||'—'}</td>
+        <td><span class="pill ${ppill(r.package)}">${r.package||'—'}</span></td>
+        <td><span class="pill ${spill(r.status)}">${r.status||'New'}</span></td>
+      </tr>`).join('')}
+    </tbody></table>`
+    :'<div class="empty"><div class="empty-icon">📄</div>No applications yet</div>'
+}
+
+// PAYMENTS
+function renderPays(){
+  const c=getClients()
+  const total=c.reduce((s,x)=>s+(x.packageAmount||0),0)
+  document.getElementById('paysTable').innerHTML=c.length
+    ?`<div style="padding:14px 16px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:13px;color:var(--text2)">Total Expected Revenue</span>
+        <span style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green)">৳${total.toLocaleString()}</span>
+      </div>
+      <table><thead><tr><th>Client</th><th>Package</th><th>Amount</th><th>Files Uploaded</th><th>Status</th><th>Date</th></tr></thead><tbody>
+      ${c.map(cl=>`<tr>
+        <td><div style="font-weight:600;color:var(--navy)">${cl.firstName} ${cl.lastName}</div><div style="font-size:11px;color:var(--text3)">${cl.phone||cl.email}</div></td>
+        <td><span class="pill ${ppill(cl.package)}">${cl.package||'—'}</span></td>
+        <td style="font-weight:700;color:var(--green)">৳${(cl.packageAmount||0).toLocaleString()}</td>
+        <td style="color:var(--green);font-weight:600">${cl.totalFilesUploaded||0} file(s)</td>
+        <td><span class="pill pill-amber">Pending Payment</span></td>
+        <td style="font-size:11px">${fmt(cl.createdAt)}</td>
+      </tr>`).join('')}
+    </tbody></table>`
+    :'<div class="empty"><div class="empty-icon">💳</div>No payments yet</div>'
+}
+
+// SHARE
+function renderShare(){
+  const base = window.location.href.replace('crm.html','').replace(/\?.*$/,'')
+  const link = base+'intake.html'
+  document.getElementById('shareLink').value=link
+  document.getElementById('openLink').href=link
+  document.getElementById('scriptBox').textContent=`function doPost(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Clients') || ss.insertSheet('Clients');
+  var d = JSON.parse(e.postData.contents);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(['ID','Name','Email','Phone','University',
+      'CGPA','IELTS','Package','Amount BDT','Target Countries',
+      'Target Degree','Scholarships','Files Uploaded','Status','Date']);
+  }
+  sheet.appendRow([d.id, d.firstName+' '+d.lastName, d.email,
+    d.phone, d.university, d.cgpa, d.ielts, d.package,
+    d.packageAmount, (d.targetCountries||[]).join(', '),
+    d.targetDegree, d.scholarships,
+    d.totalFilesUploaded||0, d.status, d.createdAt]);
+  return ContentService.createTextOutput(
+    JSON.stringify({success:true})
+  ).setMimeType(ContentService.MimeType.JSON);
+}`
+}
+
+function copyLink(){navigator.clipboard.writeText(document.getElementById('shareLink').value).then(()=>toast('✅ Link copied!','ok'))}
+function copyScript(){navigator.clipboard.writeText(document.getElementById('scriptBox').textContent).then(()=>toast('✅ Script copied!','ok'))}
+
+// SETTINGS
+function loadSettings(){const s=getSettings();document.getElementById('sheetsUrl').value=s.sheetsUrl||''}
+function saveSettings(){localStorage.setItem(SS,JSON.stringify({sheetsUrl:document.getElementById('sheetsUrl').value.trim()}));toast('✅ Settings saved','ok')}
+function clearAll(){if(!confirm('Delete ALL client data? Cannot be undone!'))return;localStorage.removeItem(SK);renderDash();toast('Data cleared','ok')}
+
+// HELPERS
+function fmt(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}
+function ppill(p){return{Basic:'pill-blue',Standard:'pill-green',Premium:'pill-navy'}[p]||'pill-gray'}
+function spill(s){return{'New':'pill-blue','In Progress':'pill-amber','Documents Ready':'pill-amber','Applied':'pill-amber','Accepted':'pill-green','Rejected':'pill-red'}[s]||'pill-gray'}
+function toast(msg,type='ok'){const t=document.createElement('div');t.className='toast '+type;t.textContent=msg;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),3000)}
+
+renderDash()
+</script>
+</body>
+</html>
