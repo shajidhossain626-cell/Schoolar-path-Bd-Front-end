@@ -4,122 +4,114 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ScholarPath BD — CRM</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0f2444;--accent:#1A6BF5;--green:#059669;--amber:#d97706;--red:#dc2626;--bg:#f8f7f4;--bg2:#fff;--bg3:#f2f0ec;--border:#e5e2dc;--text:#1a1a1a;--text2:#5a5550;--text3:#9a9590;--r:10px;--sh:0 2px 12px rgba(0,0,0,.07)}
+:root{--navy:#0f2444;--accent:#1A6BF5;--green:#059669;--amber:#d97706;--red:#dc2626;--bg:#f8f7f4;--bg2:#fff;--bg3:#f2f0ec;--border:#e5e2dc;--text:#1a1a1a;--text2:#5a5550;--text3:#9a9590;--r:10px;--sh:0 2px 10px rgba(0,0,0,.07)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
 input,select,textarea,button{font-family:'DM Sans',sans-serif;font-size:13px}
 .shell{display:flex;min-height:100vh}
-.side{width:215px;background:var(--navy);display:flex;flex-direction:column;position:fixed;height:100vh;z-index:10}
-.main{margin-left:215px;flex:1;display:flex;flex-direction:column}
-.logo{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
-.logo-icon{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
-.logo-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff}
-.logo-sub{font-size:9px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em}
-.nav{flex:1;padding:10px 8px}
-.nsec{font-size:9px;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.12em;padding:12px 10px 4px}
-.nb{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;color:rgba(255,255,255,.5);font-size:12px;font-weight:500;transition:all .15s;margin-bottom:1px;border:none;background:none;width:100%;text-align:left}
+.side{width:210px;background:var(--navy);display:flex;flex-direction:column;position:fixed;height:100vh;z-index:10}
+.main{margin-left:210px;flex:1;display:flex;flex-direction:column}
+.logo{padding:16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:9px}
+.li{width:30px;height:30px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.ln{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#fff}
+.ls{font-size:9px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em}
+.nav{flex:1;padding:9px 7px}
+.ns{font-size:9px;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.12em;padding:11px 10px 4px}
+.nb{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:6px;cursor:pointer;color:rgba(255,255,255,.5);font-size:12px;font-weight:500;transition:all .15s;margin-bottom:1px;border:none;background:none;width:100%;text-align:left}
 .nb:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9)}
 .nb.on{background:rgba(26,107,245,.3);color:#fff}
-.side-foot{padding:12px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.3)}
-.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 22px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
-.topbar-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--navy)}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.btn{padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
-.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#1557d4}
-.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{color:var(--text)}
-.btn-red{background:#fef2f2;color:var(--red);border:1px solid #fecaca}.btn-red:hover{background:#fee2e2}
-.btn-green{background:#f0fdf4;color:var(--green);border:1px solid #86efac}
-.btn-sm{padding:4px 9px;font-size:11px}
-.content{padding:22px;flex:1}
+.sf{padding:11px;border-top:1px solid rgba(255,255,255,.08);font-size:10px;color:rgba(255,255,255,.25)}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+.tt{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--navy)}
+.tr{display:flex;align-items:center;gap:7px}
+.btn{padding:6px 13px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.btn-p{background:var(--accent);color:#fff}.btn-p:hover{background:#1557d4}
+.btn-g{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}.btn-g:hover{color:var(--text)}
+.btn-r{background:#fef2f2;color:var(--red);border:1px solid #fecaca}
+.btn-gr{background:#f0fdf4;color:var(--green);border:1px solid #86efac}
+.btn-sm{padding:3px 8px;font-size:11px}
+.content{padding:20px;flex:1}
 .page{display:none}.page.on{display:block}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:18px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;box-shadow:var(--sh);position:relative;overflow:hidden}
 .stat::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
-.stat.blue::after{background:var(--accent)}.stat.green::after{background:var(--green)}.stat.amber::after{background:var(--amber)}.stat.red::after{background:var(--red)}
-.stat-icon{font-size:18px;margin-bottom:6px}
-.stat-val{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--navy);margin-bottom:2px}
-.stat-label{font-size:11px;color:var(--text3)}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);margin-bottom:14px}
-.card-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--navy)}
+.stat.bl::after{background:var(--accent)}.stat.gr::after{background:var(--green)}.stat.am::after{background:var(--amber)}.stat.re::after{background:var(--red)}
+.sv{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--navy);margin-bottom:1px}
+.sl{font-size:10px;color:var(--text3)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);margin-bottom:13px}
+.ch{padding:11px 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.ct{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--navy)}
 table{width:100%;border-collapse:collapse}
-th{padding:8px 13px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);background:var(--bg3)}
-td{padding:10px 13px;border-bottom:1px solid var(--border);color:var(--text2);font-size:12px;vertical-align:middle}
+th{padding:7px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--border);background:var(--bg3)}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2);font-size:12px;vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(26,107,245,.02)}
-.pill{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700}
-.p-blue{background:#eff6ff;color:#1d4ed8}.p-green{background:#f0fdf4;color:#15803d}
-.p-amber{background:#fffbeb;color:#b45309}.p-red{background:#fef2f2;color:#b91c1c}
-.p-gray{background:#f3f4f6;color:#4b5563}.p-navy{background:#e0f2fe;color:#0369a1}
-.overlay{position:fixed;inset:0;background:rgba(15,36,68,.6);backdrop-filter:blur(3px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:28px 20px;overflow-y:auto}
+.pill{display:inline-flex;align-items:center;padding:2px 6px;border-radius:20px;font-size:10px;font-weight:700}
+.pb{background:#eff6ff;color:#1d4ed8}.pg{background:#f0fdf4;color:#15803d}
+.pa{background:#fffbeb;color:#b45309}.pr{background:#fef2f2;color:#b91c1c}
+.py{background:#f3f4f6;color:#4b5563}.pn{background:#e0f2fe;color:#0369a1}
+.overlay{position:fixed;inset:0;background:rgba(15,36,68,.6);backdrop-filter:blur(3px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:24px 18px;overflow-y:auto}
 .overlay.on{display:flex}
-.modal{background:var(--bg2);border-radius:12px;width:100%;max-width:800px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
-.mtitle{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--navy)}
-.xbtn{background:var(--bg3);border:none;color:var(--text2);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px}
-.xbtn:hover{background:var(--border)}
-.detail-grid{display:grid;grid-template-columns:240px 1fr;gap:16px}
-.pcard{background:var(--navy);border-radius:var(--r);padding:20px;color:#fff}
-.av{width:52px;height:52px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:10px}
-.pname{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;margin-bottom:2px}
-.pemail{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:12px}
-.prow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:11px}
-.prow:last-child{border:none}
-.plbl{color:rgba(255,255,255,.4)}
-.pval{color:#fff;font-weight:500;text-align:right;max-width:130px;word-break:break-word}
-.ibox{background:var(--bg3);border-radius:8px;padding:10px;margin-bottom:8px}
-.ilbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
-.ival{font-size:12px;font-weight:500;color:var(--navy)}
-.igrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.prog-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin:8px 0 3px}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:3px;transition:width .5s}
-.notes-ta{background:var(--bg3);border:1.5px solid var(--border);border-radius:7px;color:var(--text);padding:9px;width:100%;min-height:80px;resize:vertical;font-size:12px}
-.notes-ta:focus{outline:none;border-color:var(--accent)}
-.search-row{display:flex;gap:8px;margin-bottom:12px}
-.sin{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:7px;color:var(--text);padding:7px 11px}
-.sin:focus{outline:none;border-color:var(--accent)}
-.share-box{background:linear-gradient(135deg,var(--navy),#1a3a6b);border-radius:var(--r);padding:18px 20px;color:#fff;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.surl{font-family:monospace;font-size:11px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:6px 10px;color:rgba(255,255,255,.8);min-width:240px}
-.empty{text-align:center;padding:40px;color:var(--text3)}
-.loading{text-align:center;padding:40px;color:var(--text3)}
-.toasts{position:fixed;bottom:18px;right:18px;z-index:999;display:flex;flex-direction:column;gap:6px}
-.toast{background:#fff;border:1px solid var(--border);border-radius:8px;padding:9px 13px;font-size:12px;box-shadow:var(--sh);animation:slideIn .2s ease;min-width:200px}
+.modal{background:var(--bg2);border-radius:11px;width:100%;max-width:780px;padding:22px;box-shadow:0 16px 50px rgba(0,0,0,.2)}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:11px;border-bottom:1px solid var(--border)}
+.mt{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--navy)}
+.xb{background:var(--bg3);border:none;color:var(--text2);width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:13px}
+.dg{display:grid;grid-template-columns:230px 1fr;gap:14px}
+.pc{background:var(--navy);border-radius:var(--r);padding:18px;color:#fff}
+.av{width:48px;height:48px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:9px}
+.pn2{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:2px}
+.pe{font-size:10px;color:rgba(255,255,255,.4);margin-bottom:11px}
+.pr2{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:11px}
+.pr2:last-child{border:none}
+.plb{color:rgba(255,255,255,.4)}.pv{color:#fff;font-weight:500;text-align:right}
+.ib{background:var(--bg3);border-radius:7px;padding:9px;margin-bottom:7px}
+.il{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.iv{font-size:12px;font-weight:500;color:var(--navy)}
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:9px}
+.pb2{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin:7px 0 2px}
+.pf{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:2px;transition:width .5s}
+.nta{background:var(--bg3);border:1.5px solid var(--border);border-radius:7px;color:var(--text);padding:8px;width:100%;min-height:70px;resize:vertical;font-size:12px}
+.nta:focus{outline:none;border-color:var(--accent)}
+.sr{display:flex;gap:7px;margin-bottom:11px}
+.si{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:7px;color:var(--text);padding:6px 10px}
+.si:focus{outline:none;border-color:var(--accent)}
+.ctags{display:flex;flex-wrap:wrap;gap:3px}
+.ctag{background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:8px;font-size:10px;font-weight:600}
+.share-bx{background:linear-gradient(135deg,var(--navy),#1a3a6b);border-radius:var(--r);padding:16px 18px;color:#fff;margin-bottom:13px;display:flex;align-items:center;justify-content:space-between;gap:11px}
+.su{font-family:monospace;font-size:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:5px 9px;color:rgba(255,255,255,.8);min-width:220px}
+.empty{text-align:center;padding:36px;color:var(--text3);font-size:13px}
+.toasts{position:fixed;bottom:16px;right:16px;z-index:999;display:flex;flex-direction:column;gap:5px}
+.toast{background:#fff;border:1px solid var(--border);border-radius:7px;padding:8px 12px;font-size:12px;box-shadow:var(--sh);animation:slideIn .2s ease;min-width:180px}
 .toast.ok{border-color:#86efac}.toast.err{border-color:#fca5a5}
-@keyframes slideIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
-.tag-countries{display:flex;flex-wrap:wrap;gap:4px}
-.ctag{background:#eff6ff;color:#1d4ed8;padding:1px 6px;border-radius:10px;font-size:10px;font-weight:600}
+@keyframes slideIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
 </style>
 </head>
 <body>
 <div class="shell">
 <div class="side">
-  <div class="logo">
-    <div class="logo-icon">🎓</div>
-    <div><div class="logo-name">ScholarPath BD</div><div class="logo-sub">CRM Dashboard</div></div>
-  </div>
+  <div class="logo"><div class="li">🎓</div><div><div class="ln">ScholarPath BD</div><div class="ls">CRM Dashboard</div></div></div>
   <nav class="nav">
-    <div class="nsec">Overview</div>
+    <div class="ns">Overview</div>
     <button class="nb on" onclick="go('dashboard',this)">📊 Dashboard</button>
-    <div class="nsec">Clients</div>
+    <div class="ns">Clients</div>
     <button class="nb" onclick="go('clients',this)">👥 All Clients</button>
     <button class="nb" onclick="go('applications',this)">📄 Applications</button>
     <button class="nb" onclick="go('payments',this)">💳 Payments</button>
-    <div class="nsec">Form</div>
+    <div class="ns">Form</div>
     <button class="nb" onclick="go('share',this)">🔗 Share Form</button>
-    <div class="nsec">System</div>
+    <div class="ns">System</div>
     <button class="nb" onclick="go('settings',this)">⚙️ Settings</button>
   </nav>
-  <div class="side-foot">ScholarPath BD CRM</div>
+  <div class="sf">ScholarPath BD CRM</div>
 </div>
-
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title" id="pt">Dashboard</div>
-    <div class="topbar-right">
-      <button class="btn btn-ghost btn-sm" onclick="refresh()">↻ Refresh</button>
-      <a href="intake.html" target="_blank" class="btn btn-primary btn-sm">+ Add Client</a>
+    <div class="tt" id="pt">Dashboard</div>
+    <div class="tr">
+      <button class="btn btn-g btn-sm" onclick="hardRefresh()">↻ Refresh</button>
+      <a href="intake.html" target="_blank" class="btn btn-p btn-sm">+ Add Client</a>
     </div>
   </div>
   <div class="content">
@@ -127,76 +119,74 @@ tr:hover td{background:rgba(26,107,245,.02)}
     <!-- DASHBOARD -->
     <div class="page on" id="page-dashboard">
       <div class="stats">
-        <div class="stat blue"><div class="stat-icon">👥</div><div class="stat-val" id="s-total">0</div><div class="stat-label">Total Clients</div></div>
-        <div class="stat amber"><div class="stat-icon">⏳</div><div class="stat-val" id="s-active">0</div><div class="stat-label">In Progress</div></div>
-        <div class="stat green"><div class="stat-icon">🎉</div><div class="stat-val" id="s-won">0</div><div class="stat-label">Accepted</div></div>
-        <div class="stat red"><div class="stat-icon">💰</div><div class="stat-val" id="s-rev">৳0</div><div class="stat-label">Expected Revenue</div></div>
+        <div class="stat bl"><div class="sv" id="s-total">0</div><div class="sl">Total Clients</div></div>
+        <div class="stat am"><div class="sv" id="s-active">0</div><div class="sl">In Progress</div></div>
+        <div class="stat gr"><div class="sv" id="s-won">0</div><div class="sl">Accepted</div></div>
+        <div class="stat re"><div class="sv" id="s-rev">৳0</div><div class="sl">Expected Revenue</div></div>
       </div>
       <div class="card">
-        <div class="card-head"><div class="card-title">Recent Clients</div><button class="btn btn-ghost btn-sm" onclick="go('clients',null)">View All →</button></div>
-        <div id="d-recent"><div class="loading">Loading...</div></div>
+        <div class="ch"><div class="ct">Recent Clients</div><button class="btn btn-g btn-sm" onclick="go('clients',null)">View All →</button></div>
+        <div id="d-recent"><div class="empty">Loading...</div></div>
       </div>
     </div>
 
     <!-- CLIENTS -->
     <div class="page" id="page-clients">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--navy)">All Clients</div>
-        <a href="intake.html" target="_blank" class="btn btn-primary btn-sm">+ Add New</a>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+        <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--navy)">All Clients</div>
+        <a href="intake.html" target="_blank" class="btn btn-p btn-sm">+ Add New</a>
       </div>
-      <div class="search-row">
-        <input class="sin" placeholder="🔍 Search name, email, phone..." id="csearch" oninput="filterC()">
-        <select class="sin" style="flex:0;width:140px" id="sf" onchange="filterC()">
+      <div class="sr">
+        <input class="si" placeholder="🔍 Search name, email, phone..." id="csearch" oninput="filterC()">
+        <select class="si" style="flex:0;width:135px" id="csf" onchange="filterC()">
           <option value="">All Status</option>
           <option>New</option><option>In Progress</option><option>Documents Ready</option>
           <option>Applied</option><option>Accepted</option><option>Rejected</option>
         </select>
       </div>
-      <div class="card"><div id="clientsTable"><div class="loading">Loading...</div></div></div>
+      <div class="card"><div id="clientsT"><div class="empty">Loading...</div></div></div>
     </div>
 
     <!-- APPLICATIONS -->
     <div class="page" id="page-applications">
-      <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--navy);margin-bottom:12px">Application Tracker</div>
-      <div class="card"><div id="appsTable"><div class="loading">Loading...</div></div></div>
+      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--navy);margin-bottom:11px">Application Tracker</div>
+      <div class="card"><div id="appsT"><div class="empty">Loading...</div></div></div>
     </div>
 
     <!-- PAYMENTS -->
     <div class="page" id="page-payments">
-      <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--navy);margin-bottom:12px">Payment Records</div>
-      <div class="card"><div id="paysTable"><div class="loading">Loading...</div></div></div>
+      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--navy);margin-bottom:11px">Payment Records</div>
+      <div class="card"><div id="paysT"><div class="empty">Loading...</div></div></div>
     </div>
 
     <!-- SHARE -->
     <div class="page" id="page-share">
-      <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--navy);margin-bottom:12px">Share Intake Form</div>
-      <div class="share-box">
-        <div><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:3px">📋 Client Intake Form</div><div style="font-size:11px;color:rgba(255,255,255,.5)">Send this link — clients fill form and upload documents</div></div>
-        <div style="display:flex;gap:7px;align-items:center">
-          <input class="surl" id="shareLink" readonly>
-          <button class="btn btn-primary btn-sm" onclick="copyLink()">Copy</button>
-          <a id="openLink" href="#" target="_blank" class="btn btn-ghost btn-sm">Open</a>
+      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--navy);margin-bottom:11px">Share Intake Form</div>
+      <div class="share-bx">
+        <div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:3px">📋 Client Intake Form Link</div><div style="font-size:11px;color:rgba(255,255,255,.5)">Send to clients — they fill form and upload all documents</div></div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input class="su" id="shareLink" readonly>
+          <button class="btn btn-p btn-sm" onclick="copyLink()">Copy</button>
+          <a id="openLink" href="#" target="_blank" class="btn btn-g btn-sm">Open</a>
         </div>
       </div>
-      <div class="card" style="padding:20px">
-        <div class="card-title" style="margin-bottom:12px">Google Sheets Auto-sync Script</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:12px">Paste this in <strong>Google Sheets → Extensions → Apps Script</strong> → Deploy as Web App → paste URL in Settings</div>
-        <div style="background:#1e293b;border-radius:8px;padding:12px;font-family:monospace;font-size:11px;color:#94a3b8;overflow-x:auto;white-space:pre;margin-bottom:8px" id="scriptBox"></div>
-        <button class="btn btn-ghost btn-sm" onclick="copyScript()">Copy Script</button>
+      <div class="card" style="padding:18px">
+        <div class="ct" style="margin-bottom:11px">Intake Form URL</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Share this link with potential clients on WhatsApp, Facebook, or email:</div>
+        <div style="background:var(--bg3);border-radius:7px;padding:10px;font-family:monospace;font-size:12px;word-break:break-all" id="formUrlDisplay"></div>
       </div>
     </div>
 
     <!-- SETTINGS -->
     <div class="page" id="page-settings">
-      <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--navy);margin-bottom:12px">Settings</div>
-      <div class="card" style="padding:20px;max-width:480px">
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div><label style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Google Sheets Web App URL</label>
-          <input type="text" id="sheetsUrl" style="width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;color:var(--text);padding:8px 10px" placeholder="https://script.google.com/macros/s/..."></div>
-          <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
-          <div style="padding-top:12px;border-top:1px solid var(--border)">
-            <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:7px">Danger Zone</div>
-            <button class="btn btn-red btn-sm" onclick="clearAll()">Clear All Local Data</button>
+      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--navy);margin-bottom:11px">Settings</div>
+      <div class="card" style="padding:18px;max-width:460px">
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div><label style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px">Google Apps Script Web App URL</label>
+          <input type="text" id="scriptUrlInput" style="width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;color:var(--text);padding:7px 10px" placeholder="https://script.google.com/macros/s/..."></div>
+          <button class="btn btn-p" onclick="saveSettings()">Save Settings</button>
+          <div style="padding-top:11px;border-top:1px solid var(--border)">
+            <button class="btn btn-r btn-sm" onclick="clearLocal()">Clear Local Data</button>
           </div>
         </div>
       </div>
@@ -209,10 +199,7 @@ tr:hover td{background:rgba(26,107,245,.02)}
 <!-- DETAIL MODAL -->
 <div class="overlay" id="detailOverlay">
   <div class="modal">
-    <div class="mhead">
-      <div class="mtitle" id="detailTitle">Client Profile</div>
-      <button class="xbtn" onclick="closeDetail()">✕</button>
-    </div>
+    <div class="mh"><div class="mt" id="detailTitle">Client Profile</div><button class="xb" onclick="closeDetail()">✕</button></div>
     <div id="detailBody"></div>
   </div>
 </div>
@@ -221,61 +208,75 @@ tr:hover td{background:rgba(26,107,245,.02)}
 
 <script>
 // ── CONFIG ──
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzdH4qOsUowPdO_vFhAdu3Ip9z7NMSQ_ZHPtru4yYSXYA9UESlBhZ-DMde2VPb5SQVC/exec'
-const SK = 'sp_crm_v2' // new key to avoid old corrupt data
+// This URL is set in Settings — loaded from localStorage
+const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbzdH4qOsUowPdO_vFhAdu3Ip9z7NMSQ_ZHPtru4yYSXYA9UESlBhZ-DMde2VPb5SQVC/exec'
+const SK = 'sp_crm_v3' // fresh storage key
 
-// ── STORAGE ──
-function getAll() { try { return JSON.parse(localStorage.getItem(SK)||'[]') } catch { return [] } }
-function saveAll(c) { localStorage.setItem(SK, JSON.stringify(c)) }
-function getSettings() { try { return JSON.parse(localStorage.getItem('sp_crm_settings')||'{}') } catch { return {} } }
+function getScriptUrl() { return localStorage.getItem('sp_script_url') || DEFAULT_URL }
+function getClients() { try { return JSON.parse(localStorage.getItem(SK)||'[]') } catch { return [] } }
+function saveClients(c) { localStorage.setItem(SK, JSON.stringify(c)) }
 
 // ── LOAD FROM SHEETS ──
 async function loadFromSheets() {
   try {
-    const res = await fetch(SHEETS_URL)
-    const d = await res.json()
-    if (!d.success || !d.data || d.data.length === 0) return getAll()
-    
-    const existing = getAll()
-    const existingMap = {}
-    existing.forEach(c => { existingMap[c.id] = c })
-    
-    const fresh = d.data.map(row => {
-      const id = row['ID'] || ''
-      const local = existingMap[id] || {}
-      return {
-        id,
-        firstName: (row['Full Name']||'').split(' ')[0]||'',
-        lastName: (row['Full Name']||'').split(' ').slice(1).join(' ')||'',
-        email: row['Email']||'',
-        phone: row['WhatsApp']||'',
-        university: row['University']||'',
-        cgpa: row['CGPA']||'',
-        ielts: row['IELTS']||'',
-        package: row['Package']||'',
-        packageAmount: Number(row['Amount (BDT)'])||0,
-        extraScholarships: Number(row['Extra Scholarships'])||0,
-        targetDegree: row['Target Degree']||'',
-        // parse countries — stored as comma separated string
-        targetCountries: row['Target Countries'] ? row['Target Countries'].toString().split(',').map(s=>s.trim()).filter(Boolean) : [],
-        scholarships: row['Scholarships Interested']||'',
-        motivation: row['Motivation']||'',
-        totalFilesUploaded: Number(row['Files Uploaded'])||0,
-        driveFolder: row['Drive Folder']||'',
-        createdAt: row['Date']||new Date().toISOString(),
-        // preserve locally saved changes
-        status: local.status || row['Status'] || 'New',
-        paymentStatus: local.paymentStatus || row['Payment Status'] || 'Pending',
-        notes: local.notes || row['Notes'] || '',
-      }
+    const res = await fetch(getScriptUrl())
+    const d   = await res.json()
+    if (!d.success || !d.data || !d.data.length) return
+
+    const local = getClients()
+    const lmap  = {}
+    local.forEach(c => { lmap[c.id] = c })
+
+    const fresh = d.data
+      .filter(row => row['ID'])
+      .map(row => {
+        const id    = String(row['ID'])
+        const saved = lmap[id] || {}
+        return {
+          id,
+          firstName:    firstName(row['Full Name']),
+          lastName:     lastName(row['Full Name']),
+          email:        str(row['Email']),
+          phone:        str(row['WhatsApp']),
+          university:   str(row['University']),
+          cgpa:         str(row['CGPA']),
+          ielts:        str(row['IELTS']),
+          package:      str(row['Package']),
+          packageAmount:num(row['Amount BDT']),
+          extraScholarships: num(row['Extra Scholarships']),
+          targetCountries: countries(row['Target Countries']),
+          targetDegree: str(row['Target Degree']),
+          scholarships: str(row['Scholarships Interested']),
+          totalFilesUploaded: num(row['Files Uploaded']),
+          motivation:   str(row['Motivation']),
+          driveFolder:  str(row['Drive Folder']),
+          createdAt:    str(row['Date']) || new Date().toISOString(),
+          // prefer locally saved changes
+          status:        saved.status        || str(row['Status'])         || 'New',
+          paymentStatus: saved.paymentStatus || str(row['Payment Status']) || 'Pending',
+          notes:         saved.notes         || str(row['Notes'])          || '',
+        }
+      })
+
+    saveClients(fresh)
+  } catch(e) { console.log('Load error:', e) }
+}
+
+function firstName(full){ return (full||'').split(' ')[0]||'' }
+function lastName(full){ return (full||'').split(' ').slice(1).join(' ')||'' }
+function str(v){ return (v||'').toString().trim() }
+function num(v){ return Number(v)||0 }
+function countries(v){ return str(v) ? str(v).split(',').map(s=>s.trim()).filter(Boolean) : [] }
+
+// ── SYNC TO SHEETS ──
+async function syncToSheets(action, payload) {
+  try {
+    await fetch(getScriptUrl(), {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action, ...payload})
     })
-    
-    saveAll(fresh)
-    return fresh
-  } catch(e) {
-    console.log('Sheets load error:', e)
-    return getAll()
-  }
+  } catch(e) { console.log('Sync error:', e) }
 }
 
 // ── NAV ──
@@ -284,91 +285,89 @@ function go(page, btn) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'))
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'))
   document.getElementById('page-'+page).classList.add('on')
-  if (btn) btn.classList.add('on')
-  else document.querySelectorAll('.nb').forEach(b=>{ if(b.textContent.trim().toLowerCase().includes(page.slice(0,4))) b.classList.add('on') })
+  if(btn) btn.classList.add('on')
   document.getElementById('pt').textContent = TITLES[page]||page
-  if (page==='dashboard') renderDash()
-  if (page==='clients') renderClients()
-  if (page==='applications') renderApps()
-  if (page==='payments') renderPays()
-  if (page==='share') renderShare()
-  if (page==='settings') loadSettings()
+  if(page==='dashboard')    renderDash()
+  if(page==='clients')      renderClients()
+  if(page==='applications') renderApps()
+  if(page==='payments')     renderPays()
+  if(page==='share')        renderShare()
+  if(page==='settings')     loadSettings()
 }
-function refresh() {
+
+async function hardRefresh() {
+  toast('🔄 Loading from Google Sheets...','ok')
+  await loadFromSheets()
   const page = document.querySelector('.page.on')?.id?.replace('page-','')||'dashboard'
-  document.getElementById('d-recent') && (document.getElementById('d-recent').innerHTML = '<div class="loading">Loading from Google Sheets...</div>')
-  loadFromSheets().then(() => go(page))
+  go(page, null)
+  toast('✅ Data refreshed','ok')
 }
 
-// ── UPDATE STATUS (persists locally, survives refresh) ──
+// ── STATUS CHANGE (saved locally + synced to sheets) ──
 function setStatus(id, status) {
-  const c = getAll()
-  const i = c.findIndex(x=>x.id===id)
-  if (i>=0) {
-    c[i].status = status
-    saveAll(c)
-    toast('✅ Status → '+status, 'ok')
-    renderClients()
-    renderDash()
-  }
+  const c = getClients(), i = c.findIndex(x=>x.id===id)
+  if (i<0) return
+  c[i].status = status
+  saveClients(c)
+  toast('✅ Status → '+status,'ok')
+  renderClients(); renderDash()
+  syncToSheets('updateStatus', {id, status})
 }
 
-// ── UPDATE PAYMENT STATUS ──
+// ── PAYMENT STATUS ──
 function setPayStatus(id, status) {
-  const c = getAll()
-  const i = c.findIndex(x=>x.id===id)
-  if (i>=0) {
-    c[i].paymentStatus = status
-    saveAll(c)
-    toast('✅ Payment → '+status, 'ok')
-    renderPays()
-  }
-}
-
-// ── DELETE CLIENT ──
-function delClient(id, name) {
-  if (!confirm('Delete "'+name+'"?\nThis removes them from your local CRM only.')) return
-  const c = getAll().filter(x=>x.id!==id)
-  saveAll(c)
-  renderClients()
-  renderDash()
-  toast('🗑️ Client deleted', 'ok')
+  const c = getClients(), i = c.findIndex(x=>x.id===id)
+  if (i<0) return
+  c[i].paymentStatus = status
+  saveClients(c)
+  toast('✅ Payment → '+status,'ok')
+  renderPays()
+  syncToSheets('updatePayment', {id, status})
 }
 
 // ── SAVE NOTES ──
 function saveNotes(id) {
   const notes = document.getElementById('notes_'+id)?.value||''
-  const c = getAll()
-  const i = c.findIndex(x=>x.id===id)
-  if (i>=0) { c[i].notes=notes; saveAll(c); toast('✅ Notes saved','ok') }
+  const c = getClients(), i = c.findIndex(x=>x.id===id)
+  if (i<0) return
+  c[i].notes = notes; saveClients(c); toast('✅ Notes saved','ok')
+  syncToSheets('updateNotes', {id, notes})
+}
+
+// ── DELETE ──
+function delClient(id, name) {
+  if (!confirm('Delete "'+name+'"?')) return
+  saveClients(getClients().filter(x=>x.id!==id))
+  renderClients(); renderDash()
+  toast('🗑️ Deleted','ok')
+  syncToSheets('delete', {id})
 }
 
 // ── DASHBOARD ──
 function renderDash() {
-  const c = getAll()
-  document.getElementById('s-total').textContent = c.length
+  const c = getClients()
+  document.getElementById('s-total').textContent  = c.length
   document.getElementById('s-active').textContent = c.filter(x=>['In Progress','Documents Ready','Applied'].includes(x.status)).length
-  document.getElementById('s-won').textContent = c.filter(x=>x.status==='Accepted').length
-  document.getElementById('s-rev').textContent = '৳'+c.reduce((s,x)=>s+(x.packageAmount||0),0).toLocaleString()
+  document.getElementById('s-won').textContent    = c.filter(x=>x.status==='Accepted').length
+  document.getElementById('s-rev').textContent    = '৳'+c.reduce((s,x)=>s+(x.packageAmount||0),0).toLocaleString()
   const recent = [...c].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,8)
   document.getElementById('d-recent').innerHTML = recent.length
     ? `<table><thead><tr><th>Client</th><th>Package</th><th>Countries</th><th>Files</th><th>Status</th><th>Date</th></tr></thead><tbody>
       ${recent.map(cl=>`<tr style="cursor:pointer" onclick="viewClient('${cl.id}')">
         <td><div style="font-weight:600;color:var(--navy)">${cl.firstName} ${cl.lastName}</div><div style="font-size:10px;color:var(--text3)">${cl.email}</div></td>
-        <td><span class="pill ${ppill(cl.package)}">${cl.package||'—'}</span></td>
-        <td><div class="tag-countries">${(cl.targetCountries||[]).slice(0,3).map(c=>`<span class="ctag">${c}</span>`).join('')}${(cl.targetCountries||[]).length>3?`<span class="ctag">+${cl.targetCountries.length-3}</span>`:''}</div></td>
+        <td><span class="pill ${pp(cl.package)}">${cl.package||'—'}</span></td>
+        <td><div class="ctags">${(cl.targetCountries||[]).slice(0,3).map(c=>`<span class="ctag">${c}</span>`).join('')}${(cl.targetCountries||[]).length>3?`<span class="ctag">+${cl.targetCountries.length-3}</span>`:''}</div></td>
         <td style="color:var(--green);font-weight:600">${cl.totalFilesUploaded||0}</td>
-        <td><span class="pill ${spill(cl.status)}">${cl.status||'New'}</span></td>
+        <td><span class="pill ${sp(cl.status)}">${cl.status||'New'}</span></td>
         <td style="font-size:11px">${fmt(cl.createdAt)}</td>
-      </tr>`).join('')}
-    </tbody></table>`
+      </tr>`).join('')}</tbody></table>`
     : '<div class="empty">No clients yet — share your intake form!</div>'
 }
 
 // ── CLIENTS ──
 function renderClients(list) {
-  const c = list || getAll()
-  document.getElementById('clientsTable').innerHTML = c.length
+  const c = list || getClients()
+  document.getElementById('clientsT').innerHTML = c.length
     ? `<table><thead><tr><th>Client</th><th>Phone</th><th>University</th><th>CGPA</th><th>IELTS</th><th>Package</th><th>Status</th><th>Actions</th></tr></thead><tbody>
       ${c.map(cl=>`<tr>
         <td><div style="font-weight:600;color:var(--navy)">${cl.firstName} ${cl.lastName}</div><div style="font-size:10px;font-family:monospace;color:var(--text3)">${cl.email}</div></td>
@@ -376,152 +375,137 @@ function renderClients(list) {
         <td style="font-size:11px">${cl.university||'—'}</td>
         <td style="font-weight:600;color:var(--navy)">${cl.cgpa||'—'}</td>
         <td style="font-weight:600;color:${cl.ielts?'var(--green)':'var(--text3)'}">${cl.ielts||'—'}</td>
-        <td><span class="pill ${ppill(cl.package)}">${cl.package||'—'}</span></td>
-        <td>
-          <select class="btn btn-ghost btn-sm" style="padding:3px 6px" onchange="setStatus('${cl.id}',this.value)">
-            ${['New','In Progress','Documents Ready','Applied','Accepted','Rejected'].map(s=>`<option${(cl.status||'New')===s?' selected':''}>${s}</option>`).join('')}
-          </select>
-        </td>
-        <td><div style="display:flex;gap:4px">
-          <button class="btn btn-ghost btn-sm" onclick="viewClient('${cl.id}')">👁️</button>
-          <button class="btn btn-red btn-sm" onclick="delClient('${cl.id}','${(cl.firstName+' '+cl.lastName).replace(/'/g,"\\'")}')">🗑️</button>
+        <td><span class="pill ${pp(cl.package)}">${cl.package||'—'}</span></td>
+        <td><select class="btn btn-g btn-sm" style="padding:3px 5px" onchange="setStatus('${cl.id}',this.value)">
+          ${['New','In Progress','Documents Ready','Applied','Accepted','Rejected'].map(s=>`<option${(cl.status||'New')===s?' selected':''}>${s}</option>`).join('')}
+        </select></td>
+        <td><div style="display:flex;gap:3px">
+          <button class="btn btn-g btn-sm" onclick="viewClient('${cl.id}')">👁️</button>
+          <button class="btn btn-r btn-sm" onclick="delClient('${cl.id}','${esc(cl.firstName+' '+cl.lastName)}')">🗑️</button>
         </div></td>
-      </tr>`).join('')}
-    </tbody></table>`
+      </tr>`).join('')}</tbody></table>`
     : '<div class="empty">No clients yet</div>'
 }
 
 function filterC() {
-  const q = document.getElementById('csearch').value.toLowerCase()
-  const s = document.getElementById('sf').value
-  renderClients(getAll().filter(cl=>{
-    const m = `${cl.firstName} ${cl.lastName} ${cl.email} ${cl.phone||''}`.toLowerCase().includes(q)
-    return m && (!s || (cl.status||'New')===s)
+  const q=document.getElementById('csearch').value.toLowerCase()
+  const s=document.getElementById('csf').value
+  renderClients(getClients().filter(cl=>{
+    const m=`${cl.firstName} ${cl.lastName} ${cl.email} ${cl.phone||''}`.toLowerCase().includes(q)
+    return m&&(!s||(cl.status||'New')===s)
   }))
 }
 
 // ── VIEW CLIENT ──
 function viewClient(id) {
-  const cl = getAll().find(c=>c.id===id)
+  const cl = getClients().find(c=>c.id===id)
   if (!cl) return
   document.getElementById('detailTitle').textContent = cl.firstName+' '+cl.lastName
   const prog = {New:10,'In Progress':35,'Documents Ready':60,'Applied':80,'Accepted':100,'Rejected':5}[cl.status||'New']||10
-  const basePrice = cl.package==='Basic'?3000:cl.package==='Standard'?7500:cl.package==='Premium'?10000:0
-  const extras = cl.extraScholarships||0
-  const total = basePrice + extras*2500
-
+  const base  = cl.package==='Basic'?2500:cl.package==='Standard'?5000:cl.package==='Premium'?8000:cl.packageAmount||0
+  const total = cl.packageAmount || base
   document.getElementById('detailBody').innerHTML = `
-    <div class="detail-grid">
+    <div class="dg">
       <div>
-        <div class="pcard">
-          <div class="av">${cl.firstName?.[0]||'?'}${cl.lastName?.[0]||''}</div>
-          <div class="pname">${cl.firstName} ${cl.lastName}</div>
-          <div class="pemail">${cl.email}</div>
-          <div class="prow"><span class="plbl">WhatsApp</span><span class="pval">${cl.phone||'—'}</span></div>
-          <div class="prow"><span class="plbl">Package</span><span class="pval">${cl.package||'—'}</span></div>
-          <div class="prow"><span class="plbl">Scholarships</span><span class="pval">${1+extras} application${1+extras>1?'s':''}</span></div>
-          <div class="prow"><span class="plbl">Amount</span><span class="pval" style="color:#6ee7b7">৳${total.toLocaleString()}</span></div>
-          <div class="prow"><span class="plbl">Payment</span><span class="pval">
-            <select style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:5px;color:#fff;padding:2px 5px;font-size:11px" onchange="setPayStatus('${id}',this.value)">
+        <div class="pc">
+          <div class="av">${(cl.firstName?.[0]||'?')}${(cl.lastName?.[0]||'')}</div>
+          <div class="pn2">${cl.firstName} ${cl.lastName}</div>
+          <div class="pe">${cl.email}</div>
+          <div class="pr2"><span class="plb">WhatsApp</span><span class="pv">${cl.phone||'—'}</span></div>
+          <div class="pr2"><span class="plb">Package</span><span class="pv">${cl.package||'—'}</span></div>
+          <div class="pr2"><span class="plb">Applications</span><span class="pv">${1+(cl.extraScholarships||0)} scholarship${(1+(cl.extraScholarships||0))>1?'s':''}</span></div>
+          <div class="pr2"><span class="plb">Amount</span><span class="pv" style="color:#6ee7b7">৳${total.toLocaleString()}</span></div>
+          <div class="pr2"><span class="plb">Payment</span><span class="pv">
+            <select style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:4px;color:#fff;padding:1px 4px;font-size:10px" onchange="setPayStatus('${id}',this.value)">
               ${['Pending','Paid','Partial','Refunded'].map(s=>`<option${(cl.paymentStatus||'Pending')===s?' selected':''}>${s}</option>`).join('')}
-            </select>
-          </span></div>
-          <div class="prow"><span class="plbl">Files</span><span class="pval" style="color:#6ee7b7">${cl.totalFilesUploaded||0} uploaded</span></div>
+            </select></span></div>
+          <div class="pr2"><span class="plb">Files</span><span class="pv" style="color:#6ee7b7">${cl.totalFilesUploaded||0} uploaded</span></div>
         </div>
-        <div style="margin-top:12px">
-          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;margin-bottom:5px">Progress — ${cl.status||'New'}</div>
-          <div class="prog-bar"><div class="prog-fill" style="width:${prog}%"></div></div>
-          <div style="font-size:10px;color:var(--text3)">${prog}% complete</div>
+        <div style="margin-top:10px">
+          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;margin-bottom:4px">Progress</div>
+          <div class="pb2"><div class="pf" style="width:${prog}%"></div></div>
+          <div style="font-size:10px;color:var(--text3)">${cl.status||'New'} — ${prog}%</div>
         </div>
-        ${cl.driveFolder?`<a href="${cl.driveFolder}" target="_blank" class="btn btn-primary btn-sm" style="margin-top:10px;width:100%;justify-content:center">📂 Google Drive Folder</a>`:''}
+        ${cl.driveFolder?`<a href="${cl.driveFolder}" target="_blank" class="btn btn-p btn-sm" style="margin-top:9px;width:100%;justify-content:center">📂 Open Drive Folder</a>`:''}
       </div>
       <div>
-        <div class="igrid">
-          <div class="ibox"><div class="ilbl">University</div><div class="ival">${cl.university||'—'}</div></div>
-          <div class="ibox"><div class="ilbl">CGPA</div><div class="ival">${cl.cgpa||'—'}</div></div>
-          <div class="ibox"><div class="ilbl">IELTS</div><div class="ival">${cl.ielts||'—'}</div></div>
-          <div class="ibox"><div class="ilbl">Target Degree</div><div class="ival">${cl.targetDegree||'—'}</div></div>
+        <div class="ig">
+          <div class="ib"><div class="il">University</div><div class="iv">${cl.university||'—'}</div></div>
+          <div class="ib"><div class="il">CGPA</div><div class="iv">${cl.cgpa||'—'}</div></div>
+          <div class="ib"><div class="il">IELTS</div><div class="iv">${cl.ielts||'—'}</div></div>
+          <div class="ib"><div class="il">Target Degree</div><div class="iv">${cl.targetDegree||'—'}</div></div>
         </div>
-        <div class="ibox" style="margin-bottom:10px">
-          <div class="ilbl">Target Countries (${(cl.targetCountries||[]).length})</div>
-          <div class="tag-countries" style="margin-top:5px">${(cl.targetCountries||[]).map(c=>`<span class="ctag">${c}</span>`).join('')||'—'}</div>
+        <div class="ib" style="margin-bottom:9px">
+          <div class="il">Target Countries (${(cl.targetCountries||[]).length})</div>
+          <div class="ctags" style="margin-top:4px">${(cl.targetCountries||[]).map(c=>`<span class="ctag">${c}</span>`).join('')||'—'}</div>
         </div>
-        <div class="ibox" style="margin-bottom:10px">
-          <div class="ilbl">Scholarships Interested</div>
-          <div class="ival" style="margin-top:3px">${cl.scholarships||'—'}</div>
+        <div class="ib" style="margin-bottom:9px">
+          <div class="il">Scholarships Interested</div>
+          <div class="iv" style="margin-top:2px">${cl.scholarships||'—'}</div>
         </div>
-        ${cl.motivation?`<div class="ibox" style="margin-bottom:10px"><div class="ilbl">Motivation</div><div style="font-size:12px;color:var(--text2);margin-top:3px;line-height:1.6">${cl.motivation}</div></div>`:''}
-        <div style="margin-bottom:10px">
-          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Update Status</div>
-          <select class="btn btn-ghost" style="width:100%;padding:6px 10px" onchange="setStatus('${id}',this.value)">
+        ${cl.motivation?`<div class="ib" style="margin-bottom:9px"><div class="il">Motivation</div><div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.6">${cl.motivation}</div></div>`:''}
+        <div style="margin-bottom:9px">
+          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Update Status</div>
+          <select class="btn btn-g" style="width:100%;padding:5px 9px" onchange="setStatus('${id}',this.value)">
             ${['New','In Progress','Documents Ready','Applied','Accepted','Rejected'].map(s=>`<option${(cl.status||'New')===s?' selected':''}>${s}</option>`).join('')}
           </select>
         </div>
         <div>
-          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Notes</div>
-          <textarea class="notes-ta" id="notes_${id}">${cl.notes||''}</textarea>
-          <div style="display:flex;gap:7px;margin-top:7px">
-            <button class="btn btn-primary btn-sm" onclick="saveNotes('${id}')">Save Notes</button>
-            <button class="btn btn-red btn-sm" onclick="delClient('${id}','${(cl.firstName+' '+cl.lastName).replace(/'/g,"\\'")}');closeDetail()">Delete Client</button>
+          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Notes</div>
+          <textarea class="nta" id="notes_${id}">${cl.notes||''}</textarea>
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <button class="btn btn-p btn-sm" onclick="saveNotes('${id}')">Save Notes</button>
+            <button class="btn btn-r btn-sm" onclick="delClient('${id}','${esc(cl.firstName+' '+cl.lastName)}');closeDetail()">Delete Client</button>
           </div>
         </div>
       </div>
     </div>`
   document.getElementById('detailOverlay').classList.add('on')
 }
-function closeDetail() { document.getElementById('detailOverlay').classList.remove('on') }
+function closeDetail(){ document.getElementById('detailOverlay').classList.remove('on') }
 
 // ── APPLICATIONS — one row per client ──
 function renderApps() {
-  const c = getAll()
-  document.getElementById('appsTable').innerHTML = c.length
+  const c = getClients()
+  document.getElementById('appsT').innerHTML = c.length
     ? `<table><thead><tr><th>Client</th><th>CGPA</th><th>IELTS</th><th>Target Countries</th><th>Scholarships</th><th>Package</th><th>Status</th><th>Update</th></tr></thead><tbody>
       ${c.map(cl=>`<tr>
-        <td style="cursor:pointer" onclick="viewClient('${cl.id}')">
-          <div style="font-weight:600;color:var(--navy)">${cl.firstName} ${cl.lastName}</div>
-          <div style="font-size:10px;color:var(--text3)">${cl.email}</div>
-        </td>
+        <td style="cursor:pointer" onclick="viewClient('${cl.id}')"><div style="font-weight:600;color:var(--navy)">${cl.firstName} ${cl.lastName}</div><div style="font-size:10px;color:var(--text3)">${cl.email}</div></td>
         <td style="font-weight:600">${cl.cgpa||'—'}</td>
         <td style="font-weight:600;color:${cl.ielts?'var(--green)':'var(--text3)'}">${cl.ielts||'—'}</td>
-        <td><div class="tag-countries">${(cl.targetCountries||[]).map(c=>`<span class="ctag">${c}</span>`).join('')||'—'}</div></td>
-        <td style="font-size:11px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cl.scholarships||'—'}</td>
-        <td><span class="pill ${ppill(cl.package)}">${cl.package||'—'}</span></td>
-        <td><span class="pill ${spill(cl.status)}">${cl.status||'New'}</span></td>
-        <td>
-          <select class="btn btn-ghost btn-sm" style="padding:3px 6px" onchange="setStatus('${cl.id}',this.value)">
-            ${['New','In Progress','Documents Ready','Applied','Accepted','Rejected'].map(s=>`<option${(cl.status||'New')===s?' selected':''}>${s}</option>`).join('')}
-          </select>
-        </td>
-      </tr>`).join('')}
-    </tbody></table>`
+        <td><div class="ctags">${(cl.targetCountries||[]).map(c=>`<span class="ctag">${c}</span>`).join('')||'—'}</div></td>
+        <td style="font-size:11px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cl.scholarships||'—'}</td>
+        <td><span class="pill ${pp(cl.package)}">${cl.package||'—'}</span></td>
+        <td><span class="pill ${sp(cl.status)}">${cl.status||'New'}</span></td>
+        <td><select class="btn btn-g btn-sm" style="padding:3px 5px" onchange="setStatus('${cl.id}',this.value)">
+          ${['New','In Progress','Documents Ready','Applied','Accepted','Rejected'].map(s=>`<option${(cl.status||'New')===s?' selected':''}>${s}</option>`).join('')}
+        </select></td>
+      </tr>`).join('')}</tbody></table>`
     : '<div class="empty">No applications yet</div>'
 }
 
 // ── PAYMENTS ──
 function renderPays() {
-  const c = getAll()
+  const c     = getClients()
   const total = c.reduce((s,x)=>s+(x.packageAmount||0),0)
-  const paid = c.filter(x=>x.paymentStatus==='Paid').reduce((s,x)=>s+(x.packageAmount||0),0)
-  document.getElementById('paysTable').innerHTML = c.length
-    ? `<div style="padding:12px 14px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:12px;color:var(--text2)">Revenue Summary</span>
-        <span style="font-size:13px;font-weight:700;color:var(--navy)">Expected: <span style="color:var(--accent)">৳${total.toLocaleString()}</span> &nbsp;|&nbsp; Paid: <span style="color:var(--green)">৳${paid.toLocaleString()}</span></span>
+  const paid  = c.filter(x=>x.paymentStatus==='Paid').reduce((s,x)=>s+(x.packageAmount||0),0)
+  document.getElementById('paysT').innerHTML = c.length
+    ? `<div style="padding:10px 13px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;justify-content:space-between">
+        <span style="font-size:12px;color:var(--text2)">Revenue</span>
+        <span style="font-size:12px;font-weight:700">Expected: <span style="color:var(--accent)">৳${total.toLocaleString()}</span> &nbsp;|&nbsp; Paid: <span style="color:var(--green)">৳${paid.toLocaleString()}</span></span>
       </div>
-      <table><thead><tr><th>Client</th><th>Package</th><th>Scholarships</th><th>Amount</th><th>Files</th><th>Payment Status</th><th>Date</th></tr></thead><tbody>
+      <table><thead><tr><th>Client</th><th>Package</th><th>Scholarships</th><th>Amount</th><th>Files</th><th>Payment</th><th>Date</th></tr></thead><tbody>
       ${c.map(cl=>`<tr>
         <td><div style="font-weight:600;color:var(--navy)">${cl.firstName} ${cl.lastName}</div><div style="font-size:10px;color:var(--text3)">${cl.phone||cl.email}</div></td>
-        <td><span class="pill ${ppill(cl.package)}">${cl.package||'—'}</span></td>
-        <td style="font-size:11px">${1+(cl.extraScholarships||0)} scholarship${(1+(cl.extraScholarships||0))>1?'s':''}</td>
-        <td style="font-weight:700;color:var(--green)">৳${(cl.packageAmount||0).toLocaleString()}${(cl.extraScholarships||0)>0?`<div style="font-size:10px;color:var(--text3)">+${cl.extraScholarships}×৳2,500</div>`:''}</td>
+        <td><span class="pill ${pp(cl.package)}">${cl.package||'—'}</span></td>
+        <td style="font-size:11px">${1+(cl.extraScholarships||0)} app${(1+(cl.extraScholarships||0))>1?'s':''}</td>
+        <td style="font-weight:700;color:var(--green)">৳${(cl.packageAmount||0).toLocaleString()}${(cl.extraScholarships||0)>0?`<div style="font-size:9px;color:var(--text3)">+${cl.extraScholarships}×৳2,500</div>`:''}</td>
         <td style="color:var(--green);font-weight:600">${cl.totalFilesUploaded||0}</td>
-        <td>
-          <select class="btn btn-sm ${(cl.paymentStatus||'Pending')==='Paid'?'btn-green':(cl.paymentStatus||'Pending')==='Refunded'?'btn-red':'btn-ghost'}" style="padding:3px 7px" onchange="setPayStatus('${cl.id}',this.value)">
-            ${['Pending','Paid','Partial','Refunded'].map(s=>`<option${(cl.paymentStatus||'Pending')===s?' selected':''}>${s}</option>`).join('')}
-          </select>
-        </td>
+        <td><select class="btn btn-sm ${(cl.paymentStatus||'Pending')==='Paid'?'btn-gr':(cl.paymentStatus||'Pending')==='Refunded'?'btn-r':'btn-g'}" style="padding:3px 6px" onchange="setPayStatus('${cl.id}',this.value)">
+          ${['Pending','Paid','Partial','Refunded'].map(s=>`<option${(cl.paymentStatus||'Pending')===s?' selected':''}>${s}</option>`).join('')}
+        </select></td>
         <td style="font-size:11px">${fmt(cl.createdAt)}</td>
-      </tr>`).join('')}
-    </tbody></table>`
+      </tr>`).join('')}</tbody></table>`
     : '<div class="empty">No payments yet</div>'
 }
 
@@ -530,105 +514,33 @@ function renderShare() {
   const base = window.location.href.replace('crm.html','').replace(/\?.*$/,'')
   const link = base+'intake.html'
   document.getElementById('shareLink').value = link
-  document.getElementById('openLink').href = link
-  document.getElementById('scriptBox').textContent = `const PARENT_FOLDER_ID = '1HfIMl2NEijfXk-Bm9sos8uPXrZzyC8zk'
-const SPREADSHEET_ID = '15NlCdp0vpNVgWvWkJ2YiDKUcWx_7IyYBOnaYja4mDJg'
-const SHEET_NAME = 'Clients'
-
-function doGet(e) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID)
-  const sheet = ss.getSheetByName(SHEET_NAME)
-  if (!sheet) return out({success:false,data:[]})
-  const rows = sheet.getDataRange().getValues()
-  const headers = rows[0]
-  const data = rows.slice(1).map(row => {
-    const obj = {}
-    headers.forEach((h,i) => obj[h] = row[i])
-    return obj
-  })
-  return out({success:true, data})
+  document.getElementById('openLink').href   = link
+  document.getElementById('formUrlDisplay').textContent = link
 }
-
-function doPost(e) {
-  try {
-    const data = JSON.parse(e.postData.contents)
-    saveToSheet(data)
-    if (data.documents && Object.keys(data.documents).length > 0) uploadDocs(data)
-    return out({success:true})
-  } catch(err) { return out({success:false,error:err.toString()}) }
-}
-
-function saveToSheet(data) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID)
-  let sheet = ss.getSheetByName(SHEET_NAME)
-  if (!sheet) {
-    sheet = ss.insertSheet(SHEET_NAME)
-    sheet.appendRow(['ID','Date','Full Name','Email','WhatsApp','University',
-      'CGPA','IELTS','Package','Amount (BDT)','Extra Scholarships',
-      'Target Countries','Target Degree','Scholarships Interested',
-      'Files Uploaded','Motivation','Notes','Status','Payment Status','Drive Folder'])
-    sheet.getRange(1,1,1,20).setBackground('#0f2444').setFontColor('#fff').setFontWeight('bold')
-    sheet.setFrozenRows(1)
-  }
-  sheet.appendRow([data.id, new Date(data.createdAt).toLocaleString('en-GB'),
-    (data.firstName+' '+data.lastName).trim(), data.email, data.phone,
-    data.university, data.cgpa, data.ielts, data.package, data.packageAmount,
-    data.extraScholarships||0, (data.targetCountries||[]).join(', '),
-    data.targetDegree, data.scholarships, data.totalFilesUploaded||0,
-    data.motivation, data.notes||'', 'New', 'Pending', ''])
-}
-
-function uploadDocs(data) {
-  const folder = DriveApp.getFolderById(PARENT_FOLDER_ID)
-  const name = data.firstName+' '+data.lastName+' — '+new Date().getFullYear()
-  let cf; const ex = folder.getFoldersByName(name)
-  cf = ex.hasNext() ? ex.next() : folder.createFolder(name)
-  const docs = data.documents||{}
-  Object.entries(docs).forEach(([type, files]) => {
-    const arr = Array.isArray(files)?files:[files]
-    arr.forEach(f => {
-      if (!f||!f.data) return
-      try {
-        const b64 = f.data.includes(',')?f.data.split(',')[1]:f.data
-        const mime = f.type||'application/octet-stream'
-        cf.createFile(Utilities.newBlob(Utilities.base64Decode(b64),mime,type+' — '+f.name))
-      } catch(e) { Logger.log('File error: '+e) }
-    })
-  })
-  updateCell(data.id, 20, cf.getUrl())
-}
-
-function updateCell(id, col, val) {
-  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME)
-  if (!sheet) return
-  const rows = sheet.getDataRange().getValues()
-  for (let i=1;i<rows.length;i++) {
-    if (rows[i][0]===id) { sheet.getRange(i+1,col).setValue(val); break }
-  }
-}
-
-function out(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON)
-}`
-}
-
-function copyLink(){navigator.clipboard.writeText(document.getElementById('shareLink').value).then(()=>toast('✅ Link copied!','ok'))}
-function copyScript(){navigator.clipboard.writeText(document.getElementById('scriptBox').textContent).then(()=>toast('✅ Script copied!','ok'))}
+function copyLink(){ navigator.clipboard.writeText(document.getElementById('shareLink').value).then(()=>toast('✅ Link copied!','ok')) }
 
 // ── SETTINGS ──
-function loadSettings(){document.getElementById('sheetsUrl').value=getSettings().sheetsUrl||SHEETS_URL}
-function saveSettings(){localStorage.setItem('sp_crm_settings',JSON.stringify({sheetsUrl:document.getElementById('sheetsUrl').value.trim()}));toast('✅ Settings saved','ok')}
-function clearAll(){if(!confirm('Delete ALL local client data?'))return;localStorage.removeItem(SK);renderDash();toast('Cleared','ok')}
+function loadSettings(){ document.getElementById('scriptUrlInput').value = getScriptUrl() }
+function saveSettings(){
+  localStorage.setItem('sp_script_url', document.getElementById('scriptUrlInput').value.trim())
+  toast('✅ Settings saved','ok')
+}
+function clearLocal(){
+  if(!confirm('Delete all local data?')) return
+  localStorage.removeItem(SK); renderDash(); toast('Cleared','ok')
+}
 
 // ── HELPERS ──
-function fmt(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}catch{return d}}
-function ppill(p){return{Basic:'p-blue',Standard:'p-green',Premium:'p-navy'}[p]||'p-gray'}
-function spill(s){return{'New':'p-blue','In Progress':'p-amber','Documents Ready':'p-amber','Applied':'p-amber','Accepted':'p-green','Rejected':'p-red'}[s]||'p-gray'}
-function toast(msg,type='ok'){const t=document.createElement('div');t.className='toast '+type;t.textContent=msg;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),3000)}
+function fmt(d){ if(!d)return'—'; try{return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}catch{return d} }
+function pp(p){ return{Basic:'pb',Standard:'pg',Premium:'pn'}[p]||'py' }
+function sp(s){ return{'New':'pb','In Progress':'pa','Documents Ready':'pa','Applied':'pa','Accepted':'pg','Rejected':'pr'}[s]||'py' }
+function esc(s){ return s.replace(/'/g,"\\'") }
+function toast(msg,type='ok'){ const t=document.createElement('div');t.className='toast '+type;t.textContent=msg;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),3000) }
 
 // ── INIT ──
-window.onload = () => {
-  loadFromSheets().then(() => renderDash())
+window.onload = async () => {
+  await loadFromSheets()
+  renderDash()
 }
 </script>
 </body>
