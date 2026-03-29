@@ -77,7 +77,7 @@ const PACKAGES = [
   },
 ]
 
-const EXTRA_PRICE = 2500
+const EXTRA_PRICE = 3500
 
 export default function ServicesPage() {
   const [extraSchols, setExtraSchols] = useState({ standard: 0, premium: 0 })
@@ -104,7 +104,7 @@ export default function ServicesPage() {
         <div className="text-center mb-10">
           <span className="badge badge-blue mb-3">🏷 Transparent Pricing</span>
           <h2 className="font-head font-black text-3xl text-navy-800 mb-3">Choose Your Package</h2>
-          <p className="text-gray-500 text-sm max-w-lg mx-auto">All packages include full scholarship database access. No hidden fees. Standard & Premium include one free scholarship application — add more for ৳2,500 each.</p>
+          <p className="text-gray-500 text-sm max-w-lg mx-auto">All packages include full scholarship database access. No hidden fees. Standard & Premium include one free scholarship application — add more for ৳3,500 each.</p>
         </div>
 
         {/* PACKAGE CARDS */}
