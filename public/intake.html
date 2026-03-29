@@ -230,9 +230,9 @@ const COUNTRIES = [
 ]
 
 const PKGS = [
-  {val:'Basic',   icon:'🌱', price:2500, label:'৳2,500', desc:'Document prep only', tag:'Apply Yourself', tagClass:'tag-self'},
-  {val:'Standard',icon:'🚀', price:5000, label:'৳5,000', desc:'SOP + full support',  tag:'We Apply For You', tagClass:'tag-apply', featured:true},
-  {val:'Premium', icon:'👑', price:8000, label:'৳8,000', desc:'Full concierge',      tag:'We Apply For You', tagClass:'tag-apply'},
+  {val:'Basic',   icon:'🌱', price:3000, label:'৳2,500', desc:'Document prep only', tag:'Apply Yourself', tagClass:'tag-self'},
+  {val:'Standard',icon:'🚀', price:7500, label:'৳5,000', desc:'SOP + full support',  tag:'We Apply For You', tagClass:'tag-apply', featured:true},
+  {val:'Premium', icon:'👑', price:10000, label:'৳8,000', desc:'Full concierge',      tag:'We Apply For You', tagClass:'tag-apply'},
 ]
 
 const DOC_GROUPS = [
@@ -336,7 +336,7 @@ function updateExtraNote() {
   if (!note) return
   const extras = Math.max(0, selCountries.size - 1)
   if (extras > 0 && (selPkg === 'Standard' || selPkg === 'Premium')) {
-    const base = selPkg === 'Standard' ? 5000 : 8000
+    const base = selPkg === 'Standard' ? 7500 : 10000
     const total = base + extras * 2500
     note.style.display = 'block'
     note.innerHTML = `➕ <strong>Extra scholarship charge:</strong> ${selCountries.size} countries selected — 1 included + ${extras} extra × ৳2,500 = <strong>৳${total.toLocaleString()} total</strong>`
@@ -423,7 +423,7 @@ async function submitForm() {
 
   const totalFiles = Object.values(uploads).reduce((s,a)=>s+a.length,0)
   const extras = Math.max(0, selCountries.size-1)
-  const basePrice = selPkg==='Basic'?2500:selPkg==='Standard'?5000:selPkg==='Premium'?8000:0
+  const basePrice = selPkg==='Basic'?3000:selPkg==='Standard'?7500:selPkg==='Premium'?10000:0
   const totalAmount = selPkg==='Basic' ? basePrice : basePrice + extras*2500
 
   // build docs object with file data
