@@ -89,7 +89,31 @@ tr:hover td{background:rgba(26,107,245,.02)}
 </style>
 </head>
 <body>
-<div class="shell">
+<!-- LOGIN PAGE -->
+<div id="loginPage" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy)">
+  <div style="background:var(--bg2);border-radius:14px;padding:36px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="width:52px;height:52px;background:var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px">🎓</div>
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--navy)">ScholarPath BD</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:3px">Admin CRM — Restricted Access</div>
+    </div>
+    <div id="loginErr" style="background:#fef2f2;border:1px solid #fecaca;color:var(--red);padding:9px 12px;border-radius:7px;font-size:12px;margin-bottom:12px;display:none"></div>
+    <div style="display:flex;flex-direction:column;gap:13px">
+      <div>
+        <label style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Username</label>
+        <input type="text" id="loginUser" placeholder="admin" style="width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;color:var(--text);padding:9px 11px;font-size:13px" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Password</label>
+        <input type="password" id="loginPass" placeholder="••••••••" style="width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;color:var(--text);padding:9px 11px;font-size:13px" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button onclick="doLogin()" style="background:var(--accent);color:#fff;border:none;border-radius:7px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;width:100%;font-family:'DM Sans',sans-serif">Sign In →</button>
+    </div>
+    <div style="text-align:center;margin-top:16px;font-size:11px;color:var(--text3)">🔒 Restricted to authorized users only</div>
+  </div>
+</div>
+
+<div id="shell" class="shell" style="display:none">
 <div class="side">
   <div class="logo"><div class="li">🎓</div><div><div class="ln">ScholarPath BD</div><div class="ls">CRM Dashboard</div></div></div>
   <nav class="nav">
@@ -104,7 +128,10 @@ tr:hover td{background:rgba(26,107,245,.02)}
     <div class="ns">System</div>
     <button class="nb" onclick="go('settings',this)">⚙️ Settings</button>
   </nav>
-  <div class="sf">ScholarPath BD CRM</div>
+  <div style="padding:11px;border-top:1px solid rgba(255,255,255,.08)">
+  <button onclick="doLogout()" style="width:100%;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5;border-radius:6px;padding:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">🚪 Sign Out</button>
+</div>
+<div class="sf">ScholarPath BD CRM</div>
 </div>
 <div class="main">
   <div class="topbar">
@@ -402,7 +429,7 @@ function viewClient(id) {
   if (!cl) return
   document.getElementById('detailTitle').textContent = cl.firstName+' '+cl.lastName
   const prog = {New:10,'In Progress':35,'Documents Ready':60,'Applied':80,'Accepted':100,'Rejected':5}[cl.status||'New']||10
-  const base  = cl.package==='Basic'?3000:cl.package==='Standard'?7500:cl.package==='Premium'?10000:cl.packageAmount||0
+  const base  = cl.package==='Basic'?2500:cl.package==='Standard'?5000:cl.package==='Premium'?8000:cl.packageAmount||0
   const total = cl.packageAmount || base
   document.getElementById('detailBody').innerHTML = `
     <div class="dg">
@@ -537,10 +564,47 @@ function sp(s){ return{'New':'pb','In Progress':'pa','Documents Ready':'pa','App
 function esc(s){ return s.replace(/'/g,"\\'") }
 function toast(msg,type='ok'){ const t=document.createElement('div');t.className='toast '+type;t.textContent=msg;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),3000) }
 
+// ── AUTH ──
+// Change these credentials to secure your CRM
+const ADMIN_USER = 'scholarpath'
+const ADMIN_PASS = 'admin@2026'
+const AUTH_KEY   = 'sp_crm_auth'
+
+function isLoggedIn() {
+  return localStorage.getItem(AUTH_KEY) === 'yes'
+}
+
+function doLogin() {
+  const user = document.getElementById('loginUser').value.trim()
+  const pass = document.getElementById('loginPass').value.trim()
+  const err  = document.getElementById('loginErr')
+  if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    localStorage.setItem(AUTH_KEY, 'yes')
+    document.getElementById('loginPage').style.display = 'none'
+    document.getElementById('shell').style.display = 'flex'
+    loadFromSheets().then(() => renderDash())
+  } else {
+    err.style.display = 'block'
+    err.textContent = '❌ Wrong username or password'
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem(AUTH_KEY)
+  document.getElementById('shell').style.display = 'none'
+  document.getElementById('loginPage').style.display = 'flex'
+  document.getElementById('loginUser').value = ''
+  document.getElementById('loginPass').value = ''
+}
+
 // ── INIT ──
 window.onload = async () => {
-  await loadFromSheets()
-  renderDash()
+  if (isLoggedIn()) {
+    document.getElementById('loginPage').style.display = 'none'
+    document.getElementById('shell').style.display = 'flex'
+    await loadFromSheets()
+    renderDash()
+  }
 }
 </script>
 </body>
