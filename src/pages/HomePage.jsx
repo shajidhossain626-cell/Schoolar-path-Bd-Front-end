@@ -1,8 +1,5 @@
-
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useScholarships } from '@context/ScholarshipContext'
-
-
 import ScholarshipCard from '@components/common/ScholarshipCard'
 import AISearchBar from '@components/common/AISearchBar'
 
