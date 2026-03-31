@@ -35,13 +35,13 @@ export default function HomePage() {
             <div>
               <div className="flex items-center gap-2 mb-5">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-xs font-bold text-white/60 uppercase tracking-widest">Bangladesh's #1 AI Scholarship Platform</span>
+                <span className="text-xs font-bold text-white/60 uppercase tracking-widest">Bangladesh's #1 Global Scholarship Platform</span>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight mb-5 leading-[1.08]">
                 Find Your <span className="bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent">Dream</span><br />Scholarship with AI
               </h1>
               <p className="text-white/65 text-base leading-relaxed max-w-md mb-8">
-                Discover 500+ fully-funded international scholarships. Our AI advisor matches you instantly — then our experts handle the entire application for you.
+                Discover 30+ fully-funded international scholarships. Our advisor matches you instantly — then our experts handle the entire application for you.
               </p>
               <div className="flex flex-wrap gap-3 mb-10">
                 <Link to="/scholarships" className="btn btn-primary btn-lg">🔍 Browse Scholarships</Link>
