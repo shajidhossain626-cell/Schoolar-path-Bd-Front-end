@@ -94,11 +94,7 @@ export default function ContactPage() {
               ))}
 
               {/* AI Advisor box */}
-              <div className="mt-6 p-5 bg-blue-50 border border-blue-100 rounded-2xl">
-                <h4 className="font-head font-bold text-navy-800 text-base mb-2">🤖 Quick AI Answer</h4>
-                <p className="text-xs text-gray-500 mb-3">Need instant help? Try our AI scholarship advisor — it answers questions about eligibility, deadlines, IELTS requirements and more.</p>
-                <Link to="/" className="btn btn-blue btn-sm">Ask AI Advisor →</Link>
-              </div>
+              
             </div>
 
             {/* FAQ */}
