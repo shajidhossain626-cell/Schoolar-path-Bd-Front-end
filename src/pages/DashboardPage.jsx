@@ -1,126 +1,56 @@
-import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@context/AuthContext'
 import { useScholarships } from '@context/ScholarshipContext'
-import { useChat } from '@hooks/useAI'
 import ScholarshipCard from '@components/common/ScholarshipCard'
-import { applicationAPI, documentAPI, paymentAPI } from '../services/api'
+import { useState } from 'react'
 import toast from 'react-hot-toast'
 
-const STATUS_MAP = { UNDER_REVIEW:'pill-review', review:'pill-review', ACCEPTED:'pill-accepted', accepted:'pill-accepted', REJECTED:'pill-rejected', rejected:'pill-rejected', DRAFT:'pill-draft', draft:'pill-draft', SUBMITTED:'pill-review', pending:'pill-pending' }
-const STATUS_LABEL = { UNDER_REVIEW:'Under Review', review:'Under Review', ACCEPTED:'✅ Accepted', accepted:'✅ Accepted', REJECTED:'Rejected', rejected:'Rejected', DRAFT:'In Progress', draft:'In Progress', SUBMITTED:'Submitted', pending:'Pending' }
+const INTAKE_URL  = 'https://schoolar-path-bd-front-end.vercel.app/intake.html'
+const WHATSAPP    = 'https://wa.me/8801889700879'
 
-function AppCard({ a }) {
-  const status = (a.status || 'draft').toLowerCase()
-  const scholarship = a.scholarship || {}
-  return (
-    <div className="card p-4 flex gap-4 items-center hover:shadow-card transition-shadow">
-      <span className="text-3xl flex-shrink-0">{scholarship.flag || '🎓'}</span>
-      <div className="flex-1 min-w-0">
-        <h4 className="font-bold text-sm text-navy-800 mb-0.5 truncate">{scholarship.name || a.scholarshipName || 'Scholarship'}</h4>
-        <p className="text-xs text-gray-500 mb-1.5">{scholarship.country || ''} · {a.appliedVia || 'self'} · {new Date(a.createdAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}</p>
-        <div className="progress-bar"><div className="progress-fill" style={{ width: `${a.progress || 0}%` }} /></div>
-      </div>
-      <div className="text-right flex-shrink-0">
-        <span className={`pill ${STATUS_MAP[a.status] || 'pill-draft'}`}>{STATUS_LABEL[a.status] || a.status}</span>
-        <div className="text-[11px] text-gray-400 mt-1">{a.progress || 0}%</div>
-      </div>
-    </div>
-  )
-}
+const DOC_CHECKLIST = [
+  { icon:'🛂', name:'Passport',              sub:'Valid passport — photo page' },
+  { icon:'📄', name:'Academic Transcripts',  sub:'All years — certified copy' },
+  { icon:'🎓', name:'Degree Certificate',    sub:'Bachelor\'s / Master\'s degree' },
+  { icon:'🏆', name:'IELTS / TOEFL',         sub:'Official score report' },
+  { icon:'📝', name:'Statement of Purpose',  sub:'Tailored to target scholarship' },
+  { icon:'📋', name:'CV / Resume',           sub:'Europass format for Europe' },
+  { icon:'💌', name:'Recommendation Letters',sub:'2–3 from professors / employers' },
+  { icon:'🪪', name:'National ID',           sub:'NID — both sides' },
+  { icon:'📸', name:'Passport Photos',       sub:'White background, recent' },
+  { icon:'🔬', name:'Research Proposal',     sub:'For PhD applicants only' },
+]
 
 export default function DashboardPage() {
   const { user, logout } = useAuth()
   const { savedScholarships } = useScholarships()
-  const { messages, send, loading: chatLoading } = useChat()
   const [section, setSection] = useState('overview')
-  const [applications, setApplications] = useState([])
-  const [docs, setDocs] = useState([])
-  const [payments, setPayments] = useState([])
-  const [loadingData, setLoadingData] = useState(true)
-  const [chatInput, setChatInput] = useState('')
+  const [checked, setChecked] = useState({})
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const loadData = async () => {
-      setLoadingData(true)
-      try {
-        const [appsRes, docsRes, paysRes] = await Promise.allSettled([
-          applicationAPI.list(),
-          documentAPI.list(),
-          paymentAPI.history(),
-        ])
-        if (appsRes.status === 'fulfilled' && appsRes.value.data?.success) {
-          setApplications(appsRes.value.data.data || [])
-        }
-        if (docsRes.status === 'fulfilled' && docsRes.value.data?.success) {
-          setDocs(docsRes.value.data.data || [])
-        }
-        if (paysRes.status === 'fulfilled' && paysRes.value.data?.success) {
-          setPayments(paysRes.value.data.data || [])
-        }
-      } catch (e) {
-        console.error('Dashboard load error:', e)
-      } finally {
-        setLoadingData(false)
-      }
-    }
-    loadData()
-  }, [])
-
-  const acceptedCount = applications.filter(a => a.status === 'ACCEPTED').length
-
-  const STATS = [
-    { icon:'🔖', val: savedScholarships.length, label:'Saved' },
-    { icon:'📋', val: applications.length, label:'Applications' },
-    { icon:'📄', val: docs.length, label:'Documents' },
-    { icon:'✅', val: acceptedCount, label:'Accepted' },
-  ]
+  const doneCount = Object.values(checked).filter(Boolean).length
 
   const NAV = [
-    { id:'overview', icon:'🏠', label:'Overview' },
-    { id:'saved', icon:'🔖', label:'Saved Scholarships' },
-    { id:'applications', icon:'📋', label:'My Applications' },
-    { id:'documents', icon:'📄', label:'Documents' },
-    { id:'payments', icon:'💳', label:'Payment History' },
-    { id:'ai', icon:'🤖', label:'AI Advisor' },
+    { id:'overview',  icon:'🏠', label:'Overview' },
+    { id:'saved',     icon:'🔖', label:'Saved Scholarships' },
+    { id:'checklist', icon:'📄', label:'Document Checklist' },
+    { id:'track',     icon:'📋', label:'Track Application' },
   ]
-
-  const handleFileUpload = async (e) => {
-    const files = [...e.target.files]
-    for (const f of files) {
-      const form = new FormData()
-      form.append('file', f)
-      try {
-        const res = await documentAPI.upload(form)
-        if (res.data?.success) {
-          setDocs(prev => [res.data.data, ...prev])
-        } else {
-          // fallback local preview
-          setDocs(prev => [{ id: Date.now(), name: f.name, fileSize: `${(f.size/1024/1024).toFixed(1)} MB`, uploadedAt: new Date().toISOString(), status: 'PENDING', icon: '📄' }, ...prev])
-        }
-      } catch {
-        setDocs(prev => [{ id: Date.now(), name: f.name, fileSize: `${(f.size/1024/1024).toFixed(1)} MB`, uploadedAt: new Date().toISOString(), status: 'PENDING', icon: '📄' }, ...prev])
-      }
-    }
-    toast.success(`${files.length} file(s) uploaded! 📤`)
-  }
-
-  const displayName = user?.firstName || user?.name || 'Student'
-  const displayEmail = user?.email || ''
-  const displayAvatar = user?.avatar || (user?.firstName?.[0] || 'U') + (user?.lastName?.[0] || '')
 
   return (
     <div className="container">
       <div className="grid md:grid-cols-[220px_1fr] gap-6 py-7 min-h-screen">
+
         {/* Sidebar */}
         <aside className="md:sticky md:top-20 h-fit">
           <div className="card p-4">
             <div className="flex items-center gap-3 bg-gray-50 rounded-xl p-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-navy-800 flex items-center justify-center font-head font-bold text-white text-sm flex-shrink-0">{displayAvatar}</div>
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-navy-800 flex items-center justify-center font-head font-bold text-white text-sm flex-shrink-0">
+                {user?.avatar || user?.firstName?.[0] || '?'}
+              </div>
               <div className="min-w-0">
-                <div className="font-bold text-sm text-navy-800 truncate">{displayName}</div>
-                <div className="text-xs text-gray-500 truncate">{displayEmail}</div>
+                <div className="font-bold text-sm text-navy-800 truncate">{user?.name || user?.firstName}</div>
+                <div className="text-xs text-gray-500 truncate">{user?.email}</div>
               </div>
             </div>
             <nav className="space-y-0.5">
@@ -132,7 +62,7 @@ export default function DashboardPage() {
               ))}
               <div className="pt-2 border-t border-gray-100 mt-2 space-y-0.5">
                 <button onClick={() => navigate('/services')} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
-                  <span className="text-base w-5 text-center">⭐</span>Upgrade Plan
+                  <span className="text-base w-5 text-center">⭐</span>Our Services
                 </button>
                 <button onClick={logout} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 text-left">
                   <span className="text-base w-5 text-center">🚪</span>Sign Out
@@ -143,197 +73,200 @@ export default function DashboardPage() {
         </aside>
 
         {/* Main */}
-        <main className="min-w-0">
+        <div>
 
-          {/* OVERVIEW */}
+          {/* ── OVERVIEW ── */}
           {section === 'overview' && (
-            <div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                {STATS.map(({ icon, val, label }) => (
-                  <div key={label} className="card p-4 text-center">
-                    <div className="text-2xl mb-1">{icon}</div>
-                    <div className="text-2xl font-head font-black text-navy-800">{loadingData ? '—' : val}</div>
-                    <div className="text-xs text-gray-500">{label}</div>
-                  </div>
-                ))}
+            <>
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="font-head font-black text-2xl text-navy-800">Welcome back, {user?.firstName || user?.name}! 👋</h2>
               </div>
 
-              <div className="card p-5 mb-4">
-                <h3 className="font-head font-bold text-navy-800 mb-3">📋 Recent Applications</h3>
-                {loadingData ? (
-                  <div className="text-center py-8 text-gray-400">Loading...</div>
-                ) : applications.length === 0 ? (
-                  <div className="text-center py-8">
-                    <div className="text-4xl mb-2">📋</div>
-                    <p className="text-gray-500 text-sm">No applications yet</p>
-                    <Link to="/scholarships" className="btn btn-primary btn-sm mt-3 inline-block">Browse Scholarships</Link>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {applications.slice(0, 3).map(a => <AppCard key={a.id} a={a} />)}
-                  </div>
-                )}
+              {/* Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+                <div className="card p-4">
+                  <div className="text-2xl mb-2">🔖</div>
+                  <div className="font-head font-black text-3xl text-navy-800">{savedScholarships.length}</div>
+                  <div className="text-xs text-gray-500 mt-1">Saved Scholarships</div>
+                </div>
+                <div className="card p-4">
+                  <div className="text-2xl mb-2">📄</div>
+                  <div className="font-head font-black text-3xl text-navy-800">{doneCount}/{DOC_CHECKLIST.length}</div>
+                  <div className="text-xs text-gray-500 mt-1">Documents Ready</div>
+                </div>
+                <div className="card p-4">
+                  <div className="text-2xl mb-2">🌍</div>
+                  <div className="font-head font-black text-3xl text-navy-800">{new Set(savedScholarships.map(s=>s.country)).size}</div>
+                  <div className="text-xs text-gray-500 mt-1">Countries Exploring</div>
+                </div>
               </div>
 
-              <div className="card p-5">
-                <h3 className="font-head font-bold text-navy-800 mb-3">🔖 Recently Saved</h3>
-                {savedScholarships.length === 0 ? (
-                  <div className="text-center py-8">
-                    <div className="text-4xl mb-2">🔖</div>
-                    <p className="text-gray-500 text-sm">No saved scholarships yet</p>
-                    <Link to="/scholarships" className="btn btn-primary btn-sm mt-3 inline-block">Browse Scholarships</Link>
+              {/* Apply CTA */}
+              <div className="bg-gradient-to-br from-navy-900 to-navy-600 rounded-2xl p-6 text-white mb-6">
+                <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div>
+                    <h3 className="font-head font-black text-lg mb-2">Ready to apply? 🚀</h3>
+                    <p className="text-sm text-white/70 mb-4 max-w-md">Fill our intake form — takes 5 minutes. Upload your documents. Our team contacts you on WhatsApp within 24 hours with a personalised scholarship plan.</p>
+                    <div className="flex gap-3 flex-wrap">
+                      <a href={INTAKE_URL} target="_blank" rel="noreferrer"
+                        className="btn btn-primary text-sm no-underline">📋 Fill Intake Form</a>
+                      <a href={WHATSAPP} target="_blank" rel="noreferrer"
+                        className="btn text-sm no-underline" style={{background:'#25D366',color:'#fff',border:'none'}}>💬 WhatsApp Us</a>
+                    </div>
                   </div>
-                ) : (
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {savedScholarships.slice(0, 2).map(s => <ScholarshipCard key={s.id || s.slug} scholarship={s} />)}
-                  </div>
-                )}
+                  <div className="text-5xl">🎓</div>
+                </div>
               </div>
-            </div>
+
+              {/* Saved scholarships preview */}
+              {savedScholarships.length > 0 && (
+                <>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-head font-bold text-navy-800 text-base">🔖 Your Saved Scholarships</h3>
+                    <button onClick={() => setSection('saved')} className="text-xs text-blue-600 font-semibold">View All →</button>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                    {savedScholarships.slice(0, 4).map(s => <ScholarshipCard key={s.id} scholarship={s} />)}
+                  </div>
+                </>
+              )}
+
+              {/* Doc checklist preview */}
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-head font-bold text-navy-800 text-base">📄 Document Readiness</h3>
+                <button onClick={() => setSection('checklist')} className="text-xs text-blue-600 font-semibold">View Checklist →</button>
+              </div>
+              <div className="card p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm text-gray-600">{doneCount} of {DOC_CHECKLIST.length} documents ready</span>
+                  <span className="text-xs font-bold text-blue-600">{Math.round(doneCount/DOC_CHECKLIST.length*100)}%</span>
+                </div>
+                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-blue-600 to-green-500 rounded-full transition-all duration-500"
+                    style={{width:`${Math.round(doneCount/DOC_CHECKLIST.length*100)}%`}} />
+                </div>
+                <p className="text-xs text-gray-400 mt-2">Tick items as you prepare — then upload everything via intake form</p>
+              </div>
+            </>
           )}
 
-          {/* SAVED */}
+          {/* ── SAVED ── */}
           {section === 'saved' && (
-            <div className="card p-5">
-              <h3 className="font-head font-bold text-navy-800 mb-4">🔖 Saved Scholarships</h3>
-              {savedScholarships.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="text-5xl mb-3">🔖</div>
-                  <p className="text-gray-500 mb-4">You haven't saved any scholarships yet</p>
-                  <Link to="/scholarships" className="btn btn-primary">Browse Scholarships</Link>
-                </div>
-              ) : (
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {savedScholarships.map(s => <ScholarshipCard key={s.id || s.slug} scholarship={s} />)}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* APPLICATIONS */}
-          {section === 'applications' && (
-            <div className="card p-5">
-              <h3 className="font-head font-bold text-navy-800 mb-4">📋 My Applications</h3>
-              {loadingData ? (
-                <div className="text-center py-8 text-gray-400">Loading...</div>
-              ) : applications.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="text-5xl mb-3">📋</div>
-                  <p className="text-gray-500 mb-4">No applications yet</p>
-                  <Link to="/scholarships" className="btn btn-primary">Find Scholarships</Link>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {applications.map(a => <AppCard key={a.id} a={a} />)}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* DOCUMENTS */}
-          {section === 'documents' && (
-            <div className="card p-5">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-head font-bold text-navy-800">📄 My Documents</h3>
-                <label className="btn btn-primary btn-sm cursor-pointer">
-                  + Upload
-                  <input type="file" multiple className="hidden" onChange={handleFileUpload} accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
-                </label>
+            <>
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="font-head font-black text-2xl text-navy-800">🔖 Saved Scholarships</h2>
+                <Link to="/scholarships" className="btn btn-primary btn-sm">+ Find More</Link>
               </div>
-              {docs.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="text-5xl mb-3">📄</div>
-                  <p className="text-gray-500 mb-4">No documents uploaded yet</p>
-                  <label className="btn btn-primary cursor-pointer">
-                    Upload Your First Document
-                    <input type="file" multiple className="hidden" onChange={handleFileUpload} />
-                  </label>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {docs.map((d, i) => (
-                    <div key={d.id || i} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                      <span className="text-xl">📄</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-navy-800 truncate">{d.name}</div>
-                        <div className="text-xs text-gray-500">{d.fileSize || d.size} · {new Date(d.uploadedAt || d.date).toLocaleDateString()}</div>
-                      </div>
-                      <span className={`pill ${d.status === 'VERIFIED' || d.status === 'accepted' ? 'pill-accepted' : d.status === 'REJECTED' || d.status === 'rejected' ? 'pill-rejected' : 'pill-review'}`}>
-                        {d.status === 'VERIFIED' ? '✅ Verified' : d.status === 'REJECTED' ? 'Rejected' : 'Pending'}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* PAYMENTS */}
-          {section === 'payments' && (
-            <div className="card p-5">
-              <h3 className="font-head font-bold text-navy-800 mb-4">💳 Payment History</h3>
-              {loadingData ? (
-                <div className="text-center py-8 text-gray-400">Loading...</div>
-              ) : payments.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="text-5xl mb-3">💳</div>
-                  <p className="text-gray-500 mb-4">No payments yet</p>
-                  <button onClick={() => navigate('/services')} className="btn btn-primary">View Packages</button>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {payments.map(p => (
-                    <div key={p.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                      <div>
-                        <div className="font-bold text-sm text-navy-800">{p.plan} Package</div>
-                        <div className="text-xs text-gray-500">{new Date(p.createdAt).toLocaleDateString()} · {p.method}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-bold text-green-600">৳{(p.amount||0).toLocaleString()}</div>
-                        <span className={`pill ${p.status === 'SUCCESS' ? 'pill-accepted' : p.status === 'PENDING' ? 'pill-review' : 'pill-rejected'}`}>{p.status}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* AI ADVISOR */}
-          {section === 'ai' && (
-            <div className="card p-5 flex flex-col" style={{ height: '70vh' }}>
-              <h3 className="font-head font-bold text-navy-800 mb-4">🤖 AI Scholarship Advisor</h3>
-              <div className="flex-1 overflow-y-auto space-y-3 mb-4 p-3 bg-gray-50 rounded-xl">
-                {messages.length === 0 && (
-                  <div className="text-center py-8">
-                    <div className="text-4xl mb-2">🤖</div>
-                    <p className="text-gray-500 text-sm">Ask me anything about scholarships!</p>
-                    <div className="flex flex-wrap gap-2 justify-center mt-3">
-                      {['What scholarships suit me?', 'How to write a good SOP?', 'IELTS requirements?'].map(q => (
-                        <button key={q} onClick={() => send(q)} className="text-xs bg-white border border-gray-200 rounded-full px-3 py-1.5 text-blue-600 hover:bg-blue-50">{q}</button>
-                      ))}
-                    </div>
+              {savedScholarships.length > 0
+                ? <div className="grid sm:grid-cols-2 gap-4">
+                    {savedScholarships.map(s => <ScholarshipCard key={s.id} scholarship={s} />)}
                   </div>
-                )}
-                {messages.map((m, i) => (
-                  <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm ${m.role === 'user' ? 'bg-blue-600 text-white rounded-br-sm' : 'bg-white border border-gray-200 text-gray-700 rounded-bl-sm'}`}>
-                      {m.content}
+                : <div className="text-center py-16">
+                    <div className="text-5xl mb-4">🔖</div>
+                    <h3 className="font-head font-bold text-navy-800 text-lg mb-2">No saved scholarships yet</h3>
+                    <p className="text-sm text-gray-500 mb-4">Browse scholarships and click the bookmark to save them here</p>
+                    <Link to="/scholarships" className="btn btn-primary">Browse Scholarships</Link>
+                  </div>
+              }
+            </>
+          )}
+
+          {/* ── DOCUMENT CHECKLIST ── */}
+          {section === 'checklist' && (
+            <>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="font-head font-black text-2xl text-navy-800">📄 Document Checklist</h2>
+                <span className="badge badge-blue">{doneCount}/{DOC_CHECKLIST.length} Ready</span>
+              </div>
+              <p className="text-sm text-gray-500 mb-5">Tick each document as you prepare it. When ready, upload everything via the intake form.</p>
+
+              {/* Progress bar */}
+              <div className="card p-4 mb-5">
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-gray-600">Overall readiness</span>
+                  <span className="font-bold text-blue-600">{Math.round(doneCount/DOC_CHECKLIST.length*100)}%</span>
+                </div>
+                <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-blue-600 to-green-500 rounded-full transition-all duration-500"
+                    style={{width:`${Math.round(doneCount/DOC_CHECKLIST.length*100)}%`}} />
+                </div>
+              </div>
+
+              <div className="space-y-2 mb-6">
+                {DOC_CHECKLIST.map((doc, i) => (
+                  <label key={i} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${checked[i] ? 'border-green-400 bg-green-50' : 'border-gray-200 bg-white hover:border-blue-300'}`}>
+                    <input type="checkbox" checked={!!checked[i]}
+                      onChange={() => setChecked(prev => ({...prev, [i]: !prev[i]}))}
+                      className="w-4 h-4 accent-green-500 flex-shrink-0" />
+                    <span className="text-xl flex-shrink-0">{doc.icon}</span>
+                    <div className="flex-1">
+                      <div className={`text-sm font-semibold ${checked[i] ? 'text-green-700 line-through' : 'text-navy-800'}`}>{doc.name}</div>
+                      <div className="text-xs text-gray-500">{doc.sub}</div>
+                    </div>
+                    {checked[i] && <span className="text-green-500 text-lg flex-shrink-0">✓</span>}
+                  </label>
+                ))}
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 text-center">
+                <div className="text-2xl mb-2">📋</div>
+                <h4 className="font-head font-bold text-navy-800 text-base mb-2">Ready to submit your documents?</h4>
+                <p className="text-xs text-gray-500 mb-4">Upload all your documents through our secure intake form. Our team reviews them and contacts you within 24 hours.</p>
+                <a href={INTAKE_URL} target="_blank" rel="noreferrer"
+                  className="btn btn-primary text-sm no-underline inline-flex items-center gap-2">
+                  📤 Upload via Intake Form
+                </a>
+              </div>
+            </>
+          )}
+
+          {/* ── TRACK APPLICATION ── */}
+          {section === 'track' && (
+            <>
+              <h2 className="font-head font-black text-2xl text-navy-800 mb-2">📋 Track Your Application</h2>
+              <p className="text-sm text-gray-500 mb-6">Submitted your intake form? Here is how to track your application status.</p>
+
+              {/* Steps */}
+              <div className="space-y-4 mb-6">
+                {[
+                  { step:1, icon:'📋', title:'Fill Intake Form', desc:'Submit your details and upload documents. Takes 5 minutes.', done:true, cta:{label:'Fill Form Now', href:INTAKE_URL} },
+                  { step:2, icon:'💬', title:'We Contact You on WhatsApp', desc:'Our team reviews your profile and contacts you within 24 hours on WhatsApp with a personalised plan.', done:false },
+                  { step:3, icon:'💳', title:'Choose Package & Pay', desc:'Select Basic, Standard, or Premium. Pay via bKash or Nagad. We start work immediately.', done:false },
+                  { step:4, icon:'✍️', title:'SOP & Document Preparation', desc:'Our team prepares your Statement of Purpose, reviews your CV, and prepares all application documents.', done:false },
+                  { step:5, icon:'🚀', title:'Application Submitted', desc:'We submit your application to the scholarship body and track the deadline.', done:false },
+                  { step:6, icon:'🎉', title:'Result & Visa Guidance', desc:'We notify you of the result and guide you through visa application if accepted.', done:false },
+                ].map(({ step, icon, title, desc, done, cta }) => (
+                  <div key={step} className={`flex gap-4 p-4 rounded-xl border ${done ? 'border-green-300 bg-green-50' : 'border-gray-200 bg-white'}`}>
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${done ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-500'}`}>
+                      {done ? '✓' : step}
+                    </div>
+                    <div className="flex-1">
+                      <div className={`font-bold text-sm mb-1 ${done ? 'text-green-700' : 'text-navy-800'}`}>{icon} {title}</div>
+                      <p className="text-xs text-gray-500 leading-relaxed mb-2">{desc}</p>
+                      {cta && (
+                        <a href={cta.href} target="_blank" rel="noreferrer"
+                          className="btn btn-primary btn-sm text-xs no-underline inline-flex">
+                          {cta.label} →
+                        </a>
+                      )}
                     </div>
                   </div>
                 ))}
-                {chatLoading && <div className="flex justify-start"><div className="bg-white border border-gray-200 px-4 py-2.5 rounded-2xl text-sm text-gray-400">Thinking...</div></div>}
               </div>
-              <div className="flex gap-2">
-                <input value={chatInput} onChange={e => setChatInput(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter' && chatInput.trim()) { send(chatInput); setChatInput('') } }}
-                  placeholder="Ask about scholarships..." className="input flex-1 text-sm" />
-                <button onClick={() => { if (chatInput.trim()) { send(chatInput); setChatInput('') } }} className="btn btn-primary">Send</button>
+
+              {/* Contact CTA */}
+              <div className="card p-5 text-center">
+                <h4 className="font-head font-bold text-navy-800 text-base mb-2">Already submitted? Check your status 💬</h4>
+                <p className="text-xs text-gray-500 mb-4">Message us on WhatsApp with your name and email — we will give you a full update within 2 hours.</p>
+                <a href={WHATSAPP} target="_blank" rel="noreferrer"
+                  className="btn text-sm no-underline inline-flex items-center gap-2" style={{background:'#25D366',color:'#fff',border:'none'}}>
+                  💬 Message Us on WhatsApp
+                </a>
               </div>
-            </div>
+            </>
           )}
 
-        </main>
+        </div>
       </div>
     </div>
   )
