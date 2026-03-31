@@ -78,8 +78,8 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-end">
             {[
               { label: 'Degree Level', id: 'degree', opts: [['', 'All Levels'], ['bachelors', "Bachelor's"], ['masters', "Master's"], ['phd', 'PhD']] },
-              { label: 'Destination', id: 'country', opts: [['', 'All Countries'], ['Germany', 'Germany 🇩🇪'], ['United Kingdom', 'UK 🇬🇧'], ['United States', 'USA 🇺🇸'], ['Japan', 'Japan 🇯🇵'], ['Canada', 'Canada 🇨🇦']] },
-              { label: 'Field of Study', id: 'field',  opts: [['', 'All Fields'], ['engineering', 'Engineering'], ['business', 'Business'], ['medical', 'Medical'], ['arts', 'Arts']] },
+              { label: 'Destination', id: 'country', opts: [['', 'All Countries'], ...Object.entries(countryMap).sort((a,b)=>a[0].localeCompare(b[0])).map(([c,f])=>[c,`${c} ${f}`])] },
+              { label: 'Field of Study', id: 'field',  opts: [['', 'All Fields'], ['engineering', 'Engineering & Tech'], ['business', 'Business & MBA'], ['medical', 'Medical & Health'], ['arts', 'Arts & Humanities'], ['social', 'Social Sciences'], ['multiple', 'Multiple / Any Field']] },
             ].map(({ label, id, opts }) => (
               <div key={id}>
                 <label className="label">{label}</label>

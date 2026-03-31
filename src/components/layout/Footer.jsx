@@ -33,9 +33,9 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 font-head font-black text-lg text-white mb-3">
               <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center text-base">🎓</div>
-              Scholar<span className="text-green-400">Path</span>
+              Scholar<span className="text-green-400">Path BD</span>
             </div>
-            <p className="text-sm leading-relaxed mb-4">Bangladesh's most trusted AI-powered scholarship platform. Helping students discover and win international scholarships since 2022.</p>
+            <p className="text-sm leading-relaxed mb-4">Bangladesh's most trusted scholarship consultancy. We help students discover and win international scholarships — DAAD, Chevening, MEXT and more.</p>
             <div className="flex gap-2">
               {['📘', '📷', '▶️', '💼'].map((icon, i) => (
                 <div key={i} className="w-8 h-8 bg-white/8 rounded-lg flex items-center justify-center text-sm cursor-pointer hover:bg-blue-600 transition-colors">{icon}</div>
@@ -54,7 +54,7 @@ export default function Footer() {
           ))}
         </div>
         <div className="border-t border-white/8 pt-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/40">
-          <span>© 2025 ScholarPath BD. All rights reserved. Made with ❤️ in Bangladesh 🇧🇩</span>
+          <span>© 2025 ScholarPath BD. All rights reserved. Made with ❤️ in Bangladesh 🇧🇩 · scholarpathbd.com</span>
           <div className="flex gap-4">
             {['Privacy', 'Terms', 'Sitemap'].map(l => <a key={l} href="#" className="hover:text-white/70 transition-colors">{l}</a>)}
           </div>
