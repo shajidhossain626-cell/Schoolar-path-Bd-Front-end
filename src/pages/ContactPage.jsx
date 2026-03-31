@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 const WHATSAPP_NUM = '8801889700879'
 const WHATSAPP_MSG = encodeURIComponent("Hi ScholarPath BD! I'd like to know more about your scholarship services.")
-const INTAKE_URL   = 'https://schoolar-path-bd-front-end.vercel.app/intake.html'
+const INTAKE_URL   = 'https://www.scholarpathbd.com/intake.html'
 
 const CONTACT_INFO = [
   { icon:'💬', label:'WhatsApp (fastest)', val:'+880 1889-700879', link:`https://wa.me/${WHATSAPP_NUM}?text=${WHATSAPP_MSG}`, cta:'Message Now' },

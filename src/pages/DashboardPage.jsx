@@ -5,7 +5,7 @@ import ScholarshipCard from '@components/common/ScholarshipCard'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 
-const INTAKE_URL  = 'https://schoolar-path-bd-front-end.vercel.app/intake.html'
+const INTAKE_URL  = 'https://www.scholarpathbd.com/intake.html'
 const WHATSAPP    = 'https://wa.me/8801889700879'
 
 const DOC_CHECKLIST = [
