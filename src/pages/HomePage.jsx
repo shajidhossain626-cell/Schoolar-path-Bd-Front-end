@@ -1,11 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useScholarships } from '@context/ScholarshipContext'
 import ScholarshipCard from '@components/common/ScholarshipCard'
-import AISearchBar from '@components/common/AISearchBar'
 
 const STATS = [['500+', 'Scholarships'], ['2,400+', 'Students Helped'], ['94%', 'Success Rate'], ['20+', 'Countries']]
 const STEPS = [
-  { n: 1, title: 'Discover & Match', desc: 'Use our AI advisor and smart filters to find scholarships perfectly matched to your profile, field, and goals.' },
+  { n: 1, title: 'Discover & Match', desc: 'Use our smart filters and search to find scholarships perfectly matched to your profile, field, and goals.' },
   { n: 2, title: 'Prepare & Upload', desc: 'Get a personalized document checklist. Upload files securely to your dashboard. Our experts review everything.' },
   { n: 3, title: 'Apply & Succeed', desc: 'Apply independently or let our team handle it completely. Track your application in real-time and celebrate your acceptance!' },
 ]
@@ -17,72 +16,61 @@ const TESTIMONIALS = [
 
 export default function HomePage() {
   const { scholarships } = useScholarships()
-  const countryMap = {}
-  scholarships.forEach(s => { if (s.country && s.flag) countryMap[s.country] = s.flag })
-  
   const navigate = useNavigate()
   const featured = scholarships.slice(0, 6)
 
   return (
     <>
+
       {/* HERO */}
-      <section className="bg-gradient-to-br from-navy-800 via-navy-800 to-navy-600 min-h-[90vh] flex items-center py-16 relative overflow-hidden">
-        <div className="dot-pattern absolute inset-0 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[80px]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-green-600/8 rounded-full blur-[80px]" />
-        <div className="container relative z-10">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+      <div className="bg-gradient-to-br from-navy-900 via-navy-800 to-navy-600 py-16 md:py-24 text-white">
+        <div className="container">
+          <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
-              <div className="flex items-center gap-2 mb-5">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-xs font-bold text-white/60 uppercase tracking-widest">Bangladesh's #1 Global Scholarship Platform</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight mb-5 leading-[1.08]">
-                Find Your <span className="bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent">Dream</span><br />Scholarship with AI
+              <span className="inline-block bg-white/10 border border-white/20 text-white/80 text-xs font-bold px-3 py-1 rounded-full mb-5">🇧🇩 Bangladesh's #1 Scholarship Consultancy</span>
+              <h1 className="font-head font-black text-4xl md:text-5xl leading-tight mb-5">
+                Find Your Dream<br />
+                <span className="text-green-400">Scholarship</span><br />
+                With Us
               </h1>
-              <p className="text-white/65 text-base leading-relaxed max-w-md mb-8">
-                Discover 30+ fully-funded international scholarships. Our advisor matches you instantly — then our experts handle the entire application for you.
+              <p className="text-white/70 text-base leading-relaxed mb-8 max-w-md">
+                We help Bangladeshi students win international scholarships — DAAD, Chevening, MEXT, Fulbright and more. Expert guidance, SOP writing, and full application support.
               </p>
-              <div className="flex flex-wrap gap-3 mb-10">
-                <Link to="/scholarships" className="btn btn-primary btn-lg">🔍 Browse Scholarships</Link>
-                <Link to="/services" className="btn btn-white btn-lg">View Packages →</Link>
+              <div className="flex flex-wrap gap-3 mb-8">
+                <a href="/intake.html" className="btn btn-primary px-6 py-3 text-sm font-bold">📋 Apply With Us</a>
+                <Link to="/scholarships" className="btn px-6 py-3 text-sm font-bold" style={{background:'rgba(255,255,255,0.1)',color:'#fff',border:'1px solid rgba(255,255,255,0.2)'}}>🔍 Browse Scholarships</Link>
               </div>
-              <div className="flex gap-8">
+              <div className="flex flex-wrap gap-5">
                 {STATS.map(([val, label]) => (
                   <div key={label}>
-                    <div className="font-head font-black text-2xl text-white">{val}</div>
-                    <div className="text-xs text-white/50 mt-0.5">{label}</div>
+                    <div className="font-head font-black text-2xl text-green-400">{val}</div>
+                    <div className="text-white/50 text-xs">{label}</div>
                   </div>
                 ))}
               </div>
             </div>
-            {/* Hero card */}
             <div className="hidden md:block">
-              <div className="bg-white/7 backdrop-blur-xl border border-white/12 rounded-3xl p-5 text-white">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase">Top Opportunities</span>
-                  <span className="flex items-center gap-1 px-2 py-0.5 bg-green-500/20 border border-green-500/30 rounded-full text-[11px] font-bold text-green-400">✦ Live</span>
-                </div>
-                {scholarships.slice(0, 4).map(s => (
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+                <div className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Top Opportunities</div>
+                {scholarships.slice(0,4).map(s => (
                   <Link key={s.id} to={`/scholarships/${s.id}`}
-                    className="flex items-center gap-3 p-3 bg-white/5 border border-white/8 rounded-xl mb-2 last:mb-0 hover:bg-white/10 transition-colors">
-                    <span className="text-2xl">{s.flag}</span>
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all mb-1 no-underline">
+                    <span className="text-2xl flex-shrink-0">{s.flag}</span>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold truncate">{s.name}</div>
-                      <div className="text-xs text-white/45 flex gap-2 mt-0.5">
-                        <span>{s.country}</span><span>{s.tags[0]}</span>
-                      </div>
+                      <div className="text-sm font-bold text-white truncate">{s.short || s.name}</div>
+                      <div className="text-xs text-white/50">{s.country} · {(typeof s.degree === 'string' ? JSON.parse(s.degree||'[]') : s.degree||[]).map(d=>d==='masters'?"Master's":d==='phd'?'PhD':"Bachelor's").join('/')}</div>
                     </div>
-                    <span className="text-xs font-bold text-green-400 flex-shrink-0">{s.amount}</span>
+                    <div className="text-xs font-bold text-green-400 flex-shrink-0">{s.amount}</div>
                   </Link>
                 ))}
+                <Link to="/scholarships" className="block text-center text-xs text-white/40 hover:text-white/70 mt-3 transition-colors">
+                  View all {scholarships.length}+ scholarships →
+                </Link>
               </div>
             </div>
           </div>
         </div>
-      </section>
-
-     
+      </div>
 
       {/* QUICK SEARCH */}
       <div className="bg-white shadow-card border-b border-gray-100">
@@ -90,8 +78,8 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-end">
             {[
               { label: 'Degree Level', id: 'degree', opts: [['', 'All Levels'], ['bachelors', "Bachelor's"], ['masters', "Master's"], ['phd', 'PhD']] },
-              { label: 'Destination', id: 'country', opts: [['', 'All Countries'], ...Object.entries(countryMap).sort((a,b)=>a[0].localeCompare(b[0])).map(([c,f])=>[c, `${c} ${f}`])] },
-              { label: 'Field of Study', id: 'field',  opts: [['', 'All Fields'], ['engineering', 'Engineering & Tech'], ['business', 'Business & MBA'], ['medical', 'Medical & Health'], ['arts', 'Arts & Humanities'], ['social', 'Social Sciences'], ['multiple', 'Multiple / Any Field']] },
+              { label: 'Destination', id: 'country', opts: [['', 'All Countries'], ['Germany', 'Germany 🇩🇪'], ['United Kingdom', 'UK 🇬🇧'], ['United States', 'USA 🇺🇸'], ['Japan', 'Japan 🇯🇵'], ['Canada', 'Canada 🇨🇦']] },
+              { label: 'Field of Study', id: 'field',  opts: [['', 'All Fields'], ['engineering', 'Engineering'], ['business', 'Business'], ['medical', 'Medical'], ['arts', 'Arts']] },
             ].map(({ label, id, opts }) => (
               <div key={id}>
                 <label className="label">{label}</label>
@@ -116,7 +104,7 @@ export default function HomePage() {
       <div className="bg-gray-50 border-b border-gray-200 py-3">
         <div className="container">
           <div className="flex flex-wrap items-center justify-around gap-3 text-xs font-medium text-gray-600">
-            {['🏆 Trusted by 2,400+ students', '🔒 Verified scholarships only', '👨‍💼 Expert counselors on call', '⚡ Daily updates'].map(t => (
+            {['🏆 Trusted by 2,400+ students', '🔒 Verified scholarships only', '🎯 Smart scholarship matching', '👨‍💼 Expert counselors on call', '⚡ Daily updates'].map(t => (
               <span key={t}>{t}</span>
             ))}
           </div>

@@ -28,7 +28,7 @@ export default function Navbar({ onOpenAuth }) {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 font-head font-black text-lg text-navy-800">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-navy-800 rounded-lg flex items-center justify-center text-base flex-shrink-0">🎓</div>
-            Scholar<span className="text-green-600">Path</span>
+            Scholar<span className="text-green-600">Path BD</span>
           </Link>
 
           {/* Desktop nav */}
