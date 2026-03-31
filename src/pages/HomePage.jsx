@@ -18,6 +18,8 @@ export default function HomePage() {
   const { scholarships } = useScholarships()
   const navigate = useNavigate()
   const featured = scholarships.slice(0, 6)
+  const countryMap = {}
+  scholarships.forEach(s => { if (s.country && s.flag) countryMap[s.country] = s.flag })
 
   return (
     <>
