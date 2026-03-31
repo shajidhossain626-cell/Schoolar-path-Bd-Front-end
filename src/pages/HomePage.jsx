@@ -82,19 +82,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* AI SEARCH */}
-      <section className="bg-gray-50 border-b border-gray-200 py-12">
-        <div className="container">
-          <div className="max-w-2xl mx-auto">
-            <div className="text-center mb-6">
-              <span className="badge badge-blue mb-3">✦ AI Scholarship Advisor</span>
-              <h2 className="font-head font-black text-2xl text-navy-800 mb-2">Ask Anything About Scholarships</h2>
-              <p className="text-gray-500 text-sm">Get instant AI-powered answers about eligibility, deadlines, documents, and more</p>
-            </div>
-            <AISearchBar />
-          </div>
-        </div>
-      </section>
+     
 
       {/* QUICK SEARCH */}
       <div className="bg-white shadow-card border-b border-gray-100">
@@ -128,7 +116,7 @@ export default function HomePage() {
       <div className="bg-gray-50 border-b border-gray-200 py-3">
         <div className="container">
           <div className="flex flex-wrap items-center justify-around gap-3 text-xs font-medium text-gray-600">
-            {['🏆 Trusted by 2,400+ students', '🔒 Verified scholarships only', '🤖 AI-powered matching', '👨‍💼 Expert counselors on call', '⚡ Daily updates'].map(t => (
+            {['🏆 Trusted by 2,400+ students', '🔒 Verified scholarships only', '👨‍💼 Expert counselors on call', '⚡ Daily updates'].map(t => (
               <span key={t}>{t}</span>
             ))}
           </div>
