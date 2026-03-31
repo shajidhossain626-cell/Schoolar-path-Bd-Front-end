@@ -57,49 +57,7 @@ export default function ContactPage() {
             </div>
 
             {/* Form */}
-            <div className="card p-7">
-              <h3 className="font-head font-bold text-navy-800 text-lg mb-6">Send Us a Message</h3>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="label">First Name</label>
-                    <input className={`input ${errors.firstName ? 'input-error' : ''}`} placeholder="Rahul"
-                      {...register('firstName', { required: 'Required' })} />
-                    {errors.firstName && <p className="error-msg">{errors.firstName.message}</p>}
-                  </div>
-                  <div>
-                    <label className="label">Last Name</label>
-                    <input className="input" placeholder="Ahmed" {...register('lastName')} />
-                  </div>
-                </div>
-                <div>
-                  <label className="label">Email</label>
-                  <input type="email" className={`input ${errors.email ? 'input-error' : ''}`} placeholder="you@example.com"
-                    {...register('email', { required: 'Email is required' })} />
-                  {errors.email && <p className="error-msg">{errors.email.message}</p>}
-                </div>
-                <div>
-                  <label className="label">Phone</label>
-                  <input type="tel" className="input" placeholder="+880 1700-000000" {...register('phone')} />
-                </div>
-                <div>
-                  <label className="label">I'm interested in...</label>
-                  <select className="input" {...register('interest')}>
-                    {['General Inquiry', 'Basic Package (৳2,500)', 'Standard Package (৳5,000)', 'Premium Package (৳8,000)', 'Partnership / B2B'].map(o => <option key={o}>{o}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="label">Message</label>
-                  <textarea className={`input min-h-[110px] resize-y ${errors.message ? 'input-error' : ''}`}
-                    placeholder="Tell us about your academic background and scholarship goals..."
-                    {...register('message', { required: 'Please write your message' })} />
-                  {errors.message && <p className="error-msg">{errors.message.message}</p>}
-                </div>
-                <button type="submit" disabled={isSubmitting} className="btn btn-primary btn-block">
-                  {isSubmitting ? 'Sending...' : 'Send Message 📨'}
-                </button>
-              </form>
-            </div>
+            
           </div>
         </div>
       </section>
