@@ -6,7 +6,7 @@ const INTAKE_URL   = 'https://www.scholarpathbd.com/intake.html'
 
 const CONTACT_INFO = [
   { icon:'💬', label:'WhatsApp (fastest)', val:'+880 1889-700879', link:`https://wa.me/${WHATSAPP_NUM}?text=${WHATSAPP_MSG}`, cta:'Message Now' },
-  { icon:'✉️', label:'Email', val:'hello@scholarpath.com.bd', link:'mailto:hello@scholarpath.com.bd', cta:'Send Email' },
+  { icon:'✉️', label:'Email', val:'scholarpathbd26@gmail.com', link:'mailto:scholarpathbd26@gmail.com', cta:'Send Email' },
   { icon:'🕐', label:'Response Time', val:'Within 24 hours — Mon to Sat', link:null },
   { icon:'📍', label:'Location', val:'Dhaka, Bangladesh', link:null },
 ]
