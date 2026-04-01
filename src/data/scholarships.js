@@ -764,6 +764,48 @@ export const SCHOLARSHIPS = [
     'Review all stages and documents, then submit/approve your application',
   ],
   },
+   {
+    id: 27, flag: '🇮🇹', country: 'Italy',
+    name: 'Padua International Excellence Scholarship', short: 'PIES',
+    desc: 'The University of Padua offers up to 68 scholarships to highly talented international students enrolling in English-taught Degree programmes at the University of Padua',
+    tags: ['padua execillent scholarship', 'europe scholarship', 'padua'], amount: 'fee-waiver + €8,000 scholarship per year',
+    deadline: 'May 02,2026', deadlineDate: '2026-05-02',
+    urgent: true, funding: 'full',
+    degree: ['bachelors', 'masters'], field: 'multiple',
+    overview: 'The University of Padua offers up to 68 scholarships to highly talented international students enrolling in English-taught Degree programmes at the University of Padua (A.Y. 2025/2026). The scholarship programme is highly selective. Only candidates showing the highest achievements and school/academic records may receive a scholarship. Successful scholars will be expected to fulfil an ambassadorial role and represent the University at a number of events.',
+    benefits: [
+    'Full Tuition Fee Waiver',
+    '€8,000/year Scholarship',
+    'Highly Prestigious Award',
+    'Study in a top European university (Founded in 1222)',
+    'Generous yearly funding',
+    'International exposure',
+    'Strong career opportunities',
+  ],
+    eligibility: [
+    'The scholarship is open to international students (Non-Italian)',
+    'Non-Italian High School Diploma (for Bachelor’s)',
+    'Non-Italian Bachelor’s Degree (for Master’s)',
+    'Strong academic record (very competitive)',
+    'Apply to English-taught degree programs',
+    'Highly talented prospective international students from all over the world wishing to enrol in one of the University of Padua’s Bachelor’s or Master’s degrees, completely held in English.',
+  ],
+    documents: [
+    'CV/Resume: In English, detailing academic and relevant experiences.',
+    'Transcript of Records: Official records from previous studies.',
+    'Motivation Letter: Explaining academic goals in English.',
+    'English Proficiency Certificate: Proof of English proficiency (e.g., IELTS 6.0–6.5+ or TOEFL) for most programs.',
+    'Educational Certificates: Valid Non-Italian secondary school diploma (for Bachelor\'s/Single-cycle) or Bachelor\'s degree (for Master\'s).',
+    'Valid Passport or Identity Document.',
+    'Registration for CEnT-S Test:',
+  ],
+    steps: [
+    'Select Program: Browse English-taught Bachelor\'s or Master\'s degrees on the University of Padua website.',
+    'Submit Admission Application: Apply through the application portal by the specified deadline (typically April/May).',
+    'Upload Required Documents: Include your academic transcript, CV, passport, and language certificates in the application.',
+    'Pay Application Fee: Pay the required fee (roughly €60) to finalize your application submission',
+  ],
+  },
 ]
 
 export const COUNTRIES = [...new Set(SCHOLARSHIPS.map(s => s.country))]
