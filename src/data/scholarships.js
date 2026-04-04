@@ -1,7 +1,7 @@
 
 export const SCHOLARSHIPS = [
   {
-    id: 1, flag: '🇩🇪', country: 'Germany',
+    id: 1, featured: true, flag: '🇩🇪', country: 'Germany',
     name: 'DAAD Research Scholarship 2026', short: 'DAAD',
     desc: 'Fully funded for Master\'s & PhD. Covers tuition, living costs, insurance, and travel.',
     tags: ["Master's", 'PhD', 'Engineering'], amount: '€934/month',
@@ -14,7 +14,7 @@ export const SCHOLARSHIPS = [
     steps: ['Register at portal.daad.de', 'Contact target German professor', 'Prepare & notarize documents', 'Submit before March 31', 'Attend interview if shortlisted'],
   },
   {
-    id: 2, flag: '🇬🇧', country: 'United Kingdom',
+    id: 2, featured: true, flag: '🇬🇧', country: 'United Kingdom',
     name: 'Chevening Scholarship 2026', short: 'Chevening',
     desc: "UK government's flagship scholarship for future global leaders. Full funding for 1-year Master's.",
     tags: ["Master's", 'Leadership', 'UK'], amount: 'Full + £1,393/mo',
@@ -27,7 +27,7 @@ export const SCHOLARSHIPS = [
     steps: ['Register at chevening.org', 'Complete 4 personal essays', 'Submit 2 references', 'Shortlisting (Feb/Mar)', 'Interview (Mar-Apr)', 'Award notification (Jun)'],
   },
   {
-    id: 3, flag: '🇯🇵', country: 'Japan',
+    id: 3, featured: true, flag: '🇯🇵', country: 'Japan',
     name: 'MEXT Government Scholarship', short: 'MEXT',
     desc: "Japanese government scholarship from bachelor's to research programs at top Japanese universities.",
     tags: ["Bachelor's", "Master's", 'PhD'], amount: '¥143,000/month',
@@ -40,7 +40,7 @@ export const SCHOLARSHIPS = [
     steps: ['Apply via Bangladesh Embassy', 'Written exam at embassy', 'Interview at embassy', 'Primary recommendation', 'Apply to Japanese university', 'Final MEXT selection'],
   },
   {
-    id: 4, flag: '🇺🇸', country: 'United States',
+    id: 4, featured: true, flag: '🇺🇸', country: 'United States',
     name: 'Fulbright Foreign Student Program', short: 'Fulbright',
     desc: 'Most prestigious US government scholarship for graduate study, research, and creative arts.',
     tags: ["Master's", 'PhD', 'Research'], amount: 'Full + Living',
@@ -53,7 +53,7 @@ export const SCHOLARSHIPS = [
     steps: ['Apply through USEFB Bangladesh', 'Primary screening', 'Interview in Dhaka', 'Nomination to IIE', 'Campus placement', 'Pre-departure orientation'],
   },
   {
-    id: 5, flag: '🇰🇷', country: 'South Korea',
+    id: 5, featured: true, flag: '🇰🇷', country: 'South Korea',
     name: 'GKS Graduate Scholarship 2026', short: 'GKS',
     desc: 'Korean Government Scholarship Program for international graduate students. Comprehensive full funding.',
     tags: ["Master's", 'PhD', 'Korea'], amount: '₩900,000/month',
@@ -66,7 +66,7 @@ export const SCHOLARSHIPS = [
     steps: ['Choose Embassy or University route', 'Submit to Bangladesh Embassy or Korean university', 'Primary selection', 'NIIED notification', 'Korean language program', 'University enrollment'],
   },
   {
-    id: 6, flag: '🇨🇳', country: 'China',
+    id: 6, featured: true, flag: '🇨🇳', country: 'China',
     name: 'CSC Chinese Government Scholarship 2026', short: 'CSC',
     desc: 'Full scholarship by Chinese Scholarship Council for international students at top Chinese universities.',
     tags: ["Bachelor's", "Master's", 'PhD'], amount: '¥3,000/month',
@@ -79,7 +79,7 @@ export const SCHOLARSHIPS = [
     steps: ['Register at csc.edu.cn', 'Choose target university', 'Submit online application', 'CSC review', 'Result notification (May-Jul)', 'Pre-departure preparation'],
   },
   {
-    id: 7, flag: '🇨🇦', country: 'Canada',
+    id: 7, featured: true, flag: '🇨🇦', country: 'Canada',
     name: 'Vanier Canada Graduate Scholarship 2026', short: 'Vanier',
     desc: "Canada's most prestigious doctoral award. $50,000/year for 3 years for world-class PhD students.",
     tags: ['PhD', 'Research', 'Health'], amount: 'CAD $50,000/yr',
@@ -92,7 +92,7 @@ export const SCHOLARSHIPS = [
     steps: ['Contact Canadian professor for nomination', 'Prepare nomination package', 'University submits to Vanier', 'National adjudication', 'Results March/April'],
   },
   {
-    id: 8, flag: '🇦🇺', country: 'Australia',
+    id: 8, featured: true, flag: '🇦🇺', country: 'Australia',
     name: 'Australia Awards Scholarship', short: 'AAS',
     desc: "Prestigious Australian Government scholarships for Bangladeshi students. Full funding for bachelor's or master's.",
     tags: ["Bachelor's", "Master's", 'Development'], amount: 'Full + AUD 26k',
@@ -105,7 +105,7 @@ export const SCHOLARSHIPS = [
     steps: ['Check australiaawards.gov.au', 'Apply online (Feb-Apr)', 'Shortlisting & interviews', 'Conditional offer', 'Health & police clearance', 'Pre-departure briefing'],
   },
   {
-    id: 9, flag: '🇩🇪', country: 'Germany',
+    id: 9, featured: true, flag: '🇩🇪', country: 'Germany',
     name: 'Heinrich Böll Foundation Scholarship', short: 'HBS',
     desc: 'For highly talented students committed to green politics, sustainability, and civil society.',
     tags: ["Master's", 'PhD', 'Sustainability'], amount: '€850/month',
@@ -118,7 +118,7 @@ export const SCHOLARSHIPS = [
     steps: ['Submit online application', 'Review by foundation staff', 'Group selection procedure (2-3 days)', 'Notification of results'],
   },
   {
-    id: 10, flag: '🇬🇧', country: 'United Kingdom',
+    id: 10, featured: true, flag: '🇬🇧', country: 'United Kingdom',
     name: 'Commonwealth Masters Scholarship 2026', short: 'CMS',
     desc: "Fully-funded for students from Commonwealth countries to study master's degrees in the UK.",
     tags: ["Master's", 'Commonwealth'], amount: 'Full + Flights',
@@ -131,7 +131,7 @@ export const SCHOLARSHIPS = [
     steps: ['Apply online through CSC portal', 'Shortlisting', 'Notification (Spring)', 'Apply to UK universities', 'Final selection', 'Pre-departure orientation'],
   },
   {
-    id: 11, flag: '🇺🇸', country: 'United States',
+    id: 11, featured: true, flag: '🇺🇸', country: 'United States',
     name: 'Hubert H. Humphrey Fellowship 2026', short: 'HHH',
     desc: 'Non-degree fellowship for mid-career professionals. US university coursework + professional internships.',
     tags: ['Fellowship', 'Professional'], amount: 'Full + Stipend',
@@ -144,7 +144,7 @@ export const SCHOLARSHIPS = [
     steps: ['Apply through USEFB Bangladesh', 'Primary screening', 'Selection interview', 'Nomination to IIE', 'University placement', 'Pre-departure orientation'],
   },
   {
-    id: 12, flag: '🇨🇳', country: 'China',
+    id: 12, featured: true, flag: '🇨🇳', country: 'China',
     name: 'Belt & Road Initiative Scholarship', short: 'BRI',
     desc: 'Tuition waiver for Belt & Road countries at prestigious Chinese universities.',
     tags: ["Bachelor's", "Master's", 'BRI'], amount: 'Tuition Waiver',
@@ -157,7 +157,7 @@ export const SCHOLARSHIPS = [
     steps: ['Identify BRI partner university', 'Contact international office', 'Submit application', 'University forwards to ministry', 'Receive admission + scholarship'],
   },
  {
-     id: 13, flag: 'EU', country: 'Europe',
+     id: 13, featured: true, flag: '🇪🇺', country: 'Europe',
     name: 'Erasmus Mundus Joint Masters',
     short: 'EMJM',
     desc: 'Fully-funded integrated Master’s degrees across multiple European universities.',
@@ -199,7 +199,7 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
-    id: 14, flag: '🇭🇺', country: 'Hungary',
+    id: 14, featured: true, flag: '🇭🇺', country: 'Hungary',
     name: 'Stipendium Hungaricum Scholarship',
     short: 'SH',
     desc: 'The most prestigious higher education scholarship of the Hungarian Government for international students.',
@@ -242,7 +242,7 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
-    id: 15, flag: '🇮🇹', country: 'Italy',
+    id: 15, featured: true, flag: '🇮🇹', country: 'Italy',
     name: 'Italian Government Scholarship',
     short: 'MAECI',
     desc: 'Fully-funded scholarships for international students to study in Italy and promote cultural cooperation.',
@@ -284,7 +284,7 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
-    id: 16, flag: '🇫🇮', country: 'Finland',
+    id: 16, featured: true, flag: '🇫🇮', country: 'Finland',
     name: 'University of Helsinki Scholarship',
     short: 'UH Scholarship',
     desc: 'Tuition waivers and relocation grants for outstanding non-EU/EEA students pursuing a Master’s degree.',
@@ -326,7 +326,7 @@ export const SCHOLARSHIPS = [
     ]
   },
   {
-    id: 17, flag: '🇷🇴', country: 'Romania',
+    id: 17, featured: true, flag: '🇷🇴', country: 'Romania',
     name: 'Romanian Government Scholarship',
     short: 'Romania MFA',
     desc: 'Fully-funded scholarships offered by the Ministry of Foreign Affairs to non-EU citizens for studies in Romania.',
@@ -369,7 +369,7 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
-    id: 18, flag: '🇸🇪', country: 'Sweden',
+    id: 18, featured: true, flag: '🇸🇪', country: 'Sweden',
     name: 'Swedish Institute Scholarship for Global Professionals',
     short: 'SI Global Professionals',
     desc: 'A highly competitive fully-funded scholarship for future leaders to pursue a Master’s degree in Sweden.',
@@ -412,8 +412,8 @@ export const SCHOLARSHIPS = [
 }
 ,
 {
-    id: 19,
-    countryFlag: '🇪🇸',
+    id: 19, featured: true,
+    flag: '🇪🇸',
     country: 'Spain',
     name: 'Spanish Government Scholarship',
     short: 'Spain Gov',
@@ -453,8 +453,8 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
-    id: 20,
-    countryFlag: '🇸🇦',
+    id: 20, featured: true,
+    flag: '🇸🇦',
     country: 'Saudi Arabia',
     name: 'King Abdulaziz University Scholarship',
     short: 'KAU Scholarship',
@@ -498,8 +498,8 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
-    id: 21,
-    countryFlag: '🇧🇪',
+    id: 21, featured: true,
+    flag: '🇧🇪',
     country: 'Belgium',
     name: 'VLIR-UOS Scholarship',
     short: 'VLIR-UOS',
@@ -541,8 +541,8 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
-    id: 22,
-    countryFlag: '🇳🇱',
+    id: 22, featured: true,
+    flag: '🇳🇱',
     country: 'Netherlands',
     name: 'Orange Knowledge Programme',
     short: 'OKP',
@@ -583,8 +583,8 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
-    id: 23,
-    countryFlag: '🇵🇱',
+    id: 23, featured: true,
+    flag: '🇵🇱',
     country: 'Poland',
     name: 'NAWA Government Scholarship',
     short: 'NAWA',
@@ -624,8 +624,8 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
-    id: 24,
-    countryFlag: '🇫🇷',
+    id: 24, featured: true,
+    flag: '🇫🇷',
     country: 'France',
     name: 'Eiffel Excellence Scholarship',
     short: 'Eiffel',
@@ -664,8 +664,8 @@ export const SCHOLARSHIPS = [
     ]
 },
 {
-    id: 25,
-    countryFlag: '🇦🇹',
+    id: 25, featured: true,
+    flag: '🇦🇹',
     country: 'Austria',
     name: 'Austrian Development Cooperation Scholarship',
     short: 'ADC Scholarship',

@@ -15,6 +15,7 @@ import BlogDetailPage from '@pages/BlogDetailPage'
 import AboutPage from '@pages/AboutPage'
 import ContactPage from '@pages/ContactPage'
 import NotFoundPage from '@pages/NotFoundPage'
+import AdminPage from '@pages/AdminPage'
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="admin" element={<AdminPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
