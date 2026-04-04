@@ -2,90 +2,101 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
-const PACKAGES = [
+const PLANS = [
   {
-    id: 'basic', icon: '🌱', name: 'Basic', price: '3000', period: 'one-time',
-    color: 'border-gray-200',
-    badge: null,
-    desc: 'Document preparation & self-guided support',
-    tag: 'Apply Yourself',
-    tagColor: 'bg-gray-100 text-gray-600',
+    id: 'starter', icon: '🌱', name: 'Starter', price: '5,000', period: 'one-time',
+    desc: 'Expert guidance — you apply yourself',
+    extra: null,
     features: [
-      'Full scholarship database access',
-      
-      'Personalised document checklist',
-      '1× 30-min counseling session',
-      'SOP template + writing guide',
-      'Recommendation letter guidance',
-      'CV template',
-      'Email support (5 business days)',
+      'Scholarship matching — top 5 scholarships for your profile',
+      'Complete document checklist',
+      'SOP writing guide + ready-to-use template',
+      '1 counseling session (45 minutes)',
+      'CV review and written feedback',
+      'WhatsApp support for 30 days',
+      'Access to full scholarship database (100+ scholarships)',
     ],
-    note: '⚠️ You submit the application yourself',
-    cta: 'Get Started →',
-    ctaStyle: 'btn-outline',
-    href: '/intake.html?package=basic',
+    cta: 'Get Started →', variant: 'outline'
   },
   {
-    id: 'standard', icon: '🚀', name: 'Standard', price: '7,500', period: 'per scholarship',
-    color: 'border-blue-600',
-    badge: '⭐ Most Popular',
-    badgeColor: 'bg-blue-600 text-white',
-    desc: 'Full support — we apply for you',
-    tag: 'We Apply For You',
-    tagColor: 'bg-blue-100 text-blue-700',
+    id: 'professional', icon: '🚀', name: 'Professional', price: '12,000', period: 'one-time',
+    desc: 'We write everything — you review and apply',
+    extra: '+৳5,000 per extra scholarship',
     features: [
-      'Everything in Basic',
-      'Professional SOP writing',
-      'CV review & full rewrite',
-      'Recommendation letter guidance',
-      '3× counseling sessions',
-      'Application portal submission',
-      'Interview preparation',
-      '✅ 1 scholarship application included',
-      'Priority support (24 hrs)',
+      'Everything in Starter',
+      'Professional Statement of Purpose (SOP) written for you',
+      'Full CV written from scratch by our expert writer',
+      'Motivation letter written for your chosen scholarship',
+      '3 counseling sessions with unlimited Q&A',
+      '1 scholarship application fully prepared',
+      'Document review before you submit',
+      'WhatsApp support for 60 days',
     ],
-    extra: true,
-    note: '➕ Additional scholarships: ৳3,500 each',
-    cta: 'Apply Now →',
-    ctaStyle: 'btn-primary',
-    href: '/intake.html?package=standard',
+    cta: 'Apply Now →', variant: 'primary', featured: true
   },
   {
-    id: 'premium', icon: '👑', name: 'Premium', price: '10,000', period: 'per scholarship',
-    color: 'border-amber-400',
-    badge: '👑 Best Service',
-    badgeColor: 'bg-amber-500 text-white',
-    desc: 'End-to-end concierge — we handle everything',
-    tag: 'Full Concierge',
-    tagColor: 'bg-amber-100 text-amber-700',
+    id: 'elite', icon: '👑', name: 'Elite', price: '20,000', period: 'one-time',
+    desc: 'Full done-for-you — we handle everything',
+    extra: '+৳7,000 per extra scholarship',
     features: [
-      'Everything in Standard',
-      'Dedicated personal advisor',
-      'Full application submission',
-      'Visa guidance & support letter',
-      '5 counseling sessions',
-      'WhatsApp priority support',
-      '✅ 1 scholarship application included',
-      'Post-acceptance guidance',
-      
+      'Everything in Professional',
+      'We submit the application on your behalf',
+      'Dedicated personal advisor (scholarship alumni)',
+      'Unlimited counseling sessions throughout the process',
+      'Interview preparation if you are shortlisted',
+      'Visa application guidance after acceptance',
+      'Pre-departure briefing and country preparation',
+      'WhatsApp support until your departure',
+      '1 scholarship fully managed end-to-end',
     ],
-    extra: true,
-    note: '➕ Additional scholarships: ৳3,500 each',
-    cta: 'Get Premium →',
-    ctaStyle: 'btn-blue',
-    href: '/intake.html?package=premium',
+    cta: 'Get Elite →', variant: 'blue'
   },
 ]
 
-const EXTRA_PRICE = 3500
+const ADDONS = [
+  {
+    icon: '📝',
+    name: 'Research Proposal Writing',
+    price: '5,000',
+    desc: 'For PhD applicants. A compelling, supervisor-ready research proposal written by our academic writer. Includes problem statement, methodology, timeline, and references.',
+    tag: 'PhD Applicants',
+    tagColor: 'bg-purple-100 text-purple-700',
+  },
+  {
+    icon: '📄',
+    name: 'Reference Letter Coaching',
+    price: '2,000',
+    desc: 'We guide your professor or supervisor on exactly what to write. Includes a reference letter brief, key points to highlight, and a sample draft they can adapt.',
+    tag: 'All Packages',
+    tagColor: 'bg-blue-100 text-blue-700',
+  },
+  {
+    icon: '🎯',
+    name: 'IELTS Preparation Pack',
+    price: '1,500',
+    desc: 'Our curated IELTS study resource pack — band-specific tips, writing templates, speaking practice topics, and a 30-day study plan built for scholarship applicants.',
+    tag: 'Pre-Application',
+    tagColor: 'bg-yellow-100 text-yellow-700',
+  },
+  {
+    icon: '📘',
+    name: 'Scholarship Success Ebook',
+    price: '499',
+    desc: 'The complete guide to winning international scholarships from Bangladesh. 80+ pages covering DAAD, Chevening, MEXT, Australia Awards — with real SOPs, timelines, and tips.',
+    tag: 'Self-Study',
+    tagColor: 'bg-green-100 text-green-700',
+  },
+]
 
 export default function ServicesPage() {
-  const [extraSchols, setExtraSchols] = useState({ standard: 0, premium: 0 })
+  const [paying, setPaying] = useState(null)
 
-  const totalPrice = (pkg) => {
-    const base = pkg.id === 'basic' ? 3000 : pkg.id === 'standard' ? 7500 : 10000
-    const extras = (extraSchols[pkg.id] || 0) * EXTRA_PRICE
-    return base + extras
+  const handlePurchase = (name) => {
+    setPaying(name)
+    setTimeout(() => {
+      setPaying(null)
+      toast.success(`Redirecting to payment for ${name}...`)
+    }, 1200)
   }
 
   return (
@@ -93,150 +104,126 @@ export default function ServicesPage() {
       <div className="page-hero">
         <div className="container">
           <div className="breadcrumb"><span>Home</span><span className="opacity-40">›</span><span>Services</span></div>
-          <h1>Expert Application Services</h1>
-          <p>From document prep to full application management — we handle it all</p>
+          <h1>Expert Scholarship Services</h1>
+          <p>From guidance to full done-for-you — pick the level of support you need</p>
         </div>
       </div>
 
-      <div className="container py-12">
+      {/* PACKAGES */}
+      <section className="section">
+        <div className="container">
+          <div className="section-header">
+            <span className="badge badge-blue mb-3">💼 Transparent Pricing</span>
+            <h2>Choose Your Package</h2>
+            <p>All packages include full access to 100+ scholarships. No hidden fees.</p>
+          </div>
 
-        {/* PRICING HEADER */}
-        <div className="text-center mb-10">
-          <span className="badge badge-blue mb-3">🏷 Transparent Pricing</span>
-          <h2 className="font-head font-black text-3xl text-navy-800 mb-3">Choose Your Package</h2>
-          <p className="text-gray-500 text-sm max-w-lg mx-auto">All packages include full scholarship database access. No hidden fees. Standard & Premium include one free scholarship application — add more for ৳3,500 each.</p>
-        </div>
-
-        {/* PACKAGE CARDS */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {PACKAGES.map(pkg => (
-            <div key={pkg.id} className={`card border-2 ${pkg.color} relative flex flex-col`}>
-              {pkg.badge && (
-                <div className={`absolute -top-3.5 left-1/2 -translate-x-1/2 text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap ${pkg.badgeColor}`}>
-                  {pkg.badge}
-                </div>
-              )}
-
-              <div className="p-6 flex-1">
-                {/* Header */}
-                <div className="text-center mb-5">
-                  <div className="text-3xl mb-2">{pkg.icon}</div>
-                  <h3 className="font-head font-black text-xl text-navy-800 mb-1">{pkg.name}</h3>
-                  <p className="text-xs text-gray-500 mb-3">{pkg.desc}</p>
-                  <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${pkg.tagColor}`}>{pkg.tag}</span>
-                </div>
-
-                {/* Price */}
-                <div className="text-center mb-5 py-4 border-y border-gray-100">
-                  <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-lg font-bold text-gray-500">৳</span>
-                    <span className="font-head font-black text-4xl text-navy-800">
-                      {pkg.extra ? totalPrice(pkg).toLocaleString() : pkg.price}
-                    </span>
+          <div className="grid md:grid-cols-3 gap-6 mt-10">
+            {PLANS.map(plan => (
+              <div key={plan.id} className={`rounded-3xl border-2 p-7 relative transition-all hover:-translate-y-1 hover:shadow-xl ${plan.featured ? 'bg-gradient-to-br from-navy-900 to-navy-600 border-blue-500' : 'bg-white border-gray-200 hover:border-blue-400'}`}>
+                {plan.featured && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-green-600 text-white px-4 py-0.5 rounded-full text-xs font-black whitespace-nowrap">
+                    ⭐ Most Popular
                   </div>
-                  <div className="text-xs text-gray-400 mt-1">{pkg.period}</div>
-
-                  {/* Extra scholarships counter */}
-                  {pkg.extra && (
-                    <div className="mt-4 bg-blue-50 rounded-xl p-3">
-                      <div className="text-xs font-bold text-blue-700 mb-2">How many scholarships to apply?</div>
-                      <div className="flex items-center justify-center gap-3">
-                        <button
-                          className="w-8 h-8 rounded-full bg-white border border-blue-200 text-blue-700 font-bold text-lg flex items-center justify-center hover:bg-blue-100 transition-colors"
-                          onClick={() => setExtraSchols(prev => ({ ...prev, [pkg.id]: Math.max(0, (prev[pkg.id]||0) - 1) }))}>
-                          −
-                        </button>
-                        <div className="text-center">
-                          <div className="font-black text-xl text-navy-800">{1 + (extraSchols[pkg.id]||0)}</div>
-                          <div className="text-[10px] text-gray-400">scholarship{1+(extraSchols[pkg.id]||0)>1?'s':''}</div>
-                        </div>
-                        <button
-                          className="w-8 h-8 rounded-full bg-white border border-blue-200 text-blue-700 font-bold text-lg flex items-center justify-center hover:bg-blue-100 transition-colors"
-                          onClick={() => setExtraSchols(prev => ({ ...prev, [pkg.id]: (prev[pkg.id]||0) + 1 }))}>
-                          +
-                        </button>
-                      </div>
-                      {(extraSchols[pkg.id]||0) > 0 && (
-                        <div className="text-[11px] text-blue-600 mt-2 font-medium">
-                          1 included + {extraSchols[pkg.id]} extra × ৳3,500 = ৳{totalPrice(pkg).toLocaleString()}
-                        </div>
-                      )}
-                    </div>
-                  )}
+                )}
+                <div className="text-4xl mb-4">{plan.icon}</div>
+                <h3 className={`font-head font-black text-xl mb-2 ${plan.featured ? 'text-white' : 'text-navy-800'}`}>{plan.name}</h3>
+                <p className={`text-sm mb-5 ${plan.featured ? 'text-white/60' : 'text-gray-500'}`}>{plan.desc}</p>
+                <div className={`font-head font-black text-5xl leading-none mb-1 ${plan.featured ? 'text-white' : 'text-navy-800'}`}>
+                  <span className="text-2xl align-top mt-2 inline-block">৳</span>{plan.price}
                 </div>
-
-                {/* Features */}
-                <ul className="space-y-2 mb-4">
-                  {pkg.features.map((f, i) => (
-                    <li key={i} className={`flex gap-2 text-sm ${f.startsWith('✅') ? 'font-semibold text-green-700' : 'text-gray-600'}`}>
-                      {!f.startsWith('✅') && <span className="text-green-500 font-bold flex-shrink-0 mt-0.5">✓</span>}
-                      {f.startsWith('✅') && <span className="flex-shrink-0">✅</span>}
-                      <span>{f.replace('✅ ', '')}</span>
+                <div className={`text-xs mb-1 ${plan.featured ? 'text-white/40' : 'text-gray-400'}`}>{plan.period}</div>
+                {plan.extra && (
+                  <div className={`text-xs font-medium mb-5 ${plan.featured ? 'text-green-400' : 'text-green-600'}`}>{plan.extra}</div>
+                )}
+                {!plan.extra && <div className="mb-5" />}
+                <ul className={`space-y-2.5 pb-6 mb-6 border-b ${plan.featured ? 'border-white/15' : 'border-gray-100'}`}>
+                  {plan.features.map(f => (
+                    <li key={f} className={`flex items-start gap-2 text-sm ${plan.featured ? 'text-white/80' : 'text-gray-700'}`}>
+                      <span className="text-green-500 font-bold flex-shrink-0 mt-0.5">✓</span>{f}
                     </li>
                   ))}
                 </ul>
-
-                {/* Note */}
-                <div className={`text-xs rounded-lg p-2.5 mb-4 ${pkg.extra ? 'bg-blue-50 text-blue-700' : 'bg-gray-50 text-gray-500'}`}>
-                  {pkg.note}
-                </div>
-              </div>
-
-              {/* CTA */}
-              <div className="px-6 pb-6">
-                <a href={`${pkg.href}&extra=${extraSchols[pkg.id]||0}`}
-                  className={`btn ${pkg.ctaStyle} btn-block text-center no-underline flex items-center justify-center`}>
-                  {pkg.cta}
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* EXTRA SCHOLARSHIP EXPLAINER */}
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-8 mb-12">
-          <div className="text-center mb-6">
-            <span className="badge badge-blue mb-3">➕ Multiple Scholarships</span>
-            <h3 className="font-head font-black text-2xl text-navy-800 mb-2">Applying to More Than One Scholarship?</h3>
-            <p className="text-gray-500 text-sm max-w-lg mx-auto">Standard and Premium packages include one scholarship application. Add more for just ৳2,500 each — documents are prepared once, we customize each application.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-4 max-w-2xl mx-auto">
-            {[
-              { schol: 'DAAD (Germany)', included: true },
-              { schol: 'Chevening (UK)', included: false },
-              { schol: 'Australia Awards', included: false },
-            ].map((item, i) => (
-              <div key={i} className={`rounded-xl p-4 text-center ${item.included ? 'bg-white border-2 border-green-400' : 'bg-white border border-blue-200'}`}>
-                <div className="text-sm font-bold text-navy-800 mb-1">{item.schol}</div>
-                {item.included
-                  ? <div className="text-xs text-green-600 font-bold">✅ Included in package</div>
-                  : <div className="text-xs text-blue-600 font-bold">➕ +৳3,500</div>
-                }
+                <Link
+                  to={`/intake.html?package=${plan.id}`}
+                  className={`btn btn-block ${plan.variant === 'primary' ? 'btn-primary' : plan.variant === 'blue' ? 'btn-blue' : 'btn-outline'}`}>
+                  {plan.cta}
+                </Link>
               </div>
             ))}
           </div>
-          <div className="text-center mt-4">
-            <div className="text-sm text-gray-600">Standard ৳7,500 + 2 extra scholarships × ৳3,500 = <strong className="text-navy-800">৳14,500 total</strong></div>
+          <p className="text-center text-xs text-gray-400 mt-5">All prices in BDT · Payment via bKash 01889700879 · WhatsApp us to confirm after payment</p>
+        </div>
+      </section>
+
+      {/* ADD-ONS */}
+      <section className="section bg-gray-50">
+        <div className="container">
+          <div className="section-header">
+            <span className="badge badge-green mb-3">➕ Add-On Services</span>
+            <h2>Boost Your Application Further</h2>
+            <p>Add these to any package — or purchase standalone</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-5 mt-8">
+            {ADDONS.map(a => (
+              <div key={a.name} className="bg-white border border-gray-200 rounded-2xl p-6 flex gap-4 hover:border-blue-300 hover:shadow-md transition-all">
+                <div className="text-3xl flex-shrink-0 mt-1">{a.icon}</div>
+                <div className="flex-1">
+                  <div className="flex items-start justify-between gap-3 mb-1">
+                    <h3 className="font-head font-bold text-navy-800 text-base">{a.name}</h3>
+                    <span className="font-head font-black text-green-600 text-lg whitespace-nowrap">৳{a.price}</span>
+                  </div>
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${a.tagColor} inline-block mb-2`}>{a.tag}</span>
+                  <p className="text-sm text-gray-500 leading-relaxed">{a.desc}</p>
+                  <a
+                    href={`https://wa.me/8801889700879?text=Hi! I'm interested in the ${a.name} add-on (৳${a.price}). Please share details.`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-outline btn-sm mt-4 inline-flex">
+                    💬 WhatsApp to Order
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* FAQ */}
-        <div className="max-w-2xl mx-auto">
-          <h3 className="font-head font-black text-xl text-navy-800 mb-6 text-center">Common Questions</h3>
-          {[
-            { q: 'Why does Basic not include application submission?', a: 'Basic is a self-guided package. We prepare all your documents and guide you step by step, but you submit the application yourself. This keeps the cost low for students who are confident applying independently.' },
-            { q: 'Why is there an extra charge per scholarship?', a: 'Each scholarship requires a customized SOP, separate application portal login, different documents, and individual tracking. Applying to 3 scholarships is genuinely 3 times the work.' },
-            { q: 'Can I upgrade my package later?', a: 'Yes! Contact us on WhatsApp and we will upgrade your package at any time. You only pay the difference.' },
-           
-          ].map((item, i) => (
-            <div key={i} className="mb-4 border border-gray-200 rounded-xl overflow-hidden">
-              <div className="p-4 font-bold text-sm text-navy-800 bg-gray-50">{item.q}</div>
-              <div className="p-4 text-sm text-gray-600 leading-relaxed">{item.a}</div>
-            </div>
-          ))}
+      {/* HOW IT WORKS */}
+      <section className="section">
+        <div className="container">
+          <div className="section-header">
+            <h2>How Our Service Works</h2>
+            <p>Simple, transparent, and fully guided from start to finish</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-10">
+            {[
+              ['1', 'Fill Intake Form', 'Tell us your profile — CGPA, field, target country, and package choice. Takes 5 minutes.'],
+              ['2', 'Free Consultation Call', 'Our scholarship counselor reviews your profile and recommends the best scholarships for you.'],
+              ['3', 'We Get to Work', 'Your SOP writer and advisor prepare everything. You approve, we submit (Elite), you win.'],
+            ].map(([n, title, desc]) => (
+              <div key={n} className="text-center px-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-navy-800 rounded-2xl flex items-center justify-center font-head font-black text-2xl text-white mx-auto mb-5 shadow-lg">{n}</div>
+                <h3 className="font-head font-bold text-navy-800 text-lg mb-2">{title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
+      </section>
 
-      </div>
+      {/* CTA */}
+      <section className="bg-gradient-to-br from-navy-800 to-navy-600 py-20 text-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(26,107,245,.15),transparent_50%)]" />
+        <div className="container relative z-10">
+          <h2 className="font-head font-black text-3xl text-white mb-3">Not Sure Which Package?</h2>
+          <p className="text-white/65 mb-7">Book a free 15-minute consultation. No commitment, no payment needed.</p>
+          <div className="flex gap-3 justify-center flex-wrap">
+            <a href="/intake.html" className="btn btn-primary btn-xl">📋 Fill Free Profile Form</a>
+            <a href="https://wa.me/8801889700879" target="_blank" rel="noreferrer" className="btn btn-white btn-xl">💬 WhatsApp Us</a>
+          </div>
+        </div>
+      </section>
     </>
   )
 }
