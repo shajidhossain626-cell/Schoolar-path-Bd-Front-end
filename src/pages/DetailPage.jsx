@@ -128,11 +128,11 @@ export default function DetailPage() {
                 <a href={`${INTAKE_URL}?package=basic`} className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all cursor-pointer mb-2 no-underline">
                   <span className="text-xl">🌱</span>
                   <div className="flex-1 min-w-0">
-                    <div className="font-bold text-sm text-navy-800">Basic</div>
+                    <div className="font-bold text-sm text-navy-800">Starter</div>
                     <div className="text-[11px] text-gray-500">Document checklist + guidance</div>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <div className="font-black text-sm text-navy-800">৳3,000</div>
+                    <div className="font-black text-sm text-navy-800">৳5000</div>
                     <div className="text-[10px] text-gray-400">one-time</div>
                   </div>
                 </a>
@@ -140,22 +140,22 @@ export default function DetailPage() {
                   <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">⭐ Most Popular</span>
                   <span className="text-xl">🚀</span>
                   <div className="flex-1 min-w-0">
-                    <div className="font-bold text-sm text-blue-700">Standard</div>
+                    <div className="font-bold text-sm text-blue-700">Professional</div>
                     <div className="text-[11px] text-gray-500">SOP writing + full support</div>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <div className="font-black text-sm text-blue-700">৳7,500</div>
+                    <div className="font-black text-sm text-blue-700">৳12000</div>
                     <div className="text-[10px] text-gray-400">per scholarship</div>
                   </div>
                 </a>
                 <a href={`${INTAKE_URL}?package=premium`} className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-amber-400 hover:bg-amber-50 transition-all cursor-pointer mb-4 no-underline">
                   <span className="text-xl">👑</span>
                   <div className="flex-1 min-w-0">
-                    <div className="font-bold text-sm text-navy-800">Premium</div>
+                    <div className="font-bold text-sm text-navy-800">Elite</div>
                     <div className="text-[11px] text-gray-500">End-to-end concierge</div>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <div className="font-black text-sm text-navy-800">৳10,000</div>
+                    <div className="font-black text-sm text-navy-800">৳20,000</div>
                     <div className="text-[10px] text-gray-400">per scholarship</div>
                   </div>
                 </a>
