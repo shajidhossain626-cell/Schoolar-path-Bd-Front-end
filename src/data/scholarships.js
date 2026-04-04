@@ -813,7 +813,7 @@ export const SCHOLARSHIPS = [
     tags: ['Masters', 'new zealand', 'manaki'], amount: 'NZ$1,000 per year',
     deadline: 'Mar 31,2026', deadlineDate: '2026-03-31',
     urgent: false, funding: 'full',
-    degree: ['bachelors', 'masters', 'phd'], field: 'engineering',
+    degree: ['bachelors', 'masters', 'phd'], field: 'Multiple',
     overview: 'Manaaki New Zealand Scholarships are one of the best opportunities available for international students. This scholarship provides fully funded programs at the top New Zealand universities across a wide range of fields.',
     benefits: [
     'Full tuition fees.',
