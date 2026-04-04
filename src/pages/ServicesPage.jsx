@@ -144,11 +144,11 @@ export default function ServicesPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to={`/intake.html?package=${plan.id}`}
+                <a
+                  href={`/intake.html?package=${plan.id}`}
                   className={`btn btn-block ${plan.variant === 'primary' ? 'btn-primary' : plan.variant === 'blue' ? 'btn-blue' : 'btn-outline'}`}>
                   {plan.cta}
-                </Link>
+                </a>
               </div>
             ))}
           </div>
