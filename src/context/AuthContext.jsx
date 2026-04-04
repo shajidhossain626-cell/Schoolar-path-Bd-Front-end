@@ -37,19 +37,37 @@ export function AuthProvider({ children }) {
   const [user, setUser]     = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // On page load — restore session from localStorage only
-  // Do NOT sync to Sheets here — it would overwrite admin's plan change
+  // On page load — restore from localStorage instantly,
+  // then silently check Google Sheets for latest plan (catches admin changes)
   useEffect(() => {
     try {
       const saved = localStorage.getItem(SK)
       if (saved) {
         const u = JSON.parse(saved)
-        setUser(u)
+        setUser(u)       // show immediately from localStorage (fast)
+        setLoading(false)
+
+        // Background: check if admin changed their plan in Google Sheets
+        fetchPlanFromSheet(u.email).then(sheetPlan => {
+          if (sheetPlan !== null && sheetPlan !== u.plan) {
+            // Admin changed the plan — update everything
+            const updated = {
+              ...u,
+              plan:   sheetPlan,
+              isPaid: sheetPlan !== 'Free',
+            }
+            setUser(updated)
+            localStorage.setItem(SK, JSON.stringify(updated))
+            localStorage.setItem(`sp_profile_${u.email}`, JSON.stringify(updated))
+          }
+        })
+      } else {
+        setLoading(false)
       }
     } catch {
       localStorage.removeItem(SK)
+      setLoading(false)
     }
-    setLoading(false)
   }, [])
 
   // Save user to localStorage + Google Sheets
