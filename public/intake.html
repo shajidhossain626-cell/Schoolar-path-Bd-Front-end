@@ -335,9 +335,9 @@ function updateExtraNote() {
   const note = document.getElementById('extraNote')
   if (!note) return
   const extras = Math.max(0, selCountries.size - 1)
-  if (extras > 0 && (selPkg === 'Standard' || selPkg === 'Premium')) {
-    const base = selPkg === 'Standard' ? 7500 : 10000
-    const total = base + extras * 2500
+  if (extras > 0 && (selPkg === 'Professional' || selPkg === 'Elite')) {
+    const base = selPkg === 'Professional' ? 12000 : 20000
+    const total = base + extras * 5500
     note.style.display = 'block'
     note.innerHTML = `➕ <strong>Extra scholarship charge:</strong> ${selCountries.size} countries selected — 1 included + ${extras} extra × ৳2,500 = <strong>৳${total.toLocaleString()} total</strong>`
   } else {
@@ -423,8 +423,8 @@ async function submitForm() {
 
   const totalFiles = Object.values(uploads).reduce((s,a)=>s+a.length,0)
   const extras = Math.max(0, selCountries.size-1)
-  const basePrice = selPkg==='Basic'?3000:selPkg==='Standard'?7500:selPkg==='Premium'?10000:0
-  const totalAmount = selPkg==='Basic' ? basePrice : basePrice + extras*2500
+  const basePrice = selPkg==='Starter'?5000:selPkg==='Professional'?12000:selPkg==='Elite'?20000:0
+  const totalAmount = selPkg==='Starter' ? basePrice : basePrice + extras*5500
 
   // build docs object with file data
   const docsObj = {}
