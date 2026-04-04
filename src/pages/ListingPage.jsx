@@ -6,7 +6,7 @@ import ScholarshipCard from '@components/common/ScholarshipCard'
 import { useAuth } from '@context/AuthContext'
 import { useScholarships } from '@context/ScholarshipContext'
 
-const FREE_LIMIT = 25
+const FREE_LIMIT = 26
 const PER_PAGE = 6
 
 export default function ListingPage() {
