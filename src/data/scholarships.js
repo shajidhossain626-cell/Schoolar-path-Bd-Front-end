@@ -809,6 +809,6 @@ export const SCHOLARSHIPS = [
 ]
 
 export const COUNTRIES = [...new Set(SCHOLARSHIPS.map(s => s.country))]
-export const FIELDS = ['engineering', 'business', 'medical', 'arts', 'social','Multiple']
+export const FIELDS = ['engineering', 'business', 'medical', 'arts', 'social','Multiple','multiple']
 export const DEGREES = ['bachelors', 'masters', 'phd']
 export const FUNDING_TYPES = ['full', 'partial', 'tuition']
