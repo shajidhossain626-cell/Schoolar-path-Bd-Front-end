@@ -23,20 +23,19 @@ export default function ListingPage() {
     if (degree)  updateFilter('degrees', [degree])
   }, [])
 
-  // All 25 free scholarships
-  const freeScholarships = scholarships.filter(s => s.featured).slice(0, FREE_LIMIT)
-  const totalAll = scholarships.length
-  const lockedCount = totalAll - freeScholarships.length
+  const freeScholarships   = scholarships.filter(s => s.featured).slice(0, FREE_LIMIT)
+  const totalAll           = scholarships.length
+  const lockedCount        = totalAll - freeScholarships.length
+  const freeTotalPages     = Math.ceil(freeScholarships.length / PER_PAGE)
+  const freePaginated      = freeScholarships.slice((freePage - 1) * PER_PAGE, freePage * PER_PAGE)
 
-  // Free pagination — independent of paid pagination
-  const freeTotalPages = Math.ceil(freeScholarships.length / PER_PAGE)
-  const freePaginated  = freeScholarships.slice((freePage - 1) * PER_PAGE, freePage * PER_PAGE)
-
-  // Which cards to show
   const visibleCards = isPaid ? paginated : freePaginated
   const currentPage  = isPaid ? page : freePage
   const currentTotal = isPaid ? totalPages : freeTotalPages
   const handlePage   = isPaid ? setPage : setFreePage
+
+  // Only show unlock banner on the very last free page
+  const showUnlockBanner = !isPaid && freePage === freeTotalPages
 
   return (
     <>
@@ -47,7 +46,7 @@ export default function ListingPage() {
           <p>
             {isPaid
               ? `${totalAll}+ verified international scholarships — full access unlocked ✅`
-              : `Showing ${FREE_LIMIT} free scholarships · ${lockedCount}+ more unlocked with any package`}
+              : `${freeScholarships.length} free scholarships available · ${lockedCount}+ more with any package`}
           </p>
         </div>
       </div>
@@ -56,6 +55,7 @@ export default function ListingPage() {
         <div className="grid md:grid-cols-[260px_1fr] gap-7 py-9 items-start">
           <FilterSidebar />
           <div>
+            {/* Header row */}
             <div className="flex items-center justify-between mb-5">
               <div>
                 <h2 className="font-head font-bold text-navy-800 text-lg">
@@ -63,8 +63,8 @@ export default function ListingPage() {
                 </h2>
                 <span className="text-gray-500 text-sm">
                   {isPaid
-                    ? `Showing ${resultCount} results`
-                    : `Showing ${freeScholarships.length} free scholarships (page ${freePage} of ${freeTotalPages})`}
+                    ? `${resultCount} scholarships found`
+                    : `Page ${freePage} of ${freeTotalPages} · ${freeScholarships.length} free scholarships`}
                 </span>
               </div>
               <select className="input text-sm w-auto"
@@ -75,6 +75,7 @@ export default function ListingPage() {
               </select>
             </div>
 
+            {/* Scholarship cards */}
             {visibleCards.length > 0 ? (
               <div className="grid sm:grid-cols-2 gap-5">
                 {visibleCards.map(s => <ScholarshipCard key={s.id} scholarship={s} />)}
@@ -88,58 +89,14 @@ export default function ListingPage() {
               </div>
             )}
 
-            {/* PAYWALL SECTION — show for non-paid users */}
-            {!isPaid && (
-              <div className="mt-10">
-                {/* Blurred preview cards */}
-                <div className="relative">
-                  <div className="grid sm:grid-cols-2 gap-5 blur-sm pointer-events-none select-none opacity-60">
-                    {scholarships.slice(FREE_LIMIT, FREE_LIMIT + 4).map(s => (
-                      <ScholarshipCard key={s.id} scholarship={s} />
-                    ))}
-                  </div>
-
-                  {/* Lock overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="bg-white rounded-3xl shadow-2xl border-2 border-blue-200 p-8 text-center max-w-md mx-4">
-                      <div className="text-5xl mb-4">🔒</div>
-                      <h3 className="font-head font-black text-navy-800 text-2xl mb-2">
-                        {lockedCount}+ More Scholarships Locked
-                      </h3>
-                      <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-                        You're seeing <strong>{FREE_LIMIT} free scholarships</strong>. Get full access to our complete database of <strong>{totalAll}+ scholarships</strong> — including DAAD, Chevening, MEXT, Australia Awards and many more — by signing up for any package.
-                      </p>
-                      <div className="flex flex-col gap-3">
-                        {!isLoggedIn && (
-                          <p className="text-xs text-gray-400 mb-1">Already have a package? <Link to="/dashboard" className="text-blue-600 underline">Sign in to unlock</Link></p>
-                        )}
-                        <Link to="/services" className="btn btn-primary btn-block text-base py-3">
-                          🚀 View Packages — from ৳5,000
-                        </Link>
-                        <a href="https://wa.me/8801889700879?text=Hi! I want to unlock all scholarships." target="_blank" rel="noreferrer"
-                          className="btn btn-outline btn-block">
-                          💬 WhatsApp Us to Unlock
-                        </a>
-                      </div>
-                      <div className="flex justify-center gap-6 mt-5 text-xs text-gray-400">
-                        <span>✓ 100+ scholarships</span>
-                        <span>✓ Instant access</span>
-                        <span>✓ Updated weekly</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Pagination — works for both free and paid */}
+            {/* Pagination — always visible, never blocked */}
             {currentTotal > 1 && (
               <div className="flex gap-2 mt-8 justify-center flex-wrap">
                 <button
                   onClick={() => handlePage(p => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
                   className="btn btn-outline btn-sm">← Prev</button>
-                {Array.from({ length: Math.min(currentTotal, 7) }, (_, i) => i + 1).map(p => (
+                {Array.from({ length: currentTotal }, (_, i) => i + 1).map(p => (
                   <button key={p} onClick={() => handlePage(p)}
                     className={`btn btn-sm ${p === currentPage ? 'btn-primary' : 'btn-outline'}`}>{p}</button>
                 ))}
@@ -149,6 +106,36 @@ export default function ListingPage() {
                   className="btn btn-outline btn-sm">Next →</button>
               </div>
             )}
+
+            {/* Unlock banner — only appears BELOW pagination on the last free page */}
+            {showUnlockBanner && (
+              <div className="mt-8 rounded-2xl border-2 border-dashed border-blue-300 bg-blue-50 p-6 text-center">
+                <div className="text-3xl mb-2">🔒</div>
+                <h3 className="font-head font-black text-navy-800 text-xl mb-1">
+                  You've seen all {freeScholarships.length} free scholarships
+                </h3>
+                <p className="text-gray-500 text-sm mb-4 max-w-md mx-auto">
+                  Unlock <strong>{lockedCount}+ more scholarships</strong> including DAAD, Chevening, MEXT, Australia Awards and many more — starting from just ৳5,000.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Link to="/services" className="btn btn-primary px-6">
+                    🚀 View Packages — from ৳5,000
+                  </Link>
+                  <a href="https://wa.me/8801889700879?text=Hi! I want to unlock all scholarships."
+                    target="_blank" rel="noreferrer"
+                    className="btn btn-outline px-6">
+                    💬 WhatsApp to Unlock
+                  </a>
+                </div>
+                {!isLoggedIn && (
+                  <p className="text-xs text-gray-400 mt-3">
+                    Already have a package?{' '}
+                    <Link to="/dashboard" className="text-blue-600 underline">Sign in to unlock →</Link>
+                  </p>
+                )}
+              </div>
+            )}
+
           </div>
         </div>
       </div>
