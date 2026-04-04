@@ -3,211 +3,353 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ScholarPath BD — Admin</title>
+<title>Admin — ScholarPath BD</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f5f9;min-height:100vh}
-.login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f2444}
-.login-box{background:#fff;border-radius:18px;padding:36px;width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.login-box h1{font-size:20px;font-weight:700;color:#0f2444;margin:10px 0 4px}
-.login-box p{font-size:13px;color:#94a3b8;margin-bottom:20px}
-.login-box input{width:100%;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:9px;font-size:14px;outline:none;margin-bottom:10px}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f2444}
+.login-box{background:#fff;border-radius:20px;padding:40px 36px;width:360px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.35)}
+.login-logo{font-size:42px;margin-bottom:12px}
+.login-box h1{font-size:22px;font-weight:700;color:#0f2444;margin-bottom:4px}
+.login-box p{font-size:13px;color:#94a3b8;margin-bottom:24px}
+.login-box input{width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:14px;outline:none;margin-bottom:12px;transition:border .2s}
 .login-box input:focus{border-color:#0f2444}
-.login-box .btn{width:100%;padding:12px;background:#0f2444;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
-.login-box .btn:hover{background:#1e3a6b}
-.err{color:#ef4444;font-size:12px;margin-bottom:8px}
+.login-btn{width:100%;padding:13px;background:#0f2444;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s}
+.login-btn:hover{background:#1e3a6b}
+.login-err{color:#ef4444;font-size:13px;margin-bottom:10px;min-height:18px}
+
+/* NAVBAR */
 .app{display:none}
-.nav{background:#0f2444;color:#fff;padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.nav h1{font-size:15px;font-weight:700}
-.nav-r{display:flex;gap:10px;align-items:center}
-.nav-r a{color:rgba(255,255,255,.6);text-decoration:none;font-size:12px}
-.nav-r a:hover{color:#fff}
-.nav-r button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:5px 12px;border-radius:7px;font-size:12px;cursor:pointer}
-.wrap{max-width:1100px;margin:0 auto;padding:20px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
-.stat{background:#fff;border-radius:12px;padding:16px;border:1px solid #e2e8f0;text-align:center}
-.stat-n{font-size:26px;font-weight:700;color:#0f2444}
-.stat-l{font-size:12px;color:#94a3b8;margin-top:3px}
-.card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden}
-.card-head{padding:14px 18px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.card-head h2{font-size:14px;font-weight:600;color:#0f2444}
-.controls{display:flex;gap:8px;flex-wrap:wrap}
-.controls input,.controls select{padding:6px 10px;border:1px solid #e2e8f0;border-radius:7px;font-size:12px;outline:none}
-.rbtn{padding:6px 12px;background:#0f2444;color:#fff;border:none;border-radius:7px;font-size:12px;cursor:pointer}
-.rbtn:hover{background:#1e3a6b}
-.t-wrap{overflow-x:auto}
+.nav{background:#0f2444;color:#fff;padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.nav-brand{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.nav-right{display:flex;gap:12px;align-items:center}
+.nav-right a{color:rgba(255,255,255,.6);text-decoration:none;font-size:13px;transition:color .15s}
+.nav-right a:hover{color:#fff}
+.nav-right button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 14px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s}
+.nav-right button:hover{background:rgba(255,255,255,.2)}
+
+/* CONTENT */
+.content{max-width:1160px;margin:0 auto;padding:24px 20px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px}
+.stat{background:#fff;border-radius:14px;padding:18px 16px;border:1px solid #e2e8f0;display:flex;align-items:center;gap:14px}
+.stat-icon{font-size:30px;flex-shrink:0}
+.stat-info{}
+.stat-num{font-size:28px;font-weight:700;color:#0f2444;line-height:1}
+.stat-lbl{font-size:12px;color:#94a3b8;margin-top:3px}
+
+/* TABLE CARD */
+.card{background:#fff;border-radius:16px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:16px}
+.card-header{padding:16px 20px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.card-header h2{font-size:15px;font-weight:600;color:#0f2444}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ctrls input,.ctrls select{padding:7px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;outline:none;background:#fff}
+.ctrls input:focus,.ctrls select:focus{border-color:#0f2444}
+.refresh{padding:7px 14px;background:#0f2444;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer}
+.refresh:hover{background:#1e3a6b}
+.refresh:disabled{opacity:.5;cursor:not-allowed}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:9px 14px;font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid #f1f5f9;background:#fafafa;white-space:nowrap}
-td{padding:11px 14px;border-bottom:1px solid #f8fafc;color:#475569;vertical-align:middle}
+th{text-align:left;padding:10px 16px;font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;background:#fafafa;border-bottom:1px solid #f1f5f9;white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid #f8fafc;color:#475569;vertical-align:middle}
+tr:last-child td{border:none}
 tr:hover td{background:#fafafa}
-tr:last-child td{border-bottom:none}
-.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0f2444,#1e3a6b);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
-.uc{display:flex;align-items:center;gap:8px}
-.un{font-weight:600;color:#0f2444;font-size:13px}
-.ue{font-size:11px;color:#94a3b8}
-.badge{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
-.bp{background:#dcfce7;color:#166534}
-.bf{background:#f1f5f9;color:#64748b}
-.bs{background:#dbeafe;color:#1e40af}
-.bpr{background:#ede9fe;color:#5b21b6}
-.be{background:#fef9c3;color:#854d0e}
-select.ps{padding:5px 8px;border:1px solid #e2e8f0;border-radius:7px;font-size:12px;cursor:pointer;background:#fff;outline:none}
-.msg{text-align:center;padding:40px;color:#94a3b8;font-size:13px}
-.hint{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:14px 18px;margin-top:14px;font-size:13px;color:#1e40af;line-height:1.6}
-.toast{position:fixed;bottom:20px;right:20px;background:#0f2444;color:#fff;padding:11px 16px;border-radius:10px;font-size:13px;display:none;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.user-cell{display:flex;align-items:center;gap:10px}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0f2444,#1e3a6b);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.user-name{font-weight:600;color:#0f2444;font-size:13px}
+.user-email{font-size:11px;color:#94a3b8;margin-top:1px}
+.badge{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.free{background:#f1f5f9;color:#64748b}
+.starter{background:#dbeafe;color:#1e40af}
+.pro{background:#ede9fe;color:#5b21b6}
+.elite{background:#fef9c3;color:#854d0e}
+.paid{background:#dcfce7;color:#166534}
+.plan-select{padding:5px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;cursor:pointer;background:#fff;outline:none;transition:border .15s}
+.plan-select:focus{border-color:#0f2444}
+.date{font-size:12px;color:#94a3b8;white-space:nowrap}
+.msg{text-align:center;padding:48px 20px;color:#94a3b8}
+.msg-icon{font-size:40px;margin-bottom:10px}
+.msg-text{font-size:14px}
+
+/* NOTICE */
+.notice{background:#eff6ff;border:1px solid #bfdbfe;border-radius:14px;padding:16px 20px;font-size:13px;color:#1e40af;line-height:1.7}
+.notice strong{font-weight:600}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#0f2444;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;display:none;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.2);max-width:320px}
 </style>
 </head>
 <body>
 
-<div class="login" id="lg">
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
   <div class="login-box">
-    <div style="font-size:38px">🔐</div>
+    <div class="login-logo">🔐</div>
     <h1>ScholarPath BD</h1>
-    <p>Admin Panel</p>
-    <div class="err" id="lerr"></div>
-    <input type="password" id="pw" placeholder="Admin password" onkeydown="if(event.key==='Enter')login()">
-    <button class="btn" onclick="login()">Login →</button>
+    <p>Admin Panel · User Management</p>
+    <div class="login-err" id="loginErr"></div>
+    <input type="password" id="pw" placeholder="Enter admin password"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Login to Admin →</button>
   </div>
 </div>
 
-<div class="app" id="ap">
-  <div class="nav">
-    <h1>📊 Admin Panel — ScholarPath BD</h1>
-    <div class="nav-r">
-      <a href="/" target="_blank">← Website</a>
-      <button onclick="logout()">Logout</button>
+<!-- MAIN APP -->
+<div class="app" id="appWrap">
+
+  <nav class="nav">
+    <div class="nav-brand">📊 Admin Panel — ScholarPath BD</div>
+    <div class="nav-right">
+      <a href="/" target="_blank">← View Website</a>
+      <button onclick="doLogout()">Logout</button>
     </div>
-  </div>
-  <div class="wrap">
+  </nav>
+
+  <div class="content">
+
+    <!-- STATS -->
     <div class="stats">
-      <div class="stat"><div style="font-size:26px">👥</div><div class="stat-n" id="st">—</div><div class="stat-l">Total Users</div></div>
-      <div class="stat"><div style="font-size:26px">✅</div><div class="stat-n" id="sp">—</div><div class="stat-l">Paid Users</div></div>
-      <div class="stat"><div style="font-size:26px">🔒</div><div class="stat-n" id="sf">—</div><div class="stat-l">Free Users</div></div>
-      <div class="stat"><div style="font-size:26px">🆕</div><div class="stat-n" id="sd">—</div><div class="stat-l">Joined Today</div></div>
+      <div class="stat">
+        <div class="stat-icon">👥</div>
+        <div class="stat-info"><div class="stat-num" id="sTotal">0</div><div class="stat-lbl">Total Users</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info"><div class="stat-num" id="sPaid">0</div><div class="stat-lbl">Paid Users</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon">🔒</div>
+        <div class="stat-info"><div class="stat-num" id="sFree">0</div><div class="stat-lbl">Free Users</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon">🆕</div>
+        <div class="stat-info"><div class="stat-num" id="sToday">0</div><div class="stat-lbl">Joined Today</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon">💰</div>
+        <div class="stat-info"><div class="stat-num" id="sPro">0</div><div class="stat-lbl">Professional+</div></div>
+      </div>
     </div>
+
+    <!-- TABLE -->
     <div class="card">
-      <div class="card-head">
-        <h2 id="ttl">Registered Users</h2>
-        <div class="controls">
-          <input id="srch" placeholder="Search name or email..." oninput="render()">
-          <select id="flt" onchange="render()">
+      <div class="card-header">
+        <h2 id="tableTitle">Registered Users</h2>
+        <div class="ctrls">
+          <input id="searchBox" placeholder="🔍 Search name or email..." oninput="renderTable()">
+          <select id="planFilter" onchange="renderTable()">
             <option value="">All Plans</option>
-            <option>Free</option><option>Starter</option>
-            <option>Professional</option><option>Elite</option>
+            <option>Free</option>
+            <option>Starter</option>
+            <option>Professional</option>
+            <option>Elite</option>
           </select>
-          <button class="rbtn" onclick="load()">🔄 Refresh</button>
+          <button class="refresh" id="refreshBtn" onclick="loadUsers()">🔄 Refresh</button>
         </div>
       </div>
-      <div class="t-wrap">
-        <div class="msg" id="tmsg">Loading users from Google Sheets...</div>
-        <table id="tbl" style="display:none">
-          <thead><tr><th>User</th><th>Plan</th><th>Joined</th><th>Last Seen</th><th>Grant Access</th></tr></thead>
-          <tbody id="tbody"></tbody>
+
+      <div class="tbl-wrap">
+        <div class="msg" id="tableMsg">
+          <div class="msg-icon">⏳</div>
+          <div class="msg-text">Loading users from Google Sheets...</div>
+        </div>
+        <table id="userTable" style="display:none">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Plan</th>
+              <th>Joined</th>
+              <th>Last Seen</th>
+              <th>Grant Access</th>
+            </tr>
+          </thead>
+          <tbody id="userBody"></tbody>
         </table>
       </div>
     </div>
-    <div class="hint">
-      💡 <strong>How to grant access:</strong> After a client pays via bKash — find their email → change plan from <strong>Free</strong> to their package. Access updates instantly in Google Sheets.
+
+    <!-- NOTICE -->
+    <div class="notice">
+      💡 <strong>How to grant access after payment:</strong> When a client pays via bKash → find their email in the table → change their plan from <strong>Free</strong> to <strong>Starter / Professional / Elite</strong> using the dropdown. Their access updates immediately in Google Sheets. Next time they visit the website, they will see all scholarships. <br><br>
+      ⚠️ <strong>No users showing?</strong> Make sure you have updated and redeployed your Google Apps Script with the new code provided. Users appear here automatically when they sign up on your website.
     </div>
+
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const PASS   = 'admin@2026'
+const ADMIN_PASS = 'admin@2026'
 const SCRIPT = 'https://script.google.com/macros/s/AKfycbzdH4qOsUowPdO_vFhAdu3Ip9z7NMSQ_ZHPtru4yYSXYA9UESlBhZ-DMde2VPb5SQVC/exec'
-let users = []
+const PLANS  = ['Free', 'Starter', 'Professional', 'Elite']
+let allUsers = []
 
-function login() {
-  if (document.getElementById('pw').value === PASS) {
-    document.getElementById('lg').style.display = 'none'
-    document.getElementById('ap').style.display = 'block'
-    load()
+// ── AUTH ──
+function doLogin() {
+  const val = document.getElementById('pw').value
+  document.getElementById('loginErr').textContent = ''
+  if (val === ADMIN_PASS) {
+    document.getElementById('loginWrap').style.display = 'none'
+    document.getElementById('appWrap').style.display = 'block'
+    loadUsers()
   } else {
-    document.getElementById('lerr').textContent = 'Wrong password'
+    document.getElementById('loginErr').textContent = '❌ Wrong password. Try again.'
   }
 }
 
-function logout() {
-  document.getElementById('lg').style.display = 'flex'
-  document.getElementById('ap').style.display = 'none'
+function doLogout() {
+  document.getElementById('loginWrap').style.display = 'flex'
+  document.getElementById('appWrap').style.display = 'none'
   document.getElementById('pw').value = ''
+  allUsers = []
 }
 
-async function load() {
-  document.getElementById('tmsg').style.display = 'block'
-  document.getElementById('tmsg').textContent = 'Loading from Google Sheets...'
-  document.getElementById('tbl').style.display = 'none'
+// ── LOAD USERS from Google Sheets ──
+async function loadUsers() {
+  const btn = document.getElementById('refreshBtn')
+  const msg = document.getElementById('tableMsg')
+  const tbl = document.getElementById('userTable')
+
+  btn.disabled = true
+  btn.textContent = '⏳ Loading...'
+  msg.style.display = 'block'
+  msg.innerHTML = '<div class="msg-icon">⏳</div><div class="msg-text">Loading from Google Sheets...</div>'
+  tbl.style.display = 'none'
+
   try {
-    const r = await fetch(SCRIPT + '?action=getUsers&t=' + Date.now())
-    const j = await r.json()
-    if (!j.success) throw new Error(j.error)
-    users = j.data || []
-    stats()
-    render()
-    document.getElementById('tmsg').style.display = users.length ? 'none' : 'block'
-    if (!users.length) document.getElementById('tmsg').textContent = 'No users yet. Users appear here when they sign up on your website.'
-    document.getElementById('tbl').style.display = users.length ? 'table' : 'none'
-  } catch(e) {
-    document.getElementById('tmsg').textContent = '❌ Could not load. Make sure Apps Script is updated and redeployed. ' + e.message
+    const url  = SCRIPT + '?action=getUsers&t=' + Date.now()
+    const res  = await fetch(url)
+    const json = await res.json()
+
+    if (!json.success) throw new Error(json.error || 'Failed to fetch users')
+
+    allUsers = json.data || []
+    updateStats()
+    renderTable()
+
+    if (allUsers.length === 0) {
+      msg.style.display = 'block'
+      msg.innerHTML = '<div class="msg-icon">👤</div><div class="msg-text">No users yet. Users appear here automatically when they sign up on your website.</div>'
+    } else {
+      msg.style.display = 'none'
+      tbl.style.display = 'table'
+    }
+
+  } catch(err) {
+    msg.style.display = 'block'
+    msg.innerHTML = `<div class="msg-icon">❌</div><div class="msg-text">Could not load users.<br><small style="color:#ef4444">${err.message}</small><br><br><small>Make sure your Apps Script is updated and redeployed with the new code.</small></div>`
   }
+
+  btn.disabled = false
+  btn.textContent = '🔄 Refresh'
 }
 
-function stats() {
+// ── UPDATE STATS ──
+function updateStats() {
   const today = new Date().toDateString()
-  document.getElementById('st').textContent = users.length
-  document.getElementById('sp').textContent = users.filter(u => u.Plan && u.Plan !== 'Free').length
-  document.getElementById('sf').textContent = users.filter(u => !u.Plan || u.Plan === 'Free').length
-  document.getElementById('sd').textContent = users.filter(u => new Date(u['Joined At']).toDateString() === today).length
-  document.getElementById('ttl').textContent = `Registered Users (${users.length})`
+  const paid  = allUsers.filter(u => u.Plan && u.Plan !== 'Free')
+  const pro   = allUsers.filter(u => ['Professional','Elite'].includes(u.Plan))
+
+  document.getElementById('sTotal').textContent = allUsers.length
+  document.getElementById('sPaid').textContent  = paid.length
+  document.getElementById('sFree').textContent  = allUsers.length - paid.length
+  document.getElementById('sToday').textContent = allUsers.filter(u => {
+    try { return new Date(u['Joined At']).toDateString() === today } catch { return false }
+  }).length
+  document.getElementById('sPro').textContent   = pro.length
+  document.getElementById('tableTitle').textContent = `Registered Users (${allUsers.length})`
 }
 
-function render() {
-  const q   = document.getElementById('srch').value.toLowerCase()
-  const flt = document.getElementById('flt').value
-  const list = users.filter(u => {
-    const mq = !q || (u.Name||'').toLowerCase().includes(q) || (u.Email||'').toLowerCase().includes(q)
-    const mp = !flt || u.Plan === flt
-    return mq && mp
+// ── RENDER TABLE ──
+function renderTable() {
+  const q    = document.getElementById('searchBox').value.toLowerCase()
+  const flt  = document.getElementById('planFilter').value
+  const list = allUsers.filter(u => {
+    const mQ = !q || (u.Name||'').toLowerCase().includes(q) || (u.Email||'').toLowerCase().includes(q)
+    const mP = !flt || u.Plan === flt
+    return mQ && mP
   })
-  const body = document.getElementById('tbody')
-  if (!list.length) { body.innerHTML = `<tr><td colspan="5" class="msg">No users match.</td></tr>`; return }
-  body.innerHTML = list.map(u => {
-    const plan = u.Plan || 'Free'
-    const ini  = (u.Name||'?').split(' ').map(w=>w[0]||'').join('').toUpperCase().slice(0,2)
-    const bc   = plan==='Elite'?'be':plan==='Professional'?'bpr':plan==='Starter'?'bs':plan!=='Free'?'bp':'bf'
-    const opts = ['Free','Starter','Professional','Elite'].map(p=>`<option${p===plan?' selected':''}>${p}</option>`).join('')
+
+  const tbody = document.getElementById('userBody')
+  if (list.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5"><div class="msg"><div class="msg-icon">🔍</div><div class="msg-text">No users match your search.</div></div></td></tr>'
+    return
+  }
+
+  tbody.innerHTML = list.map(u => {
+    const name    = u.Name  || 'Unknown'
+    const email   = u.Email || ''
+    const plan    = u.Plan  || 'Free'
+    const initials= name.split(' ').map(w => w[0] || '').join('').toUpperCase().slice(0, 2) || '?'
+    const badgeCls= plan === 'Elite' ? 'elite' : plan === 'Professional' ? 'pro' : plan === 'Starter' ? 'starter' : plan !== 'Free' ? 'paid' : 'free'
+    const isPaid  = plan !== 'Free'
+    const options = PLANS.map(p => `<option value="${p}"${p === plan ? ' selected' : ''}>${p}</option>`).join('')
+
     return `<tr>
-      <td><div class="uc"><div class="av">${ini}</div><div><div class="un">${esc(u.Name||'—')}</div><div class="ue">${esc(u.Email||'')}</div></div></div></td>
-      <td><span class="badge ${bc}">${plan!=='Free'?'✅':'🔒'} ${plan}</span></td>
-      <td style="font-size:12px;color:#94a3b8">${fmt(u['Joined At'])}</td>
-      <td style="font-size:12px;color:#94a3b8">${fmt(u['Last Seen'])}</td>
-      <td><select class="ps" onchange="changePlan('${esc(u.Email)}',this.value)">${opts}</select></td>
+      <td>
+        <div class="user-cell">
+          <div class="avatar">${esc(initials)}</div>
+          <div>
+            <div class="user-name">${esc(name)}</div>
+            <div class="user-email">${esc(email)}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="badge ${badgeCls}">${isPaid ? '✅' : '🔒'} ${plan}</span></td>
+      <td class="date">${fmtDate(u['Joined At'])}</td>
+      <td class="date">${fmtDate(u['Last Seen'])}</td>
+      <td>
+        <select class="plan-select" onchange="changePlan('${esc(email)}', this.value)">
+          ${options}
+        </select>
+      </td>
     </tr>`
   }).join('')
 }
 
+// ── CHANGE PLAN ──
 async function changePlan(email, plan) {
   try {
     await fetch(SCRIPT, {
-      method:'POST', headers:{'Content-Type':'text/plain'},
-      body: JSON.stringify({action:'updateUserPlan', email, plan})
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'updateUserPlan', email, plan })
     })
-    const u = users.find(u => u.Email === email)
+    const u = allUsers.find(u => u.Email === email)
     if (u) u.Plan = plan
-    stats(); render()
-    toast('✅ ' + email + ' → ' + plan)
-  } catch { toast('❌ Failed to update') }
+    updateStats()
+    renderTable()
+    showToast(`✅ ${email} → ${plan} access granted!`)
+  } catch {
+    showToast('❌ Failed to update. Check your connection.')
+  }
 }
 
-function fmt(v) {
+// ── HELPERS ──
+function fmtDate(v) {
   if (!v) return '—'
-  try { return new Date(v).toLocaleDateString('en-BD',{day:'numeric',month:'short',year:'numeric'}) }
-  catch { return v }
+  try {
+    return new Date(v).toLocaleDateString('en-BD', { day: 'numeric', month: 'short', year: 'numeric' })
+  } catch { return String(v) }
 }
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
-function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',3000) }
+
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.style.display = 'block'
+  clearTimeout(t._t)
+  t._t = setTimeout(() => t.style.display = 'none', 3500)
+}
 </script>
 </body>
 </html>
