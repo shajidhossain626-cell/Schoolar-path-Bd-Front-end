@@ -429,7 +429,7 @@ function viewClient(id) {
   if (!cl) return
   document.getElementById('detailTitle').textContent = cl.firstName+' '+cl.lastName
   const prog = {New:10,'In Progress':35,'Documents Ready':60,'Applied':80,'Accepted':100,'Rejected':5}[cl.status||'New']||10
-  const base  = cl.package==='Basic'?2500:cl.package==='Standard'?5000:cl.package==='Premium'?8000:cl.packageAmount||0
+  const base  = cl.package==='Starter'?5000:cl.package==='Professional'?12000:cl.package==='Elite'?20000:cl.packageAmount||0
   const total = cl.packageAmount || base
   document.getElementById('detailBody').innerHTML = `
     <div class="dg">
@@ -559,7 +559,7 @@ function clearLocal(){
 
 // ── HELPERS ──
 function fmt(d){ if(!d)return'—'; try{return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}catch{return d} }
-function pp(p){ return{Basic:'pb',Standard:'pg',Premium:'pn'}[p]||'py' }
+function pp(p){ return{Starter:'pb',Professional:'pg',Elite:'pn'}[p]||'py' }
 function sp(s){ return{'New':'pb','In Progress':'pa','Documents Ready':'pa','Applied':'pa','Accepted':'pg','Rejected':'pr'}[s]||'py' }
 function esc(s){ return s.replace(/'/g,"\\'") }
 function toast(msg,type='ok'){ const t=document.createElement('div');t.className='toast '+type;t.textContent=msg;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),3000) }
