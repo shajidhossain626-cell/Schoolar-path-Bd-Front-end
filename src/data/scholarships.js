@@ -157,7 +157,7 @@ export const SCHOLARSHIPS = [
     steps: ['Identify BRI partner university', 'Contact international office', 'Submit application', 'University forwards to ministry', 'Receive admission + scholarship'],
   },
  {
-     id: 13, featured: true, flag: '🇪🇺', country: 'Europe',
+     id: 13, featured: true, flag: 'EU', country: 'Europe',
     name: 'Erasmus Mundus Joint Masters',
     short: 'EMJM',
     desc: 'Fully-funded integrated Master’s degrees across multiple European universities.',
@@ -168,7 +168,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'full', 
     degree: ['masters'], 
-    field: 'Multiple', 
+    field: 'multiple', 
     overview: 'The Erasmus Mundus Joint Masters (EMJM) are high-level integrated study programs delivered by an international partnership of European higher education institutions.',
     benefits: [
         'Full tuition fee waiver', 
@@ -210,7 +210,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'full', 
     degree: ['bachelors', 'masters', 'phd'], 
-    field: 'Multiple',
+    field: 'multiple',
     overview: 'The Stipendium Hungaricum program aims to promote cultural understanding and economic relations between Hungary and partner countries like Bangladesh.',
     benefits: [
         'Full tuition fee waiver', 
@@ -253,7 +253,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'full', 
     degree: ['masters', 'phd'], 
-    field: 'engineering & tech',
+    field: 'engineering',
     overview: 'The Ministry of Foreign Affairs and International Cooperation (MAECI) offers scholarships to favor international cooperation in cultural, scientific, and technological fields.',
     benefits: [
         'Full tuition fee waiver', 
@@ -295,7 +295,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'full', 
     degree: ['masters'], 
-    field: 'engineering & tech',
+    field: 'engineering',
     overview: 'The University of Helsinki offers scholarships to top-tier international students. This includes the Finland Scholarship, which covers full tuition plus a one-time relocation allowance.',
     benefits: [
         'Full tuition fee waiver (100%)', 
@@ -337,7 +337,7 @@ export const SCHOLARSHIPS = [
     urgent: true, 
     funding: 'full', 
     degree: ['bachelors', 'masters', 'phd'], 
-    field: 'engineering & tech',
+    field: 'engineering',
     overview: 'The Romanian state provides scholarships to foreign citizens from non-EU countries to promote Romanian culture and language. Bachelor and Master studies are conducted in the Romanian language with a preparatory year included.',
     benefits: [
         'Exemption from tuition fees', 
@@ -380,7 +380,7 @@ export const SCHOLARSHIPS = [
     urgent: true, 
     funding: 'full', 
     degree: ['masters'], 
-    field: 'business & mba',
+    field: 'business',
     overview: 'The SI Scholarship aims to develop global leaders who contribute to the United Nations 2030 Agenda for Sustainable Development. It targets ambitious professionals from 34 eligible countries, including Bangladesh.',
     benefits: [
         'Full coverage of tuition fees (paid directly to the university)', 
@@ -425,7 +425,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'full', 
     degree: ['masters'], 
-    field: 'social sciences',
+    field: 'social',
     overview: 'Spain offers various government-funded scholarships for international students in multiple disciplines.',
     benefits: [
         'Full tuition fees',
@@ -466,7 +466,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'full', 
     degree: ['masters','phd'], 
-    field: 'engineering & tech',
+    field: 'engineering',
     overview: 'The KAU Scholarship offers comprehensive financial support to international students, including students from Bangladesh, to study in Saudi Arabia with advanced research facilities.',
     benefits: [
         'Full tuition fee coverage',
@@ -511,7 +511,7 @@ export const SCHOLARSHIPS = [
     urgent: true, 
     funding: 'full', 
     degree: ['masters'], 
-    field: 'social sciences',
+    field: 'social',
     overview: 'VLIR-UOS supports students from selected countries including Bangladesh to study development-related programs in Belgium.',
     benefits: [
         'Full tuition fees',
@@ -554,7 +554,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'full', 
     degree: ['masters'], 
-    field: 'business & mba',
+    field: 'business',
     overview: 'The OKP focuses on capacity building and professional development, targeting working professionals from eligible countries.',
     benefits: [
         'Full tuition coverage',
@@ -596,7 +596,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'full', 
     degree: ['masters'], 
-    field: 'engineering & tech',
+    field: 'engineering',
     overview: 'NAWA supports international students in pursuing master’s degrees in Poland with financial support.',
     benefits: [
         'Full tuition fee coverage',
@@ -637,7 +637,7 @@ export const SCHOLARSHIPS = [
     urgent: true, 
     funding: 'full', 
     degree: ['masters','phd'], 
-    field: 'engineering & tech',
+    field: 'engineering',
     overview: 'The Eiffel Scholarship is designed to attract top international students to French institutions.',
     benefits: [
         'Monthly stipend (€1,181 for Master’s)',
@@ -677,7 +677,7 @@ export const SCHOLARSHIPS = [
     urgent: false, 
     funding: 'full', 
     degree: ['masters'], 
-    field: 'social sciences',
+    field: 'social',
     overview: 'ADC scholarships aim to support development-related education for students from eligible countries.',
     benefits: [
         'Full tuition fees',
