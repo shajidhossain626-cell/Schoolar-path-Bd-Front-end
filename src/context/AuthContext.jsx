@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 const AuthContext = createContext(null)
 const BACKEND = 'https://schoolar-path-backend.onrender.com'
 const SK = 'sp_user_v2'
+
 const USERS_KEY = 'sp_all_users'
 
 export function AuthProvider({ children }) {
@@ -22,6 +23,7 @@ export function AuthProvider({ children }) {
   const persist = (u) => {
     setUser(u)
     localStorage.setItem(SK, JSON.stringify(u))
+    syncUser(u)
     // also save to all-users registry for admin tracking
     saveToRegistry(u)
   }

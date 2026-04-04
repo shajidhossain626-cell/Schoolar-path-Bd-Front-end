@@ -2,644 +2,212 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ScholarPath BD — Admin</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0f172a;--bg2:#1e293b;--bg3:#263347;--border:rgba(255,255,255,.08);--accent:#3b82f6;--green:#10b981;--amber:#f59e0b;--red:#ef4444;--text:#f1f5f9;--text2:#94a3b8;--text3:#475569;--r:10px}
-body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
-input,select,textarea,button{font-family:inherit;font-size:14px}
-/* layout */
-.shell{display:flex;min-height:100vh}
-.side{width:220px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;height:100vh;z-index:10}
-.main{margin-left:220px;flex:1;display:flex;flex-direction:column}
-/* sidebar */
-.logo{padding:18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.logo-icon{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.logo-text{font-size:14px;font-weight:700}
-.logo-sub{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
-.nav{flex:1;padding:10px 8px;overflow-y:auto}
-.nav-sec{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:12px 10px 5px}
-.nav-btn{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:8px;cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
-.nav-btn:hover{background:var(--bg3);color:var(--text)}
-.nav-btn.on{background:rgba(59,130,246,.18);color:var(--accent)}
-.side-foot{padding:14px;border-top:1px solid var(--border);font-size:12px;color:var(--text2)}
-/* topbar */
-.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 22px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
-.topbar-title{font-size:15px;font-weight:700}
-.topbar-right{display:flex;align-items:center;gap:10px}
-.dot-live{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2)}
-.dot-live span{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-/* content */
-.content{padding:22px;flex:1}
-.page{display:none}.page.on{display:block}
-/* stats */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;position:relative;overflow:hidden}
-.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.stat.blue::before{background:var(--accent)}.stat.green::before{background:var(--green)}.stat.amber::before{background:var(--amber)}.stat.red::before{background:var(--red)}
-.stat-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
-.stat-val{font-size:26px;font-weight:700;margin-bottom:3px}
-.stat-sub{font-size:11px;color:var(--text2)}
-/* card */
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
-.card-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-size:14px;font-weight:600}
-/* table */
-table{width:100%;border-collapse:collapse}
-th{padding:9px 15px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border)}
-td{padding:11px 15px;border-bottom:1px solid var(--border);color:var(--text2);font-size:13px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f5f9;min-height:100vh}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f2444}
+.login-box{background:#fff;border-radius:18px;padding:36px;width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-box h1{font-size:20px;font-weight:700;color:#0f2444;margin:10px 0 4px}
+.login-box p{font-size:13px;color:#94a3b8;margin-bottom:20px}
+.login-box input{width:100%;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:9px;font-size:14px;outline:none;margin-bottom:10px}
+.login-box input:focus{border-color:#0f2444}
+.login-box .btn{width:100%;padding:12px;background:#0f2444;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
+.login-box .btn:hover{background:#1e3a6b}
+.err{color:#ef4444;font-size:12px;margin-bottom:8px}
+.app{display:none}
+.nav{background:#0f2444;color:#fff;padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.nav h1{font-size:15px;font-weight:700}
+.nav-r{display:flex;gap:10px;align-items:center}
+.nav-r a{color:rgba(255,255,255,.6);text-decoration:none;font-size:12px}
+.nav-r a:hover{color:#fff}
+.nav-r button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:5px 12px;border-radius:7px;font-size:12px;cursor:pointer}
+.wrap{max-width:1100px;margin:0 auto;padding:20px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:#fff;border-radius:12px;padding:16px;border:1px solid #e2e8f0;text-align:center}
+.stat-n{font-size:26px;font-weight:700;color:#0f2444}
+.stat-l{font-size:12px;color:#94a3b8;margin-top:3px}
+.card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden}
+.card-head{padding:14px 18px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.card-head h2{font-size:14px;font-weight:600;color:#0f2444}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls input,.controls select{padding:6px 10px;border:1px solid #e2e8f0;border-radius:7px;font-size:12px;outline:none}
+.rbtn{padding:6px 12px;background:#0f2444;color:#fff;border:none;border-radius:7px;font-size:12px;cursor:pointer}
+.rbtn:hover{background:#1e3a6b}
+.t-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:9px 14px;font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid #f1f5f9;background:#fafafa;white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid #f8fafc;color:#475569;vertical-align:middle}
+tr:hover td{background:#fafafa}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,.02)}
-/* buttons */
-.btn{padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
-.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#2563eb}
-.btn-danger{background:var(--red);color:#fff}.btn-danger:hover{background:#dc2626}
-.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{color:var(--text)}
-.btn-sm{padding:4px 9px;font-size:11px}
-/* badges */
-.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700}
-.pill-green{background:rgba(16,185,129,.15);color:var(--green)}
-.pill-blue{background:rgba(59,130,246,.15);color:var(--accent)}
-.pill-amber{background:rgba(245,158,11,.15);color:var(--amber)}
-.pill-red{background:rgba(239,68,68,.15);color:var(--red)}
-/* forms */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg.full{grid-column:1/-1}
-.fg label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
-.fg input,.fg select,.fg textarea{background:var(--bg3);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:9px 11px;width:100%;transition:border .15s}
-.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent)}
-.fg textarea{resize:vertical;min-height:75px}
-/* modal */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
-.overlay.on{display:flex}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);width:100%;max-width:720px;max-height:90vh;overflow-y:auto;padding:22px}
-.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
-.modal-title{font-size:15px;font-weight:700}
-.close{background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:2px 8px;border-radius:5px}
-.close:hover{background:var(--bg3);color:var(--text)}
-.form-actions{display:flex;gap:9px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
-/* login */
-.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;width:100%}
-.login-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:36px;width:360px}
-.login-logo{text-align:center;margin-bottom:28px}
-.login-icon{width:52px;height:52px;background:var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px}
-.login-title{font-size:20px;font-weight:700;margin-bottom:3px}
-.login-sub{font-size:12px;color:var(--text2)}
-.login-form{display:flex;flex-direction:column;gap:14px;margin-top:20px}
-.err-box{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--red);padding:9px 12px;border-radius:7px;font-size:12px;display:none}
-/* search */
-.search-wrap{position:relative;margin-bottom:14px}
-.search-wrap input{padding-left:34px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;color:var(--text);width:100%;padding:9px 11px 9px 34px}
-.search-wrap::before{content:'🔍';position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px}
-/* section header */
-.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.sec-title{font-size:17px;font-weight:700}
-/* loading */
-.loading-box{text-align:center;padding:40px;color:var(--text2)}
-.spin{display:inline-block;width:22px;height:22px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:10px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty-box{text-align:center;padding:48px;color:var(--text3)}
-/* toast */
-.toasts{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px}
-.toast{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:11px 15px;font-size:13px;display:flex;align-items:center;gap:7px;animation:slideIn .25s ease;min-width:240px}
-.toast.ok{border-color:var(--green)}.toast.err{border-color:var(--red)}
-@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0f2444,#1e3a6b);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.uc{display:flex;align-items:center;gap:8px}
+.un{font-weight:600;color:#0f2444;font-size:13px}
+.ue{font-size:11px;color:#94a3b8}
+.badge{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.bp{background:#dcfce7;color:#166534}
+.bf{background:#f1f5f9;color:#64748b}
+.bs{background:#dbeafe;color:#1e40af}
+.bpr{background:#ede9fe;color:#5b21b6}
+.be{background:#fef9c3;color:#854d0e}
+select.ps{padding:5px 8px;border:1px solid #e2e8f0;border-radius:7px;font-size:12px;cursor:pointer;background:#fff;outline:none}
+.msg{text-align:center;padding:40px;color:#94a3b8;font-size:13px}
+.hint{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:14px 18px;margin-top:14px;font-size:13px;color:#1e40af;line-height:1.6}
+.toast{position:fixed;bottom:20px;right:20px;background:#0f2444;color:#fff;padding:11px 16px;border-radius:10px;font-size:13px;display:none;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="loginPage" class="login-wrap">
-  <div class="login-card">
-    <div class="login-logo">
-      <div class="login-icon">🎓</div>
-      <div class="login-title">ScholarPath BD</div>
-      <div class="login-sub">Admin Panel — Restricted Access</div>
+<div class="login" id="lg">
+  <div class="login-box">
+    <div style="font-size:38px">🔐</div>
+    <h1>ScholarPath BD</h1>
+    <p>Admin Panel</p>
+    <div class="err" id="lerr"></div>
+    <input type="password" id="pw" placeholder="Admin password" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn" onclick="login()">Login →</button>
+  </div>
+</div>
+
+<div class="app" id="ap">
+  <div class="nav">
+    <h1>📊 Admin Panel — ScholarPath BD</h1>
+    <div class="nav-r">
+      <a href="/" target="_blank">← Website</a>
+      <button onclick="logout()">Logout</button>
     </div>
-    <div id="loginErr" class="err-box"></div>
-    <div class="login-form">
-      <div class="fg"><label>Email</label><input type="email" id="lEmail" value="admin@scholarpath.com.bd"></div>
-      <div class="fg"><label>Password</label><input type="password" id="lPass" value="admin123456" onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <button class="btn btn-primary" style="padding:11px;width:100%" onclick="doLogin()">Sign In →</button>
+  </div>
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><div style="font-size:26px">👥</div><div class="stat-n" id="st">—</div><div class="stat-l">Total Users</div></div>
+      <div class="stat"><div style="font-size:26px">✅</div><div class="stat-n" id="sp">—</div><div class="stat-l">Paid Users</div></div>
+      <div class="stat"><div style="font-size:26px">🔒</div><div class="stat-n" id="sf">—</div><div class="stat-l">Free Users</div></div>
+      <div class="stat"><div style="font-size:26px">🆕</div><div class="stat-n" id="sd">—</div><div class="stat-l">Joined Today</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <h2 id="ttl">Registered Users</h2>
+        <div class="controls">
+          <input id="srch" placeholder="Search name or email..." oninput="render()">
+          <select id="flt" onchange="render()">
+            <option value="">All Plans</option>
+            <option>Free</option><option>Starter</option>
+            <option>Professional</option><option>Elite</option>
+          </select>
+          <button class="rbtn" onclick="load()">🔄 Refresh</button>
+        </div>
+      </div>
+      <div class="t-wrap">
+        <div class="msg" id="tmsg">Loading users from Google Sheets...</div>
+        <table id="tbl" style="display:none">
+          <thead><tr><th>User</th><th>Plan</th><th>Joined</th><th>Last Seen</th><th>Grant Access</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="hint">
+      💡 <strong>How to grant access:</strong> After a client pays via bKash — find their email → change plan from <strong>Free</strong> to their package. Access updates instantly in Google Sheets.
     </div>
   </div>
 </div>
 
-<!-- ADMIN SHELL -->
-<div id="shell" class="shell" style="display:none">
-  <div class="side">
-    <div class="logo">
-      <div class="logo-icon">🎓</div>
-      <div><div class="logo-text">ScholarPath BD</div><div class="logo-sub">Admin Panel</div></div>
-    </div>
-    <nav class="nav">
-      <div class="nav-sec">Overview</div>
-      <button class="nav-btn on" onclick="go('dashboard',this)">📊 Dashboard</button>
-      <div class="nav-sec">Content</div>
-      <button class="nav-btn" onclick="go('scholarships',this)">🎓 Scholarships</button>
-      <div class="nav-sec">Users</div>
-      <button class="nav-btn" onclick="go('users',this)">👥 All Users</button>
-      <button class="nav-btn" onclick="go('applications',this)">📋 Applications</button>
-      <div class="nav-sec">Business</div>
-      <button class="nav-btn" onclick="go('payments',this)">💳 Payments</button>
-      <button class="nav-btn" onclick="go('messages',this)">✉️ Messages</button>
-      <button class="nav-btn" onclick="go('documents',this)">📄 Documents</button>
-      <div class="nav-sec">System</div>
-      <button class="nav-btn" onclick="go('settings',this)">⚙️ Settings</button>
-      <button class="nav-btn" onclick="doLogout()" style="color:var(--red)">🚪 Logout</button>
-    </nav>
-    <div class="side-foot" id="adminName">Admin</div>
-  </div>
-  <div class="main">
-    <div class="topbar">
-      <div class="topbar-title" id="pageTitle">Dashboard</div>
-      <div class="topbar-right">
-        <div class="dot-live"><span></span><span id="apiStatus">Connected</span></div>
-        <button class="btn btn-ghost btn-sm" onclick="refresh()">↻ Refresh</button>
-      </div>
-    </div>
-    <div class="content">
-
-      <!-- DASHBOARD -->
-      <div class="page on" id="page-dashboard">
-        <div class="stats">
-          <div class="stat blue"><div class="stat-label">Total Users</div><div class="stat-val" id="s-users">—</div><div class="stat-sub">Registered</div></div>
-          <div class="stat green"><div class="stat-label">Scholarships</div><div class="stat-val" id="s-schols">—</div><div class="stat-sub">Active</div></div>
-          <div class="stat amber"><div class="stat-label">Applications</div><div class="stat-val" id="s-apps">—</div><div class="stat-sub">Total</div></div>
-          <div class="stat red"><div class="stat-label">Revenue</div><div class="stat-val" id="s-rev">—</div><div class="stat-sub">BDT collected</div></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><div class="card-title">Recent Users</div></div>
-          <div id="d-users"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div>
-        </div>
-      </div>
-
-      <!-- SCHOLARSHIPS -->
-      <div class="page" id="page-scholarships">
-        <div class="sec-head">
-          <div class="sec-title">Scholarships</div>
-          <button class="btn btn-primary" onclick="openAdd()">+ Add New</button>
-        </div>
-        <div class="search-wrap"><input type="text" placeholder="Search scholarships..." id="schSearch" oninput="filterSchols()"></div>
-        <div class="card"><div id="schTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
-      </div>
-
-      <!-- USERS -->
-      <div class="page" id="page-users">
-        <div class="sec-head"><div class="sec-title">All Users</div></div>
-        <div class="card"><div id="usersTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
-      </div>
-
-      <!-- APPLICATIONS -->
-      <div class="page" id="page-applications">
-        <div class="sec-head"><div class="sec-title">Applications</div></div>
-        <div class="card"><div id="appsTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
-      </div>
-
-      <!-- PAYMENTS -->
-      <div class="page" id="page-payments">
-        <div class="sec-head"><div class="sec-title">Payments</div></div>
-        <div class="card"><div id="paysTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
-      </div>
-
-      <!-- MESSAGES -->
-      <div class="page" id="page-messages">
-        <div class="sec-head"><div class="sec-title">Contact Messages</div></div>
-        <div class="card"><div id="msgsTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
-      </div>
-
-      <!-- DOCUMENTS -->
-      <div class="page" id="page-documents">
-        <div class="sec-head"><div class="sec-title">Client Documents</div></div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px">
-          <div class="stat blue"><div class="stat-label">Total</div><div class="stat-val" id="doc-total">—</div></div>
-          <div class="stat amber"><div class="stat-label">Pending</div><div class="stat-val" id="doc-pending">—</div></div>
-          <div class="stat green"><div class="stat-label">Verified</div><div class="stat-val" id="doc-verified">—</div></div>
-          <div class="stat red"><div class="stat-label">Rejected</div><div class="stat-val" id="doc-rejected">—</div></div>
-        </div>
-        <div class="card"><div id="docsTable"><div class="loading-box"><div class="spin"></div><br>Loading...</div></div></div>
-      </div>
-
-      <!-- SETTINGS -->
-      <div class="page" id="page-settings">
-        <div class="sec-title" style="margin-bottom:16px">Settings</div>
-        <div class="card" style="padding:20px;max-width:480px">
-          <div class="fg" style="margin-bottom:14px"><label>Backend API URL</label><input type="text" id="apiUrlInput"></div>
-          <div class="fg" style="margin-bottom:18px"><label>Admin Token (read-only)</label><input type="text" id="tokenBox" readonly style="font-size:11px"></div>
-          <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- SCHOLARSHIP MODAL -->
-<div class="overlay" id="scholModal">
-  <div class="modal">
-    <div class="modal-head">
-      <div class="modal-title" id="modalTitle">Add New Scholarship</div>
-      <button class="close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="form-grid">
-      <div class="fg"><label>Flag Emoji</label><input type="text" id="f-flag" placeholder="🇩🇪"></div>
-      <div class="fg"><label>Country</label><input type="text" id="f-country" placeholder="Germany"></div>
-      <div class="fg"><label>Full Name</label><input type="text" id="f-name" placeholder="DAAD Research Scholarship 2026"></div>
-      <div class="fg"><label>Short Name</label><input type="text" id="f-short" placeholder="DAAD"></div>
-      <div class="fg"><label>Amount</label><input type="text" id="f-amount" placeholder="€934/month"></div>
-      <div class="fg"><label>Deadline</label><input type="date" id="f-deadline"></div>
-      <div class="fg"><label>Funding Type</label>
-        <select id="f-funding"><option value="FULL">Fully Funded</option><option value="PARTIAL">Partial</option><option value="TUITION">Tuition Only</option></select>
-      </div>
-      <div class="fg"><label>Field of Study</label>
-        <select id="f-field"><option value="ENGINEERING">Engineering</option><option value="BUSINESS">Business</option><option value="MEDICAL">Medical</option><option value="ARTS">Arts & Humanities</option><option value="SOCIAL">Social Sciences</option></select>
-      </div>
-      <div class="fg"><label>Urgent?</label>
-        <select id="f-urgent"><option value="false">No</option><option value="true">Yes — show urgent badge</option></select>
-      </div>
-      <div class="fg full"><label>Short Description</label><input type="text" id="f-desc" placeholder="Brief description shown on listing page"></div>
-      <div class="fg full"><label>Overview</label><textarea id="f-overview" placeholder="Full overview of the scholarship..."></textarea></div>
-      <div class="fg full"><label>Tags (comma separated)</label><input type="text" id="f-tags" placeholder="Master's, PhD, Engineering"></div>
-      <div class="fg full"><label>Degree Levels (comma separated)</label><input type="text" id="f-degree" placeholder="MASTERS, PHD"></div>
-      <div class="fg full"><label>Benefits (one per line)</label><textarea id="f-benefits" placeholder="Monthly stipend ৳50,000&#10;Full tuition waiver&#10;Round-trip airfare"></textarea></div>
-      <div class="fg full"><label>Eligibility (one per line)</label><textarea id="f-eligibility" placeholder="Bangladeshi nationality&#10;CGPA ≥ 3.0&#10;IELTS 6.5"></textarea></div>
-      <div class="fg full"><label>Documents Required (one per line)</label><textarea id="f-documents" placeholder="Passport copy&#10;Academic transcripts&#10;Statement of Purpose"></textarea></div>
-      <div class="fg full"><label>Application Steps (one per line)</label><textarea id="f-steps" placeholder="Register on official website&#10;Prepare documents&#10;Submit before deadline"></textarea></div>
-    </div>
-    <div class="form-actions">
-      <button class="btn btn-primary" id="saveBtn" onclick="saveSchol()">Save Scholarship</button>
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<div class="toasts" id="toasts"></div>
+<div class="toast" id="toast"></div>
 
 <script>
-const AK = 'sp_api_url', TK = 'sp_admin_token'
-let API = localStorage.getItem(AK) || 'https://schoolar-path-backend.onrender.com/api'
-let tok = localStorage.getItem(TK) || ''
-let allSchols = [], editId = null
+const PASS   = 'admin@2026'
+const SCRIPT = 'https://script.google.com/macros/s/AKfycbzdH4qOsUowPdO_vFhAdu3Ip9z7NMSQ_ZHPtru4yYSXYA9UESlBhZ-DMde2VPb5SQVC/exec'
+let users = []
 
-// ── AUTH ──
-async function doLogin() {
-  const email = document.getElementById('lEmail').value
-  const pass = document.getElementById('lPass').value
-  const err = document.getElementById('loginErr')
-  err.style.display = 'none'
-  try {
-    const r = await fetch(`${API}/auth/login`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})})
-    const d = await r.json()
-    if (!d.success) throw new Error(d.message || 'Login failed')
-    if (d.data.user.role !== 'ADMIN') throw new Error('Not an admin account')
-    tok = d.data.token
-    localStorage.setItem(TK, tok)
-    document.getElementById('adminName').textContent = d.data.user.firstName + ' — Admin'
-    showAdmin()
-  } catch(e) {
-    err.style.display = 'block'
-    err.textContent = e.message
-  }
-}
-
-function doLogout() {
-  tok = ''; localStorage.removeItem(TK)
-  document.getElementById('shell').style.display = 'none'
-  document.getElementById('loginPage').style.display = 'flex'
-}
-
-function showAdmin() {
-  document.getElementById('loginPage').style.display = 'none'
-  document.getElementById('shell').style.display = 'flex'
-  document.getElementById('apiUrlInput').value = API
-  document.getElementById('tokenBox').value = tok
-  loadDashboard()
-}
-
-// ── NAV ──
-const titles = {dashboard:'Dashboard',scholarships:'Scholarships',users:'All Users',applications:'Applications',payments:'Payments',messages:'Contact Messages',documents:'Client Documents',settings:'Settings'}
-function go(page, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'))
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('on'))
-  document.getElementById('page-'+page).classList.add('on')
-  if (btn) btn.classList.add('on')
-  document.getElementById('pageTitle').textContent = titles[page] || page
-  if (page==='dashboard') loadDashboard()
-  if (page==='scholarships') loadSchols()
-  if (page==='users') loadUsers()
-  if (page==='applications') loadApps()
-  if (page==='payments') loadPays()
-  if (page==='messages') loadMsgs()
-  if (page==='documents') loadDocs()
-}
-function refresh() { go(document.querySelector('.page.on')?.id?.replace('page-','') || 'dashboard') }
-
-// ── API ──
-async function req(path, opts={}) {
-  const r = await fetch(`${API}${path}`, {...opts, headers:{'Content-Type':'application/json','Authorization':`Bearer ${tok}`,...(opts.headers||{})}})
-  return r.json()
-}
-
-// ── DASHBOARD ──
-async function loadDashboard() {
-  try {
-    const d = await req('/admin/stats')
-    if (d.success) {
-      const t = d.data.totals
-      document.getElementById('s-users').textContent = t.users||0
-      document.getElementById('s-schols').textContent = t.scholarships||0
-      document.getElementById('s-apps').textContent = t.applications||0
-      document.getElementById('s-rev').textContent = '৳'+(t.revenue||0).toLocaleString()
-      const users = d.data.recentUsers||[]
-      document.getElementById('d-users').innerHTML = users.length
-        ? `<table><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Joined</th></tr></thead><tbody>${users.map(u=>`<tr><td style="color:var(--text)">${u.firstName} ${u.lastName}</td><td style="font-family:monospace;font-size:12px">${u.email}</td><td><span class="pill ${planPill(u.plan)}">${u.plan}</span></td><td style="font-size:12px">${fmt(u.createdAt)}</td></tr>`).join('')}</tbody></table>`
-        : '<div class="empty-box">No users yet</div>'
-    }
-  } catch(e) { console.error(e) }
-}
-
-// ── SCHOLARSHIPS ──
-async function loadSchols() {
-  document.getElementById('schTable').innerHTML = '<div class="loading-box"><div class="spin"></div><br>Loading...</div>'
-  const d = await req('/scholarships?limit=100')
-  allSchols = d.data || []
-  renderSchols(allSchols)
-}
-
-function renderSchols(list) {
-  document.getElementById('schTable').innerHTML = list.length
-    ? `<table><thead><tr><th>Flag</th><th>Name</th><th>Country</th><th>Amount</th><th>Deadline</th><th>Status</th><th>Actions</th></tr></thead><tbody>${list.map(s=>`<tr>
-        <td style="font-size:22px">${s.flag||'🎓'}</td>
-        <td style="font-weight:600;color:var(--text)">${s.name}</td>
-        <td>${s.country}</td>
-        <td style="color:var(--green);font-family:monospace;font-size:12px">${s.amount}</td>
-        <td style="font-size:12px">${fmt(s.deadline)}</td>
-        <td><span class="pill ${s.isActive?'pill-green':'pill-red'}">${s.isActive?'Active':'Hidden'}</span></td>
-        <td><div style="display:flex;gap:6px">
-          <button class="btn btn-ghost btn-sm" onclick='editSchol(${JSON.stringify(s).replace(/'/g,"&#39;")})'>✏️ Edit</button>
-          <button class="btn btn-danger btn-sm" onclick="delSchol('${s.id}','${s.name.replace(/'/g,"\\'")}')">🗑️</button>
-        </div></td>
-      </tr>`).join('')}</tbody></table>`
-    : '<div class="empty-box">No scholarships yet</div>'
-}
-
-function filterSchols() {
-  const q = document.getElementById('schSearch').value.toLowerCase()
-  renderSchols(allSchols.filter(s => s.name.toLowerCase().includes(q) || s.country.toLowerCase().includes(q)))
-}
-
-function openAdd() {
-  editId = null
-  document.getElementById('modalTitle').textContent = 'Add New Scholarship'
-  document.getElementById('saveBtn').textContent = 'Save Scholarship'
-  // clear all fields
-  ;['flag','country','name','short','amount','deadline','desc','overview','tags','degree','benefits','eligibility','documents','steps'].forEach(k => {
-    const el = document.getElementById('f-'+k)
-    if (el) el.value = ''
-  })
-  document.getElementById('f-funding').value = 'FULL'
-  document.getElementById('f-field').value = 'ENGINEERING'
-  document.getElementById('f-urgent').value = 'false'
-  document.getElementById('scholModal').classList.add('on')
-}
-
-function editSchol(s) {
-  editId = s.id
-  document.getElementById('modalTitle').textContent = 'Edit Scholarship'
-  document.getElementById('saveBtn').textContent = 'Update Scholarship'
-
-  document.getElementById('f-flag').value = s.flag || ''
-  document.getElementById('f-country').value = s.country || ''
-  document.getElementById('f-name').value = s.name || ''
-  document.getElementById('f-short').value = s.shortName || s.short || ''
-  document.getElementById('f-amount').value = s.amount || ''
-
-  // deadline — handle both "2025-03-31T00:00:00.000Z" and "2025-03-31"
-  const dl = (s.deadline || '').toString()
-  document.getElementById('f-deadline').value = dl.includes('T') ? dl.split('T')[0] : dl
-
-  // dropdowns — ensure uppercase
-  document.getElementById('f-funding').value = (s.funding || 'FULL').toUpperCase()
-  document.getElementById('f-field').value = (s.field || 'ENGINEERING').toUpperCase()
-  document.getElementById('f-urgent').value = s.isUrgent ? 'true' : 'false'
-
-  document.getElementById('f-desc').value = s.description || s.desc || ''
-  document.getElementById('f-overview').value = s.overview || ''
-
-  // arrays — handle both JSON string and real array
-  document.getElementById('f-tags').value = toArr(s.tags).join(', ')
-  document.getElementById('f-degree').value = toArr(s.degree).join(', ')
-  document.getElementById('f-benefits').value = toArr(s.benefits).join('\n')
-  document.getElementById('f-eligibility').value = toArr(s.eligibility).join('\n')
-  document.getElementById('f-documents').value = toArr(s.documents).join('\n')
-  document.getElementById('f-steps').value = toArr(s.steps).join('\n')
-
-  document.getElementById('scholModal').classList.add('on')
-}
-
-function toArr(v) {
-  if (!v) return []
-  if (Array.isArray(v)) return v
-  try { const p = JSON.parse(v); return Array.isArray(p) ? p : [v] } catch { return [v] }
-}
-
-async function saveSchol() {
-  const name = document.getElementById('f-name').value.trim()
-  if (!name) return toast('Please enter a scholarship name', 'err')
-  const deadline = document.getElementById('f-deadline').value
-  if (!deadline) return toast('Please select a deadline', 'err')
-
-  const body = {
-    flag: document.getElementById('f-flag').value || '🎓',
-    country: document.getElementById('f-country').value,
-    name,
-    shortName: document.getElementById('f-short').value,
-    amount: document.getElementById('f-amount').value,
-    deadline: new Date(deadline).toISOString(),
-    funding: document.getElementById('f-funding').value,
-    field: document.getElementById('f-field').value,
-    description: document.getElementById('f-desc').value,
-    overview: document.getElementById('f-overview').value,
-    isUrgent: document.getElementById('f-urgent').value === 'true',
-    tags: JSON.stringify(splitComma(document.getElementById('f-tags').value)),
-    degree: JSON.stringify(splitComma(document.getElementById('f-degree').value)),
-    benefits: JSON.stringify(splitLines(document.getElementById('f-benefits').value)),
-    eligibility: JSON.stringify(splitLines(document.getElementById('f-eligibility').value)),
-    documents: JSON.stringify(splitLines(document.getElementById('f-documents').value)),
-    steps: JSON.stringify(splitLines(document.getElementById('f-steps').value)),
-  }
-
-  if (!editId) {
-    body.slug = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') + '-' + Date.now()
-  }
-
-  const d = await req(editId ? `/scholarships/${editId}` : '/scholarships', {
-    method: editId ? 'PUT' : 'POST',
-    body: JSON.stringify(body)
-  })
-
-  if (d.success) {
-    toast(editId ? '✅ Scholarship updated!' : '✅ Scholarship added!', 'ok')
-    closeModal()
-    loadSchols()
+function login() {
+  if (document.getElementById('pw').value === PASS) {
+    document.getElementById('lg').style.display = 'none'
+    document.getElementById('ap').style.display = 'block'
+    load()
   } else {
-    toast(d.message || 'Error saving', 'err')
+    document.getElementById('lerr').textContent = 'Wrong password'
   }
 }
 
-async function delSchol(id, name) {
-  if (!confirm(`Delete "${name}"?\nThis cannot be undone.`)) return
-  const d = await req(`/scholarships/${id}`, {method:'DELETE'})
-  if (d.success) { toast('✅ Deleted', 'ok'); loadSchols() }
-  else toast(d.message || 'Error', 'err')
+function logout() {
+  document.getElementById('lg').style.display = 'flex'
+  document.getElementById('ap').style.display = 'none'
+  document.getElementById('pw').value = ''
 }
 
-function closeModal() { document.getElementById('scholModal').classList.remove('on') }
-
-// ── USERS ──
-async function loadUsers() {
-  document.getElementById('usersTable').innerHTML = '<div class="loading-box"><div class="spin"></div><br>Loading...</div>'
-  const d = await req('/admin/users')
-  const users = d.data || []
-  document.getElementById('usersTable').innerHTML = users.length
-    ? `<table><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Role</th><th>Apps</th><th>Joined</th></tr></thead><tbody>${users.map(u=>`<tr>
-        <td style="color:var(--text);font-weight:500">${u.firstName} ${u.lastName}</td>
-        <td style="font-family:monospace;font-size:12px">${u.email}</td>
-        <td><span class="pill ${planPill(u.plan)}">${u.plan}</span></td>
-        <td><span class="pill ${u.role==='ADMIN'?'pill-red':'pill-blue'}">${u.role}</span></td>
-        <td>${u._count?.applications||0}</td>
-        <td style="font-size:12px">${fmt(u.createdAt)}</td>
-      </tr>`).join('')}</tbody></table>`
-    : '<div class="empty-box">No users yet</div>'
-}
-
-// ── APPLICATIONS ──
-async function loadApps() {
-  document.getElementById('appsTable').innerHTML = '<div class="loading-box"><div class="spin"></div><br>Loading...</div>'
-  const d = await req('/applications')
-  const apps = d.data?.applications || d.data || []
-  document.getElementById('appsTable').innerHTML = apps.length
-    ? `<table><thead><tr><th>Student</th><th>Scholarship</th><th>Status</th><th>Progress</th><th>Date</th><th>Update</th></tr></thead><tbody>${apps.map(a=>`<tr>
-        <td style="color:var(--text)">${a.user?.firstName||''} ${a.user?.lastName||''}<br><span style="font-family:monospace;font-size:11px;color:var(--text3)">${a.user?.email||''}</span></td>
-        <td>${a.scholarship?.flag||''} ${a.scholarship?.name||''}</td>
-        <td><span class="pill ${statPill(a.status)}">${a.status}</span></td>
-        <td><div style="display:flex;align-items:center;gap:7px"><div style="flex:1;height:4px;background:var(--bg3);border-radius:2px"><div style="width:${a.progress||0}%;height:100%;background:var(--green);border-radius:2px"></div></div><span style="font-size:11px">${a.progress||0}%</span></div></td>
-        <td style="font-size:12px">${fmt(a.createdAt)}</td>
-        <td><select class="btn btn-ghost btn-sm" onchange="updateApp('${a.id}',this.value);this.value=''">
-          <option value="">Change status</option>
-          ${['DRAFT','SUBMITTED','UNDER_REVIEW','ACCEPTED','REJECTED'].map(s=>`<option value="${s}">${s}</option>`).join('')}
-        </select></td>
-      </tr>`).join('')}</tbody></table>`
-    : '<div class="empty-box">No applications yet</div>'
-}
-
-async function updateApp(id, status) {
-  if (!status) return
-  const d = await req(`/admin/applications/${id}/status`, {method:'PUT',body:JSON.stringify({status})})
-  if (d.success) { toast('✅ Status updated to '+status,'ok'); loadApps() }
-  else toast(d.message||'Error','err')
-}
-
-// ── PAYMENTS ──
-async function loadPays() {
-  document.getElementById('paysTable').innerHTML = '<div class="loading-box"><div class="spin"></div><br>Loading...</div>'
-  const d = await req('/payments')
-  const pays = d.data?.payments || d.data || []
-  document.getElementById('paysTable').innerHTML = pays.length
-    ? `<table><thead><tr><th>User</th><th>Plan</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>${pays.map(p=>`<tr>
-        <td style="color:var(--text)">${p.user?.firstName||''} ${p.user?.lastName||''}<br><span style="font-family:monospace;font-size:11px;color:var(--text3)">${p.user?.email||''}</span></td>
-        <td><span class="pill ${planPill(p.plan)}">${p.plan}</span></td>
-        <td style="color:var(--green);font-family:monospace">৳${(p.amount||0).toLocaleString()}</td>
-        <td><span class="pill ${p.status==='SUCCESS'?'pill-green':p.status==='PENDING'?'pill-amber':'pill-red'}">${p.status}</span></td>
-        <td style="font-size:12px">${fmt(p.createdAt)}</td>
-      </tr>`).join('')}</tbody></table>`
-    : '<div class="empty-box">No payments yet</div>'
-}
-
-// ── DOCUMENTS ──
-async function loadDocs() {
-  document.getElementById('docsTable').innerHTML = '<div class="loading-box"><div class="spin"></div><br>Loading...</div>'
+async function load() {
+  document.getElementById('tmsg').style.display = 'block'
+  document.getElementById('tmsg').textContent = 'Loading from Google Sheets...'
+  document.getElementById('tbl').style.display = 'none'
   try {
-    const d = await req('/admin/documents')
-    const docs = d.data || []
-    // update stats
-    document.getElementById('doc-total').textContent = docs.length
-    document.getElementById('doc-pending').textContent = docs.filter(d=>d.status==='PENDING').length
-    document.getElementById('doc-verified').textContent = docs.filter(d=>d.status==='VERIFIED').length
-    document.getElementById('doc-rejected').textContent = docs.filter(d=>d.status==='REJECTED').length
-
-    document.getElementById('docsTable').innerHTML = docs.length
-      ? `<table><thead><tr><th>Student</th><th>File Name</th><th>Size</th><th>Type</th><th>Status</th><th>Uploaded</th><th>Actions</th></tr></thead><tbody>${docs.map(doc=>`<tr>
-          <td style="color:var(--text)">${doc.user?.firstName||''} ${doc.user?.lastName||''}<br><span style="font-family:monospace;font-size:11px;color:var(--text3)">${doc.user?.email||''}</span></td>
-          <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)">${doc.name}</td>
-          <td style="font-size:12px">${doc.fileSize||'—'}</td>
-          <td style="font-size:11px">${doc.fileType?.split('/')[1]?.toUpperCase()||'—'}</td>
-          <td><span class="pill ${doc.status==='VERIFIED'?'pill-green':doc.status==='REJECTED'?'pill-red':'pill-amber'}">${doc.status}</span></td>
-          <td style="font-size:12px">${fmt(doc.uploadedAt)}</td>
-          <td><div style="display:flex;gap:5px">
-            <a href="${doc.fileUrl}" target="_blank" class="btn btn-ghost btn-sm">👁️ View</a>
-            <button class="btn btn-success btn-sm" style="background:var(--green);color:#fff" onclick="updateDoc('${doc.id}','VERIFIED')">✅</button>
-            <button class="btn btn-danger btn-sm" onclick="updateDoc('${doc.id}','REJECTED')">❌</button>
-          </div></td>
-        </tr>`).join('')}</tbody></table>`
-      : '<div class="empty-box">📄 No documents uploaded yet</div>'
+    const r = await fetch(SCRIPT + '?action=getUsers&t=' + Date.now())
+    const j = await r.json()
+    if (!j.success) throw new Error(j.error)
+    users = j.data || []
+    stats()
+    render()
+    document.getElementById('tmsg').style.display = users.length ? 'none' : 'block'
+    if (!users.length) document.getElementById('tmsg').textContent = 'No users yet. Users appear here when they sign up on your website.'
+    document.getElementById('tbl').style.display = users.length ? 'table' : 'none'
   } catch(e) {
-    document.getElementById('docsTable').innerHTML = '<div class="empty-box">Could not load documents</div>'
+    document.getElementById('tmsg').textContent = '❌ Could not load. Make sure Apps Script is updated and redeployed. ' + e.message
   }
 }
 
-async function updateDoc(id, status) {
-  const d = await req(`/documents/${id}/status`, {method:'PUT', body:JSON.stringify({status})})
-  if (d.success) { toast(`✅ Document marked as ${status}`, 'ok'); loadDocs() }
-  else toast(d.message||'Error', 'err')
+function stats() {
+  const today = new Date().toDateString()
+  document.getElementById('st').textContent = users.length
+  document.getElementById('sp').textContent = users.filter(u => u.Plan && u.Plan !== 'Free').length
+  document.getElementById('sf').textContent = users.filter(u => !u.Plan || u.Plan === 'Free').length
+  document.getElementById('sd').textContent = users.filter(u => new Date(u['Joined At']).toDateString() === today).length
+  document.getElementById('ttl').textContent = `Registered Users (${users.length})`
 }
 
-// ── MESSAGES ──
-async function loadMsgs() {
-  document.getElementById('msgsTable').innerHTML = '<div class="loading-box"><div class="spin"></div><br>Loading...</div>'
+function render() {
+  const q   = document.getElementById('srch').value.toLowerCase()
+  const flt = document.getElementById('flt').value
+  const list = users.filter(u => {
+    const mq = !q || (u.Name||'').toLowerCase().includes(q) || (u.Email||'').toLowerCase().includes(q)
+    const mp = !flt || u.Plan === flt
+    return mq && mp
+  })
+  const body = document.getElementById('tbody')
+  if (!list.length) { body.innerHTML = `<tr><td colspan="5" class="msg">No users match.</td></tr>`; return }
+  body.innerHTML = list.map(u => {
+    const plan = u.Plan || 'Free'
+    const ini  = (u.Name||'?').split(' ').map(w=>w[0]||'').join('').toUpperCase().slice(0,2)
+    const bc   = plan==='Elite'?'be':plan==='Professional'?'bpr':plan==='Starter'?'bs':plan!=='Free'?'bp':'bf'
+    const opts = ['Free','Starter','Professional','Elite'].map(p=>`<option${p===plan?' selected':''}>${p}</option>`).join('')
+    return `<tr>
+      <td><div class="uc"><div class="av">${ini}</div><div><div class="un">${esc(u.Name||'—')}</div><div class="ue">${esc(u.Email||'')}</div></div></div></td>
+      <td><span class="badge ${bc}">${plan!=='Free'?'✅':'🔒'} ${plan}</span></td>
+      <td style="font-size:12px;color:#94a3b8">${fmt(u['Joined At'])}</td>
+      <td style="font-size:12px;color:#94a3b8">${fmt(u['Last Seen'])}</td>
+      <td><select class="ps" onchange="changePlan('${esc(u.Email)}',this.value)">${opts}</select></td>
+    </tr>`
+  }).join('')
+}
+
+async function changePlan(email, plan) {
   try {
-    const d = await req('/contact')
-    const msgs = d.data || []
-    document.getElementById('msgsTable').innerHTML = msgs.length
-      ? `<table><thead><tr><th>Name</th><th>Email</th><th>Interest</th><th>Message</th><th>Date</th></tr></thead><tbody>${msgs.map(m=>`<tr>
-          <td style="color:var(--text)">${m.firstName} ${m.lastName||''}</td>
-          <td style="font-family:monospace;font-size:12px">${m.email}</td>
-          <td style="font-size:12px">${m.interest||'General'}</td>
-          <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.message}</td>
-          <td style="font-size:12px">${fmt(m.createdAt)}</td>
-        </tr>`).join('')}</tbody></table>`
-      : '<div class="empty-box">No messages yet</div>'
-  } catch(e) {
-    document.getElementById('msgsTable').innerHTML = '<div class="empty-box">Could not load messages</div>'
-  }
+    await fetch(SCRIPT, {
+      method:'POST', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({action:'updateUserPlan', email, plan})
+    })
+    const u = users.find(u => u.Email === email)
+    if (u) u.Plan = plan
+    stats(); render()
+    toast('✅ ' + email + ' → ' + plan)
+  } catch { toast('❌ Failed to update') }
 }
 
-// ── SETTINGS ──
-function saveSettings() {
-  API = document.getElementById('apiUrlInput').value.trim()
-  localStorage.setItem(AK, API)
-  toast('✅ Settings saved', 'ok')
+function fmt(v) {
+  if (!v) return '—'
+  try { return new Date(v).toLocaleDateString('en-BD',{day:'numeric',month:'short',year:'numeric'}) }
+  catch { return v }
 }
-
-// ── HELPERS ──
-function fmt(d) { if(!d) return '—'; return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) }
-function planPill(p) { return {FREE:'pill-blue',BASIC:'pill-amber',STANDARD:'pill-green',PREMIUM:'pill-red'}[p]||'pill-blue' }
-function statPill(s) { return {DRAFT:'pill-blue',SUBMITTED:'pill-amber',UNDER_REVIEW:'pill-amber',ACCEPTED:'pill-green',REJECTED:'pill-red'}[s]||'pill-blue' }
-function splitComma(v) { return v.split(',').map(x=>x.trim()).filter(Boolean) }
-function splitLines(v) { return v.split('\n').map(x=>x.trim()).filter(Boolean) }
-function toast(msg, type='ok') {
-  const t = document.createElement('div')
-  t.className = `toast ${type}`
-  t.textContent = msg
-  document.getElementById('toasts').appendChild(t)
-  setTimeout(() => t.remove(), 3200)
-}
-
-// auto-login if token saved
-window.onload = () => { if (tok) { showAdmin() } }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',3000) }
 </script>
 </body>
 </html>
