@@ -703,7 +703,7 @@ export const SCHOLARSHIPS = [
     ]
 },
   {
-    id: 26, flag: '🇹🇷', country: 'Turkey',
+    id: 26, flag: '🇹🇷',featured: true, country: 'Turkey',
     name: 'Türkiye Scholarships 2026', short: 'TRS',
     desc: 'Türkiye Scholarships is a fully funded and prestigious scholarship program.',
     tags: ['Master\'s', 'Scholarship', 'Turkey'], amount: '6,500 TL for Master’s',
