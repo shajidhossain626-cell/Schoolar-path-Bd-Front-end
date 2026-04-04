@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useFilters } from '@hooks/useFilters'
 import FilterSidebar from '@components/common/FilterSidebar'
@@ -7,12 +7,14 @@ import { useAuth } from '@context/AuthContext'
 import { useScholarships } from '@context/ScholarshipContext'
 
 const FREE_LIMIT = 25
+const PER_PAGE = 6
 
 export default function ListingPage() {
   const { paginated, filters, updateFilter, clearAll, page, setPage, totalPages, resultCount } = useFilters()
   const [searchParams] = useSearchParams()
   const { isLoggedIn, isPaid } = useAuth()
   const { scholarships } = useScholarships()
+  const [freePage, setFreePage] = useState(1)
 
   useEffect(() => {
     const country = searchParams.get('country')
@@ -21,13 +23,20 @@ export default function ListingPage() {
     if (degree)  updateFilter('degrees', [degree])
   }, [])
 
-  // Split visible vs locked
+  // All 25 free scholarships
   const freeScholarships = scholarships.filter(s => s.featured).slice(0, FREE_LIMIT)
   const totalAll = scholarships.length
   const lockedCount = totalAll - freeScholarships.length
 
-  // For paid users show all paginated, for free show only featured
-  const visibleCards = isPaid ? paginated : paginated.filter(s => s.featured)
+  // Free pagination — independent of paid pagination
+  const freeTotalPages = Math.ceil(freeScholarships.length / PER_PAGE)
+  const freePaginated  = freeScholarships.slice((freePage - 1) * PER_PAGE, freePage * PER_PAGE)
+
+  // Which cards to show
+  const visibleCards = isPaid ? paginated : freePaginated
+  const currentPage  = isPaid ? page : freePage
+  const currentTotal = isPaid ? totalPages : freeTotalPages
+  const handlePage   = isPaid ? setPage : setFreePage
 
   return (
     <>
@@ -53,7 +62,9 @@ export default function ListingPage() {
                   {isPaid ? 'All Scholarships' : 'Free Scholarships'}
                 </h2>
                 <span className="text-gray-500 text-sm">
-                  {isPaid ? `Showing ${resultCount} results` : `Showing ${visibleCards.length} of ${FREE_LIMIT} free scholarships`}
+                  {isPaid
+                    ? `Showing ${resultCount} results`
+                    : `Showing ${freeScholarships.length} free scholarships (page ${freePage} of ${freeTotalPages})`}
                 </span>
               </div>
               <select className="input text-sm w-auto"
@@ -121,16 +132,20 @@ export default function ListingPage() {
               </div>
             )}
 
-            {/* Pagination — only for paid */}
-            {isPaid && totalPages > 1 && (
+            {/* Pagination — works for both free and paid */}
+            {currentTotal > 1 && (
               <div className="flex gap-2 mt-8 justify-center flex-wrap">
-                <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                <button
+                  onClick={() => handlePage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
                   className="btn btn-outline btn-sm">← Prev</button>
-                {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => i + 1).map(p => (
-                  <button key={p} onClick={() => setPage(p)}
-                    className={`btn btn-sm ${p === page ? 'btn-primary' : 'btn-outline'}`}>{p}</button>
+                {Array.from({ length: Math.min(currentTotal, 7) }, (_, i) => i + 1).map(p => (
+                  <button key={p} onClick={() => handlePage(p)}
+                    className={`btn btn-sm ${p === currentPage ? 'btn-primary' : 'btn-outline'}`}>{p}</button>
                 ))}
-                <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+                <button
+                  onClick={() => handlePage(p => Math.min(currentTotal, p + 1))}
+                  disabled={currentPage === currentTotal}
                   className="btn btn-outline btn-sm">Next →</button>
               </div>
             )}
