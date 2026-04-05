@@ -878,7 +878,7 @@ benefits: [
 ],
 eligibility: [
 'Must be a Bangladeshi citizen with valid passport',
-'Bachelor’s or Master’s degree depending on program',
+' Master’s degree depending on program',
 'Strong academic record (minimum CGPA 3.5 or equivalent)',
 'Research proposal required for research/PhD programs',
 'English or French proficiency (IELTS/TOEFL if required)',
