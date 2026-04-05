@@ -46,7 +46,7 @@ export default function FilterSidebar() {
     filters.fields.length || filters.deadline || filters.search
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-5 sticky top-20">
+    <div className="bg-white border border-gray-200 rounded-2xl p-5 md:sticky md:top-20">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-head font-bold text-navy-800 text-sm">🎯 Filters</h3>
         {hasFilters && (
