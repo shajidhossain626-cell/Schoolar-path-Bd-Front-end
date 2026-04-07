@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ScholarPath BD — Team Operations</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2444;--navy2:#1a3a6b;--green:#22c55e;--green2:#16a34a;
+  --blue:#3b82f6;--amber:#f59e0b;--red:#ef4444;--purple:#8b5cf6;--teal:#14b8a6;--orange:#f97316;
+  --bg:#f0f4f8;--surface:#fff;--border:#e2e8f0;--text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --sw:260px;--hh:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* LOGIN */
+#login{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999}
+.lc{background:#fff;border-radius:20px;padding:44px 40px;width:400px;box-shadow:0 40px 80px rgba(0,0,0,.4)}
+.lc-logo{width:52px;height:52px;background:var(--green);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:18px}
+.lc h1{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:4px}
+.lc p{font-size:13px;color:var(--text3);margin-bottom:26px}
+.lf{margin-bottom:13px}
+.lf label{display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.lf input,.lf select{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:inherit;outline:none;transition:border .2s}
+.lf input:focus,.lf select:focus{border-color:var(--navy)}
+.lerr{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:9px 13px;border-radius:8px;font-size:13px;margin-bottom:13px;display:none}
+.lbtn{width:100%;padding:13px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s}
+.lbtn:hover{background:var(--navy2)}
+
+/* LAYOUT */
+#app{display:none}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sw);background:var(--navy);display:flex;flex-direction:column;z-index:100;overflow:hidden}
+.sb-brand{padding:20px 18px 0;display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.sb-logo{width:38px;height:38px;background:var(--green);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sb-name{font-size:13px;font-weight:800;color:#fff;line-height:1.2}
+.sb-sub{font-size:10px;color:rgba(255,255,255,.4)}
+.sb-nav{flex:1;padding:0 10px;overflow-y:auto}
+.sb-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em;padding:0 8px;margin:14px 0 6px}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;cursor:pointer;transition:all .15s;margin-bottom:2px}
+.ni:hover{background:rgba(255,255,255,.08)}
+.ni.on{background:var(--green)}
+.ni-ic{font-size:15px;flex-shrink:0}
+.ni-lbl{font-size:12px;font-weight:600;color:rgba(255,255,255,.8);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ni.on .ni-lbl{color:#fff}
+.ni-badge{background:rgba(255,255,255,.15);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;flex-shrink:0}
+.sb-role-group{margin-bottom:4px}
+.sb-role-header{padding:6px 11px;display:flex;align-items:center;gap:6px;cursor:pointer}
+.sb-role-header span{font-size:11px;font-weight:700;color:rgba(255,255,255,.5)}
+.sb-role-header .rh-count{margin-left:auto;font-size:10px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);padding:1px 6px;border-radius:8px}
+.sb-foot{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08)}
+.sb-user{display:flex;align-items:center;gap:9px}
+.sb-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-un{font-size:12px;font-weight:700;color:#fff}
+.sb-ur{font-size:10px;color:rgba(255,255,255,.4)}
+.sb-logout{background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:16px;padding:4px;margin-left:auto}
+.sb-logout:hover{color:#fff}
+
+/* MAIN */
+.main{margin-left:var(--sw);min-height:100vh}
+.topbar{height:var(--hh);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 26px;gap:14px;position:sticky;top:0;z-index:50}
+.tb-title{font-size:17px;font-weight:800;color:var(--navy);flex:1}
+.tb-sub{font-size:11px;color:var(--text3)}
+.tb-actions{display:flex;gap:8px}
+.content{padding:26px}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;font-family:inherit;border:none;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--navy2)}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:var(--green2)}
+.btn-ghost{background:var(--bg);color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{background:var(--border)}
+.btn-danger{background:#fef2f2;color:var(--red);border:1px solid #fecaca}.btn-danger:hover{background:#fee2e2}
+.btn-sm{padding:5px 11px;font-size:11px;border-radius:7px}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px}
+.stat-lbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.stat-val{font-size:28px;font-weight:800;color:var(--navy);line-height:1}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* ROLE GROUP CARD */
+.role-group-grid{display:flex;flex-direction:column;gap:16px;margin-bottom:24px}
+.role-group-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.rg-head{padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);background:var(--bg)}
+.rg-icon{font-size:22px}
+.rg-title{font-size:14px;font-weight:800;color:var(--navy);flex:1}
+.rg-sub{font-size:11px;color:var(--text3)}
+.rg-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-left:8px}
+.rg-members{padding:14px}
+.member-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;transition:background .15s;border:1px solid transparent;margin-bottom:6px}
+.member-row:hover{background:var(--bg);border-color:var(--border)}
+.mr-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.mr-info{flex:1;min-width:0}
+.mr-name{font-size:13px;font-weight:700;color:var(--navy)}
+.mr-sub{font-size:11px;color:var(--text3)}
+.mr-prog{width:120px;flex-shrink:0}
+.mr-prog-label{font-size:10px;color:var(--text3);margin-bottom:3px;text-align:right}
+.mr-prog-bar{height:5px;background:var(--bg);border-radius:3px;overflow:hidden}
+.mr-prog-fill{height:100%;border-radius:3px;transition:width .4s}
+.mr-actions{display:flex;gap:6px;flex-shrink:0}
+.add-member-btn{padding:8px 14px;background:var(--bg);color:var(--navy2);border:1.5px dashed var(--border);border-radius:9px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;width:100%;transition:all .15s;margin-top:6px}
+.add-member-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* MEMBER WORKSPACE */
+.role-hero{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px 26px;margin-bottom:20px;display:flex;align-items:center;gap:18px}
+.rh-av{width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.rh-name{font-size:20px;font-weight:800;color:var(--navy)}
+.rh-sub{font-size:12px;color:var(--text3);margin-top:3px}
+.rh-kpis{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.kpi-pill{font-size:11px;font-weight:600;padding:3px 11px;border-radius:20px;background:var(--bg);color:var(--text2);border:1px solid var(--border)}
+
+.prog-bar-row{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.pbr-bar{flex:1;height:7px;background:var(--bg);border-radius:4px;overflow:hidden}
+.pbr-fill{height:100%;border-radius:4px;transition:width .4s}
+.pbr-text{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap}
+.pbr-reset{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;padding:3px 8px;border-radius:6px;font-family:inherit}
+.pbr-reset:hover{background:var(--bg);color:var(--text2)}
+
+/* SECTIONS */
+.sections{display:flex;flex-direction:column;gap:14px}
+.sec-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.sec-head{padding:13px 18px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);background:var(--bg)}
+.sec-icon{font-size:15px}
+.sec-title{font-size:13px;font-weight:700;color:var(--navy);flex:1}
+.sec-count{font-size:10px;color:var(--text3)}
+.sec-add-btn{font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;padding:3px 7px;border-radius:6px;font-family:inherit;margin-left:8px}
+.sec-add-btn:hover{background:#eff6ff}
+.sec-del{background:none;border:none;color:#fca5a5;cursor:pointer;font-size:15px;padding:0 4px;line-height:1}
+.sec-del:hover{color:var(--red)}
+.task-list{padding:8px 10px}
+.ti{display:flex;align-items:flex-start;gap:9px;padding:8px 9px;border-radius:9px;cursor:pointer;transition:all .15s;border:1px solid transparent;margin-bottom:3px;position:relative}
+.ti:hover{background:var(--bg)}
+.ti:hover .ti-del{opacity:1}
+.ti.done{background:#f0fdf4;border-color:#bbf7d0}
+.ti-cb{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--border);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;transition:all .15s}
+.ti.done .ti-cb{background:var(--green);border-color:var(--green)}
+.ti-text{font-size:12px;color:var(--text2);line-height:1.55;flex:1}
+.ti.done .ti-text{color:var(--green2);text-decoration:line-through;opacity:.75}
+.ti-del{opacity:0;background:none;border:none;color:#fca5a5;cursor:pointer;font-size:15px;padding:0 3px;line-height:1;transition:opacity .15s}
+.ti-del:hover{color:var(--red)}
+.atf{display:none;padding:8px 10px 12px;border-top:1px solid var(--border)}
+.atf.open{display:block}
+.atf-row{display:flex;gap:7px}
+.atf-row input{flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;outline:none}
+.atf-row input:focus{border-color:var(--navy)}
+.atf-row button{padding:8px 13px;border-radius:8px;font-size:12px;font-weight:700;font-family:inherit;border:none;cursor:pointer}
+
+/* INFO PANELS */
+.info-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}
+.info-panel{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:14px 18px}
+.info-panel h4{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.ili{font-size:12px;color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border);line-height:1.5;display:flex;gap:6px}
+.ili:last-child{border:none}
+
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:999;padding:16px}
+.mo.open{display:flex}
+.mb{background:#fff;border-radius:18px;padding:26px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
+.mb h2{font-size:17px;font-weight:800;color:var(--navy);margin-bottom:4px}
+.mb p{font-size:12px;color:var(--text3);margin-bottom:18px}
+.mf{margin-bottom:12px}
+.mf label{display:block;font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.mf input,.mf select,.mf textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none}
+.mf input:focus,.mf select:focus,.mf textarea:focus{border-color:var(--navy)}
+.mf textarea{resize:vertical;min-height:70px}
+.ma{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--navy);color:#fff;padding:11px 16px;border-radius:11px;font-size:13px;font-weight:500;display:none;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.empty{text-align:center;padding:32px;color:var(--text3);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="lc">
+    <div class="lc-logo">🎓</div>
+    <h1>ScholarPath BD</h1>
+    <p>Team Operations Panel — Sign in to continue</p>
+    <div class="lerr" id="lerr"></div>
+    <div class="lf"><label>Username</label><input type="text" id="lu" placeholder="Enter your username" onkeydown="if(event.key==='Enter')tryLogin()"></div>
+    <div class="lf"><label>Password</label><input type="password" id="lp" placeholder="Enter your password" onkeydown="if(event.key==='Enter')tryLogin()"></div>
+    <button class="lbtn" onclick="tryLogin()">Sign In →</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">🎓</div>
+      <div><div class="sb-name">ScholarPath BD</div><div class="sb-sub">Team Operations</div></div>
+    </div>
+    <div class="sb-nav" id="sbNav"></div>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-av" id="sbAv" style="background:var(--green)">?</div>
+        <div style="flex:1;min-width:0"><div class="sb-un" id="sbName">—</div><div class="sb-ur" id="sbRole">—</div></div>
+        <button class="sb-logout" onclick="doLogout()" title="Logout">↩</button>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div style="flex:1"><div class="tb-title" id="tbTitle">Dashboard</div><div class="tb-sub" id="tbSub">ScholarPath BD Team</div></div>
+      <div class="tb-actions" id="tbActions"></div>
+    </div>
+    <div class="content" id="mc"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="mo" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="mb">
+    <h2 id="moTitle">—</h2>
+    <p id="moDesc">—</p>
+    <div id="moBody"></div>
+    <div class="ma">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmModal()">Save</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── ROLE DEFINITIONS ───
+// Each role has template sections. Members are separate.
+const ROLE_DEFS = {
+  ceo:       { label:'CEO', icon:'👑', color:'#f59e0b', badgeBg:'#fef9c3', badgeColor:'#92400e', desc:'Chief Executive Officer — Strategic leadership' },
+  sales:     { label:'Sales Agent', icon:'📢', color:'#ef4444', badgeBg:'#fee2e2', badgeColor:'#991b1b', desc:'Lead generation & client conversion' },
+  sop:       { label:'SOP Writer', icon:'✍️', color:'#3b82f6', badgeBg:'#dbeafe', badgeColor:'#1e40af', desc:'Academic writing & document preparation' },
+  counselor: { label:'Scholarship Counselor', icon:'🎓', color:'#14b8a6', badgeBg:'#ccfbf1', badgeColor:'#0f766e', desc:'Profile review & scholarship guidance' },
+  campus:    { label:'Campus Ambassador', icon:'🏫', color:'#f97316', badgeBg:'#ffedd5', badgeColor:'#9a3412', desc:'University campus outreach & referrals' },
+}
+
+// Template sections per role
+const ROLE_SECTIONS = {
+  ceo:[
+    {id:'ceo-s1',title:'Pre-work preparation',icon:'🌅',tasks:['Review team WhatsApp report before opening anything else','Check Google Analytics — note visitor count and top traffic source','Open CRM — check active clients and overdue SOPs','Check WhatsApp for urgent agent escalations','Set your 3 top priorities for today in writing']},
+    {id:'ceo-s2',title:'Core CEO tasks',icon:'📋',tasks:['Review weekly revenue vs monthly target','Approve all pending SOPs — check quality before client delivery','Make all final decisions: pricing, refunds, upgrades, complaints','Close Premium clients (৳20,000) personally within 24 hours','Review team KPIs — agents posting? Counselor doing 3 calls/week?','Check scholarship deadlines — any client deadline within 7 days?','Pay all commissions due today']},
+    {id:'ceo-s3',title:'Quality control',icon:'✅',tasks:['Every SOP reviewed — hook, word count, alignment, grammar','Every client complaint addressed within 4 hours','CRM updated — all active clients have current status and notes','Intake form submissions got agent response within 2 hours']},
+    {id:'ceo-s4',title:'End-of-day wrap',icon:'🌙',tasks:['Update revenue tracker — clients this week, total revenue','Note 1 win and 1 improvement for tomorrow','Send Sunday team direction message if today is Sunday','Set tomorrow\'s 3 priorities now — not tomorrow morning']},
+  ],
+  sales:[
+    {id:'sales-s1',title:'Pre-work preparation',icon:'🌅',tasks:['Read CEO morning team message — know today\'s targets','Choose 10 Facebook groups to post in today','Select approved template for today\'s post','Check WhatsApp for leads who responded overnight','Review tracking sheet — who needs follow-up today']},
+    {id:'sales-s2',title:'Core tasks — lead generation',icon:'📢',tasks:['Post in minimum 10 Facebook groups before 11AM','Update WhatsApp status with today\'s scholarship content','Respond to every new message within 2 hours','Ask every new lead the 5 qualifying questions (CGPA, field, country, IELTS, degree)','Add each new lead to tracking sheet immediately','Forward hot leads (CGPA 3.0+, clear target) to counselor with intro','Follow up on 3-day-old leads — 1 polite check-in message','Collect bKash payment screenshot and forward to CEO immediately','Post at 9AM, 2PM, and 9PM for peak engagement']},
+    {id:'sales-s3',title:'Quality control',icon:'✅',tasks:['Never quote prices — always say "our team will send full details"','Never promise scholarship success — say "we maximise your chances"','Every lead response must be personalised — no copy-paste feel','Intake form link in posts is correct and working']},
+    {id:'sales-s4',title:'Sunday report to CEO',icon:'🌙',tasks:['Count: groups posted in today','Count: new leads responded today','Count: hot leads forwarded to counselor this week','Note: any difficult questions from leads','Note: which post got most engagement today']},
+  ],
+  sop:[
+    {id:'sop-s1',title:'Pre-work preparation',icon:'🌅',tasks:['Check WhatsApp for new client assignments from CEO','Review active clients — which SOPs are at what stage','Read intake form data for each new client before contacting','Research specific scholarship requirements for each client','Identify any scholarship deadline within 7 days — these get priority']},
+    {id:'sop-s2',title:'Core tasks — writing',icon:'✍️',tasks:['Contact new client within 24 hours — book 20-min interview call','Interview: ask about story, motivation, career goals, why this scholarship','Research scholarship tone: DAAD=research, Chevening=leadership, MEXT=study plan','Deliver first draft within 5 working days of receiving all info','Check word count against limit before sending to CEO','Proofread twice — zero grammar errors before CEO submission','Write CV in Europass format (European) or standard format (others)','Revise within 48 hours after CEO or client feedback','Submit final to CEO for approval — NEVER send directly to client']},
+    {id:'sop-s3',title:'Quality checklist',icon:'✅',tasks:['Opening is a strong hook — not "My name is..." or "I am applying..."','SOP covers: background, academic journey, research interest, why this scholarship, return plan','Every fact matches client\'s actual profile — zero exaggeration','Scholarship-specific requirements verified (return-home commitment, word limits etc.)','SOP reads as personal — not AI-generated, uses client\'s real story']},
+    {id:'sop-s4',title:'Daily progress report',icon:'🌙',tasks:['Update CEO on each SOP: draft / review / complete stage','Flag any client not responding to interview requests after 48 hours','Warn CEO 48 hours early if any deadline is at risk','Record time spent per client for weekly invoice']},
+  ],
+  counselor:[
+    {id:'cou-s1',title:'Pre-work preparation',icon:'🌅',tasks:['Check which leads agents forwarded this week','Review currently open scholarship deadlines','Prepare call structure for today — 10-10-10 minute format','Study any scholarship a client specifically asked about']},
+    {id:'cou-s2',title:'Core tasks — counseling',icon:'🎓',tasks:['Conduct minimum 3 profile review calls per week — 30 minutes each','First 10 min: gather profile — CGPA, university, field, country, IELTS, work exp.','Middle 10 min: recommend 2-3 specific scholarships matching their exact profile','Final 10 min: explain application process, documents needed, recommend package','End every call: "our team will send you details within 1 hour"','Report call outcome to agent immediately after every call','Call rejected clients — offer alternative scholarship options','Share your own scholarship experience to build trust when relevant']},
+    {id:'cou-s3',title:'Quality control',icon:'✅',tasks:['Never discuss pricing — always hand that to the agent after call','Only recommend scholarships client genuinely qualifies for','Every call must end with a clear next step for the client','All scholarship recommendations verified — deadlines are still open','Call notes shared with CEO within 24 hours']},
+    {id:'cou-s4',title:'Sunday report to CEO',icon:'🌙',tasks:['Count: counseling calls done this week','Count: clients converted after your call recommendation','Note: scholarships clients are most interested in (helps marketing)','Flag: clients needing urgent follow-up before deadline','Share: questions you could not answer — CEO needs to know']},
+  ],
+  campus:[
+    {id:'cam-s1',title:'Pre-work preparation',icon:'🌅',tasks:['Check WhatsApp for updates from CEO or agents','Scan university groups — any scholarship questions to answer today?','Choose 3 department groups to post in today','Check notice boards — flyers still up? Replace if removed']},
+    {id:'cam-s2',title:'Core tasks — campus outreach',icon:'🏫',tasks:['Post in minimum 3 university department WhatsApp groups','Share intake form link with any student mentioning study abroad','Answer basic scholarship questions — refer complex ones to ScholarPath BD','Put up flyers on notice boards if not there already','Share today\'s post on personal Facebook and WhatsApp status','Forward interested student contacts to sales agent within 24 hours']},
+    {id:'cam-s3',title:'Quality control',icon:'✅',tasks:['Only share accurate info — if unsure say "contact ScholarPath BD"','Always include intake form link when sharing with interested students','Never quote prices from memory — direct to scholarpathbd.com/services','Maximum 1 post per group per day — no spamming']},
+    {id:'cam-s4',title:'Monthly report to CEO',icon:'🌙',tasks:['Count: students referred to ScholarPath BD this month','Count: students who filled intake form through your referral','Note: which groups are most responsive','Note: common questions students ask']},
+  ],
+}
+
+const ROLE_INFO = {
+  ceo:{kpis:['৳1,00,000+/month revenue','SOP approval < 24hrs','60%+ Premium close rate'],tools:['Google Analytics','CRM Google Sheets','WhatsApp Business','Google Drive'],mistakes:['Working IN the business instead of ON it','Missing SOP quality reviews','Holding commissions > 24 hours']},
+  sales:{kpis:['10+ group posts/day','Lead response < 2hrs','5+ hot leads/week to counselor','2+ clients/month'],tools:['WhatsApp Business','Facebook Groups','Lead Tracking Sheet','Approved templates'],mistakes:['Quoting prices yourself','Ignoring leads > 2 hours','Same group twice in one day','Not adding leads to sheet']},
+  sop:{kpis:['Draft delivered in 5 working days','90%+ first-approval rate','Zero late submissions','4.5+ client satisfaction'],tools:['Google Docs','Grammarly','Europass CV builder','Official scholarship websites'],mistakes:['Starting SOP with "My name is..."','Going over word count limit','Sending draft directly to client without CEO approval']},
+  counselor:{kpis:['3+ calls/week minimum','60%+ conversion rate','Notes to CEO within 24hrs','4.8+ client satisfaction'],tools:['WhatsApp / Zoom','Scholarship official sites','Lead tracking sheet','CRM panel'],mistakes:['Recommending scholarships client doesn\'t qualify for','Discussing pricing yourself','Ending call without clear next step']},
+  campus:{kpis:['3+ group posts/week','2+ paying referrals/month','Flyers always visible on boards'],tools:['WhatsApp (university groups)','Facebook personal profile','Printed flyers','Intake form link'],mistakes:['Posting too frequently — looks like spam','Sharing wrong scholarship info','Not forwarding interested student contacts']},
+}
+
+// ─── DATA LAYER ───
+const SK='sp_tp_auth', DK='sp_tp_data', TK='sp_tp_ticks'
+let cu=null, data={}
+
+function loadData(){
+  const s=localStorage.getItem(DK)
+  if(s){try{data=JSON.parse(s)}catch{data=defaultData()}}
+  else data=defaultData()
+}
+function saveData(){ localStorage.setItem(DK,JSON.stringify(data)) }
+function getTicks(){ try{return JSON.parse(localStorage.getItem(TK)||'{}')}catch{return {}} }
+function setTick(mid,sid,ti,v){ const t=getTicks(),k=`${mid}_${sid}_${ti}`; if(v)t[k]=true;else delete t[k]; localStorage.setItem(TK,JSON.stringify(t)) }
+function isTicked(mid,sid,ti){ return !!getTicks()[`${mid}_${sid}_${ti}`] }
+
+function defaultData(){
+  return {
+    users:{
+      admin:{ pass:'admin@2026', name:'Shajid Hossain', role:'CEO', access:'admin', memberId:'member_ceo_1' },
+    },
+    members:{
+      member_ceo_1:{ name:'Shajid Hossain', roleId:'ceo', color:'#f59e0b', sections: JSON.parse(JSON.stringify(ROLE_SECTIONS.ceo)) },
+      member_sales_1:{ name:'Sales Agent 1', roleId:'sales', color:'#ef4444', sections: JSON.parse(JSON.stringify(ROLE_SECTIONS.sales)) },
+      member_sop_1:{ name:'SOP Writer 1', roleId:'sop', color:'#3b82f6', sections: JSON.parse(JSON.stringify(ROLE_SECTIONS.sop)) },
+      member_counselor_1:{ name:'Counselor 1', roleId:'counselor', color:'#14b8a6', sections: JSON.parse(JSON.stringify(ROLE_SECTIONS.counselor)) },
+      member_campus_1:{ name:'Campus Ambassador 1', roleId:'campus', color:'#f97316', sections: JSON.parse(JSON.stringify(ROLE_SECTIONS.campus)) },
+    },
+  }
+}
+
+// ─── AUTH ───
+function tryLogin(){
+  const u=document.getElementById('lu').value.trim().toLowerCase()
+  const p=document.getElementById('lp').value.trim()
+  const err=document.getElementById('lerr')
+  const user=data.users[u]
+  if(!user||user.pass!==p){ err.style.display='block'; err.textContent='❌ Wrong username or password'; return }
+  cu={...user, username:u}
+  localStorage.setItem(SK,JSON.stringify(cu))
+  err.style.display='none'
+  startApp()
+}
+function doLogout(){
+  cu=null; localStorage.removeItem(SK)
+  document.getElementById('app').style.display='none'
+  document.getElementById('login').style.display='flex'
+  document.getElementById('lu').value=''; document.getElementById('lp').value=''
+}
+
+// ─── SIDEBAR ───
+function buildSidebar(){
+  const nav=document.getElementById('sbNav')
+  nav.innerHTML=''
+  const isAdmin=cu.access==='admin'
+
+  nav.innerHTML+=`<div class="sb-label">Overview</div>`
+  nav.appendChild(makeNI('📊','Dashboard',null,()=>showDash(),true))
+
+  if(isAdmin){
+    nav.innerHTML+=`<div class="sb-label">Team by Role</div>`
+    // Group members by role
+    Object.entries(ROLE_DEFS).forEach(([rid,rdef])=>{
+      const mems=getMembersByRole(rid)
+      if(mems.length===0) return
+      const grpDiv=document.createElement('div')
+      grpDiv.className='sb-role-group'
+      const grpHead=document.createElement('div')
+      grpHead.className='sb-role-header'
+      grpHead.innerHTML=`<span>${rdef.icon}</span><span>${rdef.label}</span><span class="rh-count">${mems.length}</span>`
+      grpDiv.appendChild(grpHead)
+      mems.forEach(([mid,m])=>{
+        const n=makeNI('',m.name,null,()=>showMember(mid))
+        n.style.paddingLeft='28px'
+        grpDiv.appendChild(n)
+      })
+      nav.appendChild(grpDiv)
+    })
+  } else {
+    nav.innerHTML+=`<div class="sb-label">My Workspace</div>`
+    const m=data.members[cu.memberId]
+    if(m) nav.appendChild(makeNI(ROLE_DEFS[m.roleId].icon,m.name,null,()=>showMember(cu.memberId)))
+  }
+
+  const m=data.members[cu.memberId]
+  const rd=m?ROLE_DEFS[m.roleId]:{}
+  document.getElementById('sbAv').textContent=cu.name.split(' ').map(w=>w[0]).join('').slice(0,2)
+  document.getElementById('sbAv').style.background=m?m.color:'var(--green)'
+  document.getElementById('sbName').textContent=cu.name
+  document.getElementById('sbRole').textContent=cu.role
+}
+
+function makeNI(icon,label,count,fn,isFirst){
+  const d=document.createElement('div')
+  d.className='ni'+(isFirst?' on':'')
+  d.innerHTML=`${icon?`<span class="ni-ic">${icon}</span>`:''}<span class="ni-lbl">${label}</span>${count!==null&&count!==undefined?`<span class="ni-badge">${count}</span>`:''}`
+  d.onclick=()=>{ document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on')); d.classList.add('on'); fn() }
+  return d
+}
+
+function getMembersByRole(rid){ return Object.entries(data.members).filter(([,m])=>m.roleId===rid) }
+
+// ─── DASHBOARD ───
+function showDash(){
+  setTopbar('Dashboard','All team members and daily progress overview')
+  document.getElementById('tbActions').innerHTML=cu.access==='admin'
+    ?`<button class="btn btn-green" onclick="openAddMemberModal()">+ Add Member</button>
+      <button class="btn btn-ghost" onclick="openAddRoleModal()">+ Add Role User</button>`
+    :''
+
+  let totalT=0,totalD=0
+  Object.entries(data.members).forEach(([mid,m])=>{
+    m.sections.forEach((s,si)=>s.tasks.forEach((_,ti)=>{ totalT++; if(isTicked(mid,s.id,ti)) totalD++ }))
+  })
+
+  const mCount=Object.keys(data.members).length
+  let roleGroupsHTML=''
+
+  Object.entries(ROLE_DEFS).forEach(([rid,rdef])=>{
+    const mems=getMembersByRole(rid)
+    if(!mems.length) return
+    const memberRowsHTML=mems.map(([mid,m])=>{
+      let tot=0,done=0
+      m.sections.forEach((s)=>s.tasks.forEach((_,ti)=>{ tot++; if(isTicked(mid,s.id,ti)) done++ }))
+      const pct=tot>0?Math.round(done/tot*100):0
+      const initials=m.name.split(' ').map(w=>w[0]).join('').slice(0,2)
+      return `<div class="member-row">
+        <div class="mr-av" style="background:${m.color}">${initials}</div>
+        <div class="mr-info"><div class="mr-name">${m.name}</div><div class="mr-sub">${rdef.label}</div></div>
+        <div class="mr-prog">
+          <div class="mr-prog-label">${done}/${tot}</div>
+          <div class="mr-prog-bar"><div class="mr-prog-fill" style="width:${pct}%;background:${m.color}"></div></div>
+        </div>
+        <div class="mr-actions">
+          <button class="btn btn-ghost btn-sm" onclick="navTo('${mid}')">Open →</button>
+          ${cu.access==='admin'?`<button class="btn btn-danger btn-sm" onclick="delMember('${mid}')">Del</button>`:''}
+        </div>
+      </div>`
+    }).join('')
+
+    roleGroupsHTML+=`<div class="role-group-card">
+      <div class="rg-head">
+        <span class="rg-icon">${rdef.icon}</span>
+        <div style="flex:1"><div class="rg-title">${rdef.label} <span class="rg-badge" style="background:${rdef.badgeBg};color:${rdef.badgeColor}">${mems.length} member${mems.length>1?'s':''}</span></div><div class="rg-sub">${rdef.desc}</div></div>
+        ${cu.access==='admin'?`<button class="btn btn-ghost btn-sm" onclick="openAddMemberToRoleModal('${rid}')">+ Add member</button>`:''}
+      </div>
+      <div class="rg-members">
+        ${memberRowsHTML}
+        ${cu.access==='admin'?`<button class="add-member-btn" onclick="openAddMemberToRoleModal('${rid}')">+ Add another ${rdef.label}</button>`:''}
+      </div>
+    </div>`
+  })
+
+  document.getElementById('mc').innerHTML=`
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-lbl">Team members</div><div class="stat-val">${mCount}</div><div class="stat-sub">Across all roles</div></div>
+      <div class="stat-card"><div class="stat-lbl">Tasks completed today</div><div class="stat-val" style="color:var(--green)">${totalD}</div><div class="stat-sub">${totalT>0?Math.round(totalD/totalT*100):0}% of all tasks</div></div>
+      <div class="stat-card"><div class="stat-lbl">Tasks remaining</div><div class="stat-val" style="color:var(--amber)">${totalT-totalD}</div><div class="stat-sub">Pending tasks today</div></div>
+      <div class="stat-card"><div class="stat-lbl">Total team tasks</div><div class="stat-val">${totalT}</div><div class="stat-sub">Across all workspaces</div></div>
+    </div>
+    <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:14px">Team by role</div>
+    <div class="role-group-grid">${roleGroupsHTML}</div>
+  `
+}
+
+// ─── MEMBER WORKSPACE ───
+function showMember(mid){
+  const m=data.members[mid]
+  if(!m) return
+  const rd=ROLE_DEFS[m.roleId]
+  const ri=ROLE_INFO[m.roleId]||{kpis:[],tools:[],mistakes:[]}
+  const isAdmin=cu.access==='admin'
+  setTopbar(m.name, rd.label+' · Daily workspace')
+  document.getElementById('tbActions').innerHTML=
+    `<button class="btn btn-ghost btn-sm" onclick="resetMemberTicks('${mid}')">Reset day</button>`+
+    (isAdmin?`<button class="btn btn-ghost btn-sm" onclick="openAddSecModal('${mid}')">+ Section</button>`:'')
+
+  let tot=0,done=0
+  m.sections.forEach((s)=>s.tasks.forEach((_,ti)=>{ tot++; if(isTicked(mid,s.id,ti)) done++ }))
+  const pct=tot>0?Math.round(done/tot*100):0
+
+  const secsHTML=m.sections.map(s=>buildSec(mid,s,isAdmin)).join('')
+  const kpisHTML=ri.kpis.map(k=>`<div class="ili"><span>📊</span>${k}</div>`).join('')
+  const toolsHTML=ri.tools.map(t=>`<div class="ili"><span>🔧</span>${t}</div>`).join('')
+  const mistakesHTML=ri.mistakes.map(t=>`<div class="ili"><span>⚠️</span>${t}</div>`).join('')
+
+  document.getElementById('mc').innerHTML=`
+    <div class="role-hero">
+      <div class="rh-av" style="background:${m.color}20">${rd.icon}</div>
+      <div style="flex:1">
+        <div class="rh-name">${m.name}</div>
+        <div class="rh-sub">${rd.label} · ${rd.desc}</div>
+        <div class="rh-kpis">${ri.kpis.map(k=>`<span class="kpi-pill">${k}</span>`).join('')}</div>
+      </div>
+    </div>
+    <div class="prog-bar-row">
+      <div style="font-size:12px;font-weight:600;color:var(--text2);min-width:90px">Daily progress</div>
+      <div class="pbr-bar"><div class="pbr-fill" id="pbrf-${mid}" style="width:${pct}%;background:${m.color}"></div></div>
+      <div class="pbr-text" id="pbrt-${mid}">${done}/${tot} tasks</div>
+      <button class="pbr-reset" onclick="resetMemberTicks('${mid}')">Reset</button>
+    </div>
+    <div class="sections" id="secs-${mid}">${secsHTML}</div>
+    <div class="info-row">
+      <div class="info-panel"><h4>Performance KPIs</h4>${kpisHTML}</div>
+      <div class="info-panel"><h4>Tools to use</h4>${toolsHTML}</div>
+      <div class="info-panel"><h4>Mistakes to avoid</h4>${mistakesHTML}</div>
+    </div>
+  `
+}
+
+function buildSec(mid,s,isAdmin){
+  const tasksHTML=s.tasks.map((t,ti)=>{
+    const ticked=isTicked(mid,s.id,ti)
+    return `<div class="ti${ticked?' done':''}" id="ti-${mid}-${s.id}-${ti}" onclick="toggleTask('${mid}','${s.id}',${ti})">
+      <div class="ti-cb">${ticked?'✓':''}</div>
+      <div class="ti-text">${t}</div>
+      ${isAdmin?`<button class="ti-del" onclick="event.stopPropagation();delTask('${mid}','${s.id}',${ti})">×</button>`:''}
+    </div>`
+  }).join('')
+
+  return `<div class="sec-card" id="sec-${mid}-${s.id}">
+    <div class="sec-head">
+      <span class="sec-icon">${s.icon||'📋'}</span>
+      <span class="sec-title">${s.title}</span>
+      <span class="sec-count">${s.tasks.length} tasks</span>
+      ${isAdmin?`<button class="sec-add-btn" onclick="toggleATF('${mid}','${s.id}')">+ task</button>
+        <button class="sec-del" onclick="delSec('${mid}','${s.id}')" title="Delete section">×</button>`:''}
+    </div>
+    <div class="task-list">${tasksHTML||'<div class="empty">No tasks yet — add one above</div>'}</div>
+    ${isAdmin?`<div class="atf" id="atf-${mid}-${s.id}">
+      <div class="atf-row">
+        <input id="atfi-${mid}-${s.id}" type="text" placeholder="Type new task..." onkeydown="if(event.key==='Enter')addTask('${mid}','${s.id}')">
+        <button style="background:var(--navy);color:#fff" onclick="addTask('${mid}','${s.id}')">Add</button>
+        <button style="background:var(--bg);color:var(--text2)" onclick="toggleATF('${mid}','${s.id}')">✕</button>
+      </div>
+    </div>`:''}
+  </div>`
+}
+
+function toggleTask(mid,sid,ti){
+  const el=document.getElementById(`ti-${mid}-${sid}-${ti}`)
+  const was=el.classList.contains('done')
+  setTick(mid,sid,ti,!was)
+  el.classList.toggle('done',!was)
+  el.querySelector('.ti-cb').textContent=!was?'✓':''
+  updateProg(mid)
+}
+
+function updateProg(mid){
+  const m=data.members[mid]; if(!m) return
+  let tot=0,done=0
+  m.sections.forEach(s=>s.tasks.forEach((_,ti)=>{ tot++; if(isTicked(mid,s.id,ti)) done++ }))
+  const pct=tot>0?Math.round(done/tot*100):0
+  const fill=document.getElementById('pbrf-'+mid)
+  const text=document.getElementById('pbrt-'+mid)
+  if(fill) fill.style.width=pct+'%'
+  if(text) text.textContent=`${done}/${tot} tasks`
+}
+
+function resetMemberTicks(mid){
+  const t=getTicks(); const m=data.members[mid]; if(!m) return
+  m.sections.forEach(s=>s.tasks.forEach((_,ti)=>delete t[`${mid}_${s.id}_${ti}`]))
+  localStorage.setItem(TK,JSON.stringify(t))
+  showMember(mid); showToast('Day reset ✓')
+}
+
+function toggleATF(mid,sid){
+  const f=document.getElementById(`atf-${mid}-${sid}`); if(!f) return
+  f.classList.toggle('open')
+  if(f.classList.contains('open')) document.getElementById(`atfi-${mid}-${sid}`).focus()
+}
+
+function addTask(mid,sid){
+  const inp=document.getElementById(`atfi-${mid}-${sid}`)
+  const val=inp.value.trim(); if(!val) return
+  const m=data.members[mid]; const s=m.sections.find(x=>x.id===sid); if(!s) return
+  s.tasks.push(val); saveData(); inp.value=''; showMember(mid); showToast('Task added ✓')
+}
+
+function delTask(mid,sid,ti){
+  if(!confirm('Delete this task?')) return
+  const m=data.members[mid]; const s=m.sections.find(x=>x.id===sid); if(!s) return
+  s.tasks.splice(ti,1); saveData(); showMember(mid); showToast('Task deleted')
+}
+
+function delSec(mid,sid){
+  if(!confirm('Delete this entire section and all its tasks?')) return
+  const m=data.members[mid]
+  m.sections=m.sections.filter(s=>s.id!==sid); saveData(); showMember(mid); showToast('Section deleted')
+}
+
+function delMember(mid){
+  const m=data.members[mid]; if(!m) return
+  if(!confirm(`Remove ${m.name} from the team? This cannot be undone.`)) return
+  // Also remove their user account if any
+  Object.keys(data.users).forEach(u=>{ if(data.users[u].memberId===mid) delete data.users[u] })
+  delete data.members[mid]; saveData(); buildSidebar(); showDash(); showToast('Member removed')
+}
+
+function navTo(mid){
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'))
+  showMember(mid)
+}
+
+// ─── MODALS ───
+let mctx={}
+
+function openAddMemberToRoleModal(rid){
+  const rd=ROLE_DEFS[rid]
+  mctx={type:'addMemberToRole',rid}
+  document.getElementById('moTitle').textContent=`Add ${rd.label}`
+  document.getElementById('moDesc').textContent=`Create a new team member for the ${rd.label} role. They will get their own workspace and login.`
+  document.getElementById('moBody').innerHTML=`
+    <div class="mf"><label>Full name</label><input id="mf-name" type="text" placeholder="e.g. Rahman Ahmed"></div>
+    <div class="mf"><label>Username (for login)</label><input id="mf-user" type="text" placeholder="e.g. rahman"></div>
+    <div class="mf"><label>Password</label><input id="mf-pass" type="text" placeholder="e.g. rahman@2026"></div>
+  `
+  openModal()
+}
+
+function openAddMemberModal(){
+  mctx={type:'addMember'}
+  document.getElementById('moTitle').textContent='Add new team member'
+  document.getElementById('moDesc').textContent='Add a team member to any role. They get their own login and workspace.'
+  const roleOpts=Object.entries(ROLE_DEFS).map(([id,r])=>`<option value="${id}">${r.icon} ${r.label}</option>`).join('')
+  document.getElementById('moBody').innerHTML=`
+    <div class="mf"><label>Role</label><select id="mf-role">${roleOpts}</select></div>
+    <div class="mf"><label>Full name</label><input id="mf-name" type="text" placeholder="e.g. Karim Ahmed"></div>
+    <div class="mf"><label>Username (for login)</label><input id="mf-user" type="text" placeholder="e.g. karim"></div>
+    <div class="mf"><label>Password</label><input id="mf-pass" type="text" placeholder="e.g. karim@2026"></div>
+  `
+  openModal()
+}
+
+function openAddRoleModal(){ openAddMemberModal() }
+
+function openAddSecModal(mid){
+  mctx={type:'addSec',mid}
+  document.getElementById('moTitle').textContent='Add new section'
+  document.getElementById('moDesc').textContent='Add a checklist section to this member\'s workspace'
+  document.getElementById('moBody').innerHTML=`
+    <div class="mf"><label>Section title</label><input id="mf-title" type="text" placeholder="e.g. Weekly reporting"></div>
+    <div class="mf"><label>Icon (emoji)</label><input id="mf-icon" type="text" placeholder="📊" maxlength="4" value="📋"></div>
+  `
+  openModal()
+}
+
+function openModal(){ document.getElementById('modal').classList.add('open') }
+function closeModal(){ document.getElementById('modal').classList.remove('open'); mctx={} }
+
+function confirmModal(){
+  if(mctx.type==='addMember'||mctx.type==='addMemberToRole'){
+    const rid=mctx.rid||document.getElementById('mf-role')?.value
+    const name=document.getElementById('mf-name').value.trim()
+    const user=document.getElementById('mf-user').value.trim().toLowerCase()
+    const pass=document.getElementById('mf-pass').value.trim()
+    if(!name||!user||!pass||!rid){alert('All fields are required');return}
+    if(data.users[user]){alert('Username already exists — choose another');return}
+    const mid='member_'+rid+'_'+Date.now()
+    const rd=ROLE_DEFS[rid]
+    const colors={'ceo':'#f59e0b','sales':'#ef4444','sop':'#3b82f6','counselor':'#14b8a6','campus':'#f97316'}
+    data.members[mid]={ name, roleId:rid, color:colors[rid]||'#6b7280', sections:JSON.parse(JSON.stringify(ROLE_SECTIONS[rid]||[])) }
+    data.users[user]={ pass, name, role:rd.label, access:'member', memberId:mid }
+    saveData(); closeModal(); buildSidebar(); showDash()
+    showToast(`${name} added as ${rd.label} ✓`)
+  } else if(mctx.type==='addSec'){
+    const title=document.getElementById('mf-title').value.trim()
+    const icon=document.getElementById('mf-icon').value.trim()||'📋'
+    if(!title) return
+    data.members[mctx.mid].sections.push({id:'s'+Date.now(),title,icon,tasks:[]})
+    saveData(); closeModal(); showMember(mctx.mid); showToast('Section added ✓')
+  }
+}
+
+function setTopbar(title,sub){ document.getElementById('tbTitle').textContent=title; document.getElementById('tbSub').textContent=sub }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; clearTimeout(t._t); t._t=setTimeout(()=>t.style.display='none',2500) }
+
+// ─── INIT ───
+function startApp(){
+  document.getElementById('login').style.display='none'
+  document.getElementById('app').style.display='block'
+  buildSidebar()
+  if(cu.access==='admin') showDash()
+  else showMember(cu.memberId)
+}
+
+window.onload=()=>{
+  loadData()
+  const saved=localStorage.getItem(SK)
+  if(saved){ try{ cu=JSON.parse(saved); startApp() }catch{} }
+}
+</script>
+</body>
+</html>
