@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useScholarships } from '@context/ScholarshipContext'
 import ScholarshipCard from '@components/common/ScholarshipCard'
 
-const STATS = [['50+', 'Scholarships'], ['2,400+', 'Students Helped'], ['94%', 'Success Rate'], ['20+', 'Countries']]
+const STATS = [['80+', 'Scholarships'], ['2,400+', 'Students Helped'], ['94%', 'Success Rate'], ['30+', 'Countries']]
 const STEPS = [
   { n: 1, title: 'Discover & Match', desc: 'Use our smart filters and search to find scholarships perfectly matched to your profile, field, and goals.' },
   { n: 2, title: 'Prepare & Upload', desc: 'Get a personalized document checklist. Upload files securely to your dashboard. Our experts review everything.' },
@@ -125,7 +125,7 @@ export default function HomePage() {
             {featured.map(s => <ScholarshipCard key={s.id} scholarship={s} />)}
           </div>
           <div className="text-center mt-10">
-            <Link to="/scholarships" className="btn btn-outline btn-lg">View All 50+ Scholarships →</Link>
+            <Link to="/scholarships" className="btn btn-outline btn-lg">View All 80+ Scholarships →</Link>
           </div>
         </div>
       </section>
