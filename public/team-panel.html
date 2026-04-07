@@ -334,7 +334,7 @@ function buildSidebar(){
   const isAdmin=cu.access==='admin'
 
   nav.innerHTML+=`<div class="sb-label">Overview</div>`
-  nav.appendChild(makeNI('📊','Dashboard',null,()=>showDash(),true))
+  const dashNI=makeNI('📊','Dashboard',null,()=>showDash(),true); dashNI.id='ni-dashboard'; nav.appendChild(dashNI)
 
   if(isAdmin){
     nav.innerHTML+=`<div class="sb-label">Team by Role</div>`
@@ -350,6 +350,7 @@ function buildSidebar(){
       grpDiv.appendChild(grpHead)
       mems.forEach(([mid,m])=>{
         const n=makeNI('',m.name,null,()=>showMember(mid))
+        n.id='ni-'+mid
         n.style.paddingLeft='28px'
         grpDiv.appendChild(n)
       })
@@ -358,7 +359,7 @@ function buildSidebar(){
   } else {
     nav.innerHTML+=`<div class="sb-label">My Workspace</div>`
     const m=data.members[cu.memberId]
-    if(m) nav.appendChild(makeNI(ROLE_DEFS[m.roleId].icon,m.name,null,()=>showMember(cu.memberId)))
+    if(m){ const mni=makeNI(ROLE_DEFS[m.roleId].icon,m.name,null,()=>showMember(cu.memberId),true); mni.id='ni-'+cu.memberId; nav.appendChild(mni) }
   }
 
   const m=data.members[cu.memberId]
@@ -381,6 +382,9 @@ function getMembersByRole(rid){ return Object.entries(data.members).filter(([,m]
 
 // ─── DASHBOARD ───
 function showDash(){
+  // Mark dashboard nav active
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'))
+  const dni=document.getElementById('ni-dashboard'); if(dni) dni.classList.add('on')
   setTopbar('Dashboard','All team members and daily progress overview')
   document.getElementById('tbActions').innerHTML=cu.access==='admin'
     ?`<button class="btn btn-green" onclick="openAddMemberModal()">+ Add Member</button>
@@ -451,6 +455,7 @@ function showMember(mid){
   const isAdmin=cu.access==='admin'
   setTopbar(m.name, rd.label+' · Daily workspace')
   document.getElementById('tbActions').innerHTML=
+    (isAdmin?`<button class="btn btn-ghost btn-sm" onclick="showDash()">← Dashboard</button>`:'') +
     `<button class="btn btn-ghost btn-sm" onclick="resetMemberTicks('${mid}')">Reset day</button>`+
     (isAdmin?`<button class="btn btn-ghost btn-sm" onclick="openAddSecModal('${mid}')">+ Section</button>`:'')
 
@@ -578,6 +583,7 @@ function delMember(mid){
 
 function navTo(mid){
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'))
+  const ni=document.getElementById('ni-'+mid); if(ni) ni.classList.add('on')
   showMember(mid)
 }
 
