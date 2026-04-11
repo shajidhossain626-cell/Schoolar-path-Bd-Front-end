@@ -4,11 +4,12 @@ import { useAuth } from '@context/AuthContext'
 
 const NAV_LINKS = [
   { to: '/',            label: 'Home',         end: true },
-  { to: '/scholarships',label: 'Scholarships' },
-  { to: '/services',    label: 'Services' },
-  { to: '/blog',        label: 'Blog' },
-  { to: '/about',       label: 'About' },
-  { to: '/contact',     label: 'Contact' },
+  { to: '/scholarships', label: 'Scholarships' },
+  { to: '/services',     label: 'Services' },
+  { to: '/universities', label: 'Universities' },
+  { to: '/blog',         label: 'Blog' },
+  { to: '/about',        label: 'About' },
+  { to: '/contact',      label: 'Contact' },
 ]
 
 export default function Navbar({ onOpenAuth }) {

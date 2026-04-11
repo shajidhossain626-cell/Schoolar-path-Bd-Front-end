@@ -16,6 +16,7 @@ import AboutPage from '@pages/AboutPage'
 import ContactPage from '@pages/ContactPage'
 import NotFoundPage from '@pages/NotFoundPage'
 import AdminPage from '@pages/AdminPage'
+import UniversitiesPage from '@pages/UniversitiesPage'
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="universities" element={<UniversitiesPage />} />
             <Route path="admin" element={<AdminPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
