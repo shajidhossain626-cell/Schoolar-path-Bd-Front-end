@@ -6,6 +6,7 @@ const NAV_LINKS = [
   { to: '/',            label: 'Home',         end: true },
   { to: '/scholarships', label: 'Scholarships' },
   { to: '/services',     label: 'Services' },
+  { to: '/tools',        label: 'Free Tools', highlight: true },
   { to: '/universities', label: 'Universities' },
   { to: '/blog',         label: 'Blog' },
   { to: '/about',        label: 'About' },
@@ -37,8 +38,11 @@ export default function Navbar({ onOpenAuth }) {
             {NAV_LINKS.map(({ to, label, end }) => (
               <NavLink key={to} to={to} end={end}
                 className={({ isActive }) =>
-                  `px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${isActive ? 'text-blue-600 bg-blue-50 font-semibold' : 'text-gray-500 hover:text-navy-800 hover:bg-gray-100'}`}>
-                {label}
+                  highlight
+                    ? `px-3 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-1 ${isActive ? 'text-green-700 bg-green-50' : 'text-green-600 hover:bg-green-50'}`
+                    : `px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${isActive ? 'text-blue-600 bg-blue-50 font-semibold' : 'text-gray-500 hover:text-navy-800 hover:bg-gray-100'}`}>
+                {highlight && <span style={{fontSize:12}}>🎁</span>}{label}
+                {highlight && <span style={{fontSize:9,fontWeight:800,background:'#22c55e',color:'#fff',padding:'1px 5px',borderRadius:20,marginLeft:2}}>FREE</span>}
               </NavLink>
             ))}
           </div>

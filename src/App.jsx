@@ -18,6 +18,7 @@ import NotFoundPage from '@pages/NotFoundPage'
 import AdminPage from '@pages/AdminPage'
 import UniversitiesPage from '@pages/UniversitiesPage'
 import ScholarshipChecker from '@pages/ScholarshipChecker'
+import ToolsPage from '@pages/ToolsPage'
 
 export default function App() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
               }
             />
             <Route path="universities" element={<UniversitiesPage />} />
+            <Route path="tools" element={<ToolsPage />} />
             <Route path="tools/eligibility-checker" element={<ScholarshipChecker />} />
             <Route path="admin" element={<AdminPage />} />
             <Route path="*" element={<NotFoundPage />} />
