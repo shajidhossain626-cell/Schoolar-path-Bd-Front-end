@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 const COUNTRIES = [
   {
@@ -3618,24 +3618,46 @@ scholarship: 'Wintec International Student Scholarship, New Zealand Excellence A
 
 ]
 
+// ── Featured (10 countries shown as big cards) ──
+const FEATURED_IDS = ['usa', 'uk', 'canada', 'australia', 'germany', 'japan', 'south_korea', 'italy', 'denmark', 'new_zealand']
+const FEATURED = COUNTRIES.filter(c => FEATURED_IDS.includes(c.id))
+  .sort((a,b) => FEATURED_IDS.indexOf(a.id) - FEATURED_IDS.indexOf(b.id))
+const MORE = COUNTRIES.filter(c => !FEATURED_IDS.includes(c.id))
+  .sort((a,b) => a.name.localeCompare(b.name))
+
 export default function UniversitiesPage() {
-  const [active, setActive] = useState('germany')
-  const [search, setSearch] = useState('')
+  const [active, setActive]           = useState(null)
+  const [moreVal, setMoreVal]         = useState('')
+  const [search, setSearch]           = useState('')
   const [fieldFilter, setFieldFilter] = useState('')
+  const [animKey, setAnimKey]         = useState(0)
+  const listRef = useRef(null)
 
-  const country = COUNTRIES.find(c => c.id === active)
+  const totalUniversities = COUNTRIES.reduce((a, c) => a + c.universities.length, 0)
+  const country = active ? COUNTRIES.find(c => c.id === active) : null
 
-  const filtered = country.universities.filter(u => {
-    const matchSearch = !search ||
-      u.name.toLowerCase().includes(search.toLowerCase()) ||
-      u.city.toLowerCase().includes(search.toLowerCase()) ||
-      u.scholarship.toLowerCase().includes(search.toLowerCase())
-    const matchField = !fieldFilter ||
-      u.fields.some(f => f.toLowerCase().includes(fieldFilter.toLowerCase()))
-    return matchSearch && matchField
-  })
+  const filtered = country ? country.universities.filter(u => {
+    const q = search.toLowerCase()
+    const ms = !search || u.name.toLowerCase().includes(q) ||
+               u.city.toLowerCase().includes(q) ||
+               u.scholarship.toLowerCase().includes(q)
+    const mf = !fieldFilter ||
+               u.fields.some(f => f.toLowerCase().includes(fieldFilter.toLowerCase()))
+    return ms && mf
+  }) : []
 
-  const allFields = [...new Set(country.universities.flatMap(u => u.fields))].sort()
+  const allFields = country
+    ? [...new Set(country.universities.flatMap(u => u.fields))].sort()
+    : []
+
+  function pick(id) {
+    setActive(id)
+    setMoreVal('')
+    setSearch('')
+    setFieldFilter('')
+    setAnimKey(k => k + 1)
+    setTimeout(() => listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
+  }
 
   return (
     <div className="min-h-screen" style={{ background: '#f7f8fc' }}>
@@ -3645,7 +3667,6 @@ export default function UniversitiesPage() {
         background: 'linear-gradient(135deg, #0f2444 0%, #1a3a6b 60%, #0f2444 100%)',
         paddingTop: '64px', paddingBottom: '64px', position: 'relative', overflow: 'hidden'
       }}>
-        {/* decorative circles */}
         <div style={{ position:'absolute', top:-60, right:-60, width:300, height:300, border:'1px solid rgba(255,255,255,.07)', borderRadius:'50%' }} />
         <div style={{ position:'absolute', bottom:-80, left:-40, width:240, height:240, border:'1px solid rgba(255,255,255,.05)', borderRadius:'50%' }} />
 
@@ -3659,183 +3680,311 @@ export default function UniversitiesPage() {
           <h1 style={{ fontSize:'clamp(28px,5vw,48px)', fontWeight:900, color:'#fff', lineHeight:1.1, marginBottom:14, maxWidth:640 }}>
             Find Your Dream University
           </h1>
-          <p style={{ fontSize:16, color:'rgba(255,255,255,.6)', maxWidth:520, lineHeight:1.7 }}>
-            Explore 80+ top-ranked universities across 8 countries — with official links, available scholarships, and key programs for Bangladeshi students.
+          <p style={{ fontSize:15, color:'rgba(255,255,255,.6)', maxWidth:520, lineHeight:1.7 }}>
+            {COUNTRIES.length} countries · {totalUniversities}+ universities — official links, scholarships &amp; key programs for Bangladeshi students.
           </p>
-
-          {/* Country pills */}
-          <div style={{ display:'flex', flexWrap:'wrap', gap:10, marginTop:32 }}>
-            {COUNTRIES.map(c => (
-              <button
-                key={c.id}
-                onClick={() => { setActive(c.id); setSearch(''); setFieldFilter('') }}
-                style={{
-                  padding:'10px 18px',
-                  borderRadius:50,
-                  border: active===c.id ? 'none' : '1px solid rgba(255,255,255,.2)',
-                  background: active===c.id ? '#22c55e' : 'rgba(255,255,255,.08)',
-                  color: active===c.id ? '#fff' : 'rgba(255,255,255,.75)',
-                  fontWeight:700, fontSize:13, cursor:'pointer',
-                  display:'flex', alignItems:'center', gap:7,
-                  transition:'all .2s',
-                  backdropFilter:'blur(4px)',
-                }}
-              >
-                <span style={{fontSize:18}}>{c.flag}</span>
-                {c.name}
-                <span style={{
-                  background: active===c.id ? 'rgba(255,255,255,.25)' : 'rgba(255,255,255,.1)',
-                  padding:'1px 7px', borderRadius:20, fontSize:11
-                }}>{c.universities.length}</span>
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 
-      {/* ── COUNTRY BAND ── */}
-      <div style={{
-        background: country.light,
-        borderBottom: `3px solid ${country.color}`,
-        padding:'18px 0'
-      }}>
-        <div className="container" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
-          <div style={{ display:'flex', alignItems:'center', gap:14 }}>
-            <span style={{ fontSize:40 }}>{country.flag}</span>
-            <div>
-              <div style={{ fontSize:20, fontWeight:900, color: country.color }}>{country.name}</div>
-              <div style={{ fontSize:13, color:'#64748b', marginTop:2 }}>{country.desc}</div>
+      {/* ── FEATURED COUNTRY CARDS ── */}
+      <div className="container" style={{ padding:'0 16px' }}>
+        {/* Cards float up over hero */}
+        <div style={{ marginTop:-36, position:'relative', zIndex:10 }}>
+          <div style={{
+            display:'grid',
+            gridTemplateColumns:'repeat(auto-fill, minmax(min(100%, 150px), 1fr))',
+            gap:12,
+          }}>
+            {FEATURED.map(c => {
+              const isOn = active === c.id
+              return (
+                <button
+                  key={c.id}
+                  onClick={() => pick(c.id)}
+                  style={{
+                    background: isOn
+                      ? `linear-gradient(145deg, ${c.color}, ${c.accent || c.color}bb)`
+                      : '#fff',
+                    border: isOn ? '2px solid transparent' : '1.5px solid #e2e8f0',
+                    borderRadius:18, padding:'20px 12px 16px',
+                    cursor:'pointer', textAlign:'center',
+                    transition:'all .22s cubic-bezier(.16,1,.3,1)',
+                    transform: isOn ? 'translateY(-6px)' : 'translateY(0)',
+                    boxShadow: isOn
+                      ? `0 20px 48px ${c.color}45`
+                      : '0 2px 12px rgba(0,0,0,.07)',
+                    position:'relative', overflow:'hidden',
+                  }}
+                  onMouseEnter={e => {
+                    if (!isOn) {
+                      e.currentTarget.style.transform = 'translateY(-4px)'
+                      e.currentTarget.style.boxShadow = `0 12px 32px rgba(0,0,0,.12)`
+                      e.currentTarget.style.borderColor = c.color + '55'
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!isOn) {
+                      e.currentTarget.style.transform = 'translateY(0)'
+                      e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,.07)'
+                      e.currentTarget.style.borderColor = '#e2e8f0'
+                    }
+                  }}
+                >
+                  {isOn && (
+                    <div style={{
+                      position:'absolute', inset:0,
+                      backgroundImage:'radial-gradient(circle at 80% 10%, rgba(255,255,255,.18) 0%, transparent 60%)'
+                    }} />
+                  )}
+                  <div style={{ fontSize:40, marginBottom:10, lineHeight:1, position:'relative', zIndex:1 }}>
+                    {c.flag}
+                  </div>
+                  <div style={{
+                    fontSize:12, fontWeight:800, lineHeight:1.3,
+                    color: isOn ? '#fff' : '#0f172a',
+                    position:'relative', zIndex:1,
+                  }}>{c.name}</div>
+                  <div style={{
+                    marginTop:8, fontSize:10, fontWeight:700,
+                    display:'inline-block', padding:'3px 10px', borderRadius:20,
+                    background: isOn ? 'rgba(255,255,255,.22)' : '#f1f5f9',
+                    color: isOn ? '#fff' : '#64748b',
+                    position:'relative', zIndex:1,
+                  }}>
+                    {c.universities.length} unis
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* ── MORE COUNTRIES BAR ── */}
+        {MORE.length > 0 && (
+          <div style={{
+            marginTop:16, background:'#fff',
+            border:'1.5px solid #e2e8f0', borderRadius:16,
+            padding:'16px 20px',
+            display:'flex', alignItems:'center', gap:14, flexWrap:'wrap',
+          }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
+              <span style={{ fontSize:20 }}>🌍</span>
+              <div>
+                <div style={{ fontSize:13, fontWeight:800, color:'#0f172a' }}>More Countries</div>
+                <div style={{ fontSize:10, color:'#94a3b8' }}>{MORE.length} more available</div>
+              </div>
+            </div>
+            <select
+              value={moreVal}
+              onChange={e => { setMoreVal(e.target.value); if(e.target.value) pick(e.target.value) }}
+              style={{
+                flex:1, minWidth:200, padding:'10px 14px',
+                border:'1.5px solid #e2e8f0', borderRadius:10,
+                fontSize:13, fontWeight:600, outline:'none',
+                background: '#f8faff', cursor:'pointer', color:'#0f172a',
+              }}
+            >
+              <option value="">— Select a country —</option>
+              {MORE.map(c => (
+                <option key={c.id} value={c.id}>
+                  {c.flag}  {c.name}  ({c.universities.length} universities)
+                </option>
+              ))}
+            </select>
+            {/* Quick pills for first few extra countries */}
+            <div style={{ display:'flex', flexWrap:'wrap', gap:6, flexShrink:0 }}>
+              {MORE.slice(0, 6).map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => pick(c.id)}
+                  style={{
+                    fontSize:12, padding:'6px 12px', borderRadius:20,
+                    border: active===c.id ? 'none' : '1px solid #e2e8f0',
+                    background: active===c.id ? c.color : '#f8faff',
+                    color: active===c.id ? '#fff' : '#475569',
+                    fontWeight:700, cursor:'pointer', transition:'all .15s',
+                    display:'flex', alignItems:'center', gap:5,
+                  }}
+                >
+                  <span style={{ fontSize:16 }}>{c.flag}</span>
+                  {c.name}
+                </button>
+              ))}
+              {MORE.length > 6 && (
+                <span style={{ fontSize:11, color:'#94a3b8', alignSelf:'center', fontWeight:600 }}>
+                  +{MORE.length - 6} more in dropdown ↑
+                </span>
+              )}
             </div>
           </div>
-          <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-            <input
-              placeholder="Search universities..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              style={{
-                padding:'9px 14px', border:'1.5px solid #e2e8f0', borderRadius:10,
-                fontSize:13, outline:'none', minWidth:200, background:'#fff'
-              }}
-            />
-            <select
-              value={fieldFilter}
-              onChange={e => setFieldFilter(e.target.value)}
-              style={{
-                padding:'9px 14px', border:'1.5px solid #e2e8f0', borderRadius:10,
-                fontSize:13, outline:'none', background:'#fff', cursor:'pointer'
-              }}
-            >
-              <option value="">All Fields</option>
-              {allFields.map(f => <option key={f} value={f}>{f}</option>)}
-            </select>
-          </div>
-        </div>
+        )}
       </div>
 
-      {/* ── UNIVERSITIES GRID ── */}
-      <div className="container" style={{ padding:'32px 16px' }}>
-        <div style={{ marginBottom:16, fontSize:13, color:'#94a3b8', fontWeight:600 }}>
-          {filtered.length} universities in {country.name}
-          {(search || fieldFilter) && (
-            <button
-              onClick={() => { setSearch(''); setFieldFilter('') }}
-              style={{ marginLeft:10, color:'#3b82f6', background:'none', border:'none', cursor:'pointer', fontSize:12, fontWeight:700 }}
-            >
-              Clear filters ×
-            </button>
-          )}
-        </div>
-
-        <div style={{
-          display:'grid',
-          gridTemplateColumns:'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
-          gap:16
-        }}>
-          {filtered.map((u, i) => (
-            <div
-              key={u.name}
-              style={{
-                background:'#fff',
-                borderRadius:16,
-                border:'1px solid #e2e8f0',
-                padding:'20px',
-                transition:'all .2s',
-                position:'relative',
-                overflow:'hidden',
-                animation:`fadeUp .4s ease ${i * 0.04}s both`
-              }}
-              onMouseEnter={e => { e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow='0 12px 32px rgba(15,36,68,.1)'; e.currentTarget.style.borderColor=country.color }}
-              onMouseLeave={e => { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow=''; e.currentTarget.style.borderColor='#e2e8f0' }}
-            >
-              {/* Rank badge */}
-              <div style={{
-                position:'absolute', top:16, right:16,
-                background: u.qs <= 50 ? '#fef9c3' : u.qs <= 150 ? '#f0fdf4' : '#f8fafc',
-                color: u.qs <= 50 ? '#854d0e' : u.qs <= 150 ? '#166534' : '#475569',
-                border: `1px solid ${u.qs <= 50 ? '#fde68a' : u.qs <= 150 ? '#bbf7d0' : '#e2e8f0'}`,
-                padding:'3px 9px', borderRadius:20, fontSize:11, fontWeight:700
-              }}>
-                QS #{u.qs}
-              </div>
-
-              {/* Flag + name */}
-              <div style={{ display:'flex', alignItems:'flex-start', gap:10, marginBottom:12, paddingRight:60 }}>
-                <span style={{ fontSize:28, flexShrink:0 }}>{country.flag}</span>
-                <div>
-                  <div style={{ fontSize:15, fontWeight:800, color:'#0f2444', lineHeight:1.3 }}>{u.name}</div>
-                  <div style={{ fontSize:12, color:'#94a3b8', marginTop:3, display:'flex', alignItems:'center', gap:4 }}>
-                    <span>📍</span>{u.city}
+      {/* ── UNIVERSITY LIST ── */}
+      <div ref={listRef} style={{ scrollMarginTop: 80 }}>
+        {!country ? (
+          /* Empty state — nothing selected yet */
+          <div className="container" style={{ textAlign:'center', padding:'64px 16px 48px' }}>
+            <div style={{ fontSize:64, marginBottom:18 }}>🌍</div>
+            <div style={{ fontSize:22, fontWeight:900, color:'#0f172a', marginBottom:8 }}>
+              Select a country to get started
+            </div>
+            <div style={{ fontSize:14, color:'#94a3b8', maxWidth:340, margin:'0 auto' }}>
+              Click any featured country card above, or choose from the dropdown to browse universities
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Country band */}
+            <div style={{
+              background: country.light || '#f8faff',
+              borderBottom: `3px solid ${country.color}`,
+              padding:'16px 0', marginTop:16,
+            }}>
+              <div className="container" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:14 }}>
+                  <span style={{ fontSize:40 }}>{country.flag}</span>
+                  <div>
+                    <div style={{ fontSize:20, fontWeight:900, color: country.color }}>{country.name}</div>
+                    <div style={{ fontSize:13, color:'#64748b', marginTop:2 }}>{country.desc}</div>
                   </div>
                 </div>
+                <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
+                  <input
+                    placeholder="Search universities..."
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    style={{
+                      padding:'9px 14px', border:'1.5px solid #e2e8f0', borderRadius:10,
+                      fontSize:13, outline:'none', minWidth:200, background:'#fff'
+                    }}
+                  />
+                  <select
+                    value={fieldFilter}
+                    onChange={e => setFieldFilter(e.target.value)}
+                    style={{
+                      padding:'9px 14px', border:'1.5px solid #e2e8f0', borderRadius:10,
+                      fontSize:13, outline:'none', background:'#fff', cursor:'pointer'
+                    }}
+                  >
+                    <option value="">All Fields</option>
+                    {allFields.map(f => <option key={f} value={f}>{f}</option>)}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Grid */}
+            <div className="container" style={{ padding:'28px 16px 32px' }}>
+              <div style={{ marginBottom:16, fontSize:13, color:'#94a3b8', fontWeight:600 }}>
+                {filtered.length} universities in {country.name}
+                {(search || fieldFilter) && (
+                  <button
+                    onClick={() => { setSearch(''); setFieldFilter('') }}
+                    style={{ marginLeft:10, color:'#3b82f6', background:'none', border:'none', cursor:'pointer', fontSize:12, fontWeight:700 }}
+                  >
+                    Clear filters ×
+                  </button>
+                )}
               </div>
 
-              {/* Fields */}
-              <div style={{ display:'flex', flexWrap:'wrap', gap:5, marginBottom:14 }}>
-                {u.fields.map(f => (
-                  <span key={f} style={{
-                    fontSize:10, fontWeight:700, padding:'3px 9px', borderRadius:20,
-                    background: country.light, color: country.color,
-                    border:`1px solid ${country.color}30`
-                  }}>{f}</span>
+              <div key={animKey} style={{
+                display:'grid',
+                gridTemplateColumns:'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
+                gap:16
+              }}>
+                {filtered.map((u, i) => (
+                  <div
+                    key={u.name}
+                    style={{
+                      background:'#fff', borderRadius:16,
+                      border:'1px solid #e2e8f0', padding:'20px',
+                      transition:'all .2s', position:'relative', overflow:'hidden',
+                      animation:`fadeUp .4s ease ${i * 0.04}s both`,
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.transform='translateY(-3px)'
+                      e.currentTarget.style.boxShadow=`0 12px 32px rgba(15,36,68,.1)`
+                      e.currentTarget.style.borderColor=country.color
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.transform=''
+                      e.currentTarget.style.boxShadow=''
+                      e.currentTarget.style.borderColor='#e2e8f0'
+                    }}
+                  >
+                    {/* Top row: flag + badge */}
+                    <div style={{ display:'flex', alignItems:'start', justifyContent:'space-between', gap:8, marginBottom:12 }}>
+                      <div style={{ fontSize:32, flexShrink:0 }}>{country.flag}</div>
+                      <span style={{
+                        fontSize:11, fontWeight:800, padding:'3px 9px', borderRadius:20, flexShrink:0,
+                        background: u.qs<=50?'#fef9c3':u.qs<=200?'#f0fdf4':'#f0f9ff',
+                        color: u.qs<=50?'#854d0e':u.qs<=200?'#166534':'#0369a1',
+                        border:`1px solid ${u.qs<=50?'#fde68a':u.qs<=200?'#bbf7d0':'#bae6fd'}`,
+                      }}>
+                        QS #{u.qs >= 999 ? '999+' : u.qs}
+                      </span>
+                    </div>
+
+                    <p style={{ fontSize:10, fontWeight:700, color:'#94a3b8', textTransform:'uppercase', letterSpacing:'.07em', marginBottom:6 }}>
+                      📍 {u.city}
+                    </p>
+                    <h3 style={{ fontSize:15, fontWeight:800, color:'#0f172a', lineHeight:1.3, marginBottom:10 }}>{u.name}</h3>
+
+                    {/* Fields */}
+                    <div style={{ display:'flex', flexWrap:'wrap', gap:5, marginBottom:12 }}>
+                      {u.fields.map(f => (
+                        <span key={f} style={{
+                          fontSize:10, fontWeight:700, padding:'3px 9px', borderRadius:20,
+                          background: country.light || '#f8fafc',
+                          color: country.color,
+                          border:`1px solid ${country.color}30`,
+                        }}>{f}</span>
+                      ))}
+                    </div>
+
+                    {/* Scholarship */}
+                    <div style={{
+                      background:'#f0fdf4', border:'1px solid #bbf7d0',
+                      borderRadius:9, padding:'8px 12px', marginBottom:14, fontSize:12
+                    }}>
+                      <span style={{ fontWeight:700, color:'#166534' }}>🎓 Scholarships: </span>
+                      <span style={{ color:'#166534' }}>{u.scholarship}</span>
+                    </div>
+
+                    {/* Link */}
+                    <a
+                      href={u.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display:'flex', alignItems:'center', justifyContent:'center', gap:6,
+                        padding:'10px 16px', background: country.color, color:'#fff',
+                        borderRadius:10, textDecoration:'none', fontSize:13, fontWeight:700,
+                        transition:'opacity .15s', width:'100%'
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.opacity='.85'}
+                      onMouseLeave={e => e.currentTarget.style.opacity='1'}
+                    >
+                      🌐 Visit Official Website
+                      <span style={{ fontSize:12 }}>→</span>
+                    </a>
+                  </div>
                 ))}
               </div>
 
-              {/* Scholarship */}
-              <div style={{
-                background:'#f0fdf4', border:'1px solid #bbf7d0',
-                borderRadius:9, padding:'8px 12px', marginBottom:14, fontSize:12
-              }}>
-                <span style={{ fontWeight:700, color:'#166534' }}>🎓 Scholarships: </span>
-                <span style={{ color:'#166534' }}>{u.scholarship}</span>
-              </div>
-
-              {/* Link button */}
-              <a
-                href={u.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display:'flex', alignItems:'center', justifyContent:'center', gap:6,
-                  padding:'10px 16px', background: country.color, color:'#fff',
-                  borderRadius:10, textDecoration:'none', fontSize:13, fontWeight:700,
-                  transition:'opacity .15s', width:'100%'
-                }}
-                onMouseEnter={e => e.currentTarget.style.opacity='.85'}
-                onMouseLeave={e => e.currentTarget.style.opacity='1'}
-              >
-                🌐 Visit Official Website
-                <span style={{ fontSize:12 }}>→</span>
-              </a>
+              {filtered.length === 0 && (
+                <div style={{ textAlign:'center', padding:'60px 20px', color:'#94a3b8' }}>
+                  <div style={{ fontSize:48, marginBottom:12 }}>🔍</div>
+                  <div style={{ fontSize:16, fontWeight:700, color:'#475569', marginBottom:6 }}>No universities match</div>
+                  <button onClick={() => { setSearch(''); setFieldFilter('') }}
+                    style={{ marginTop:8, padding:'9px 18px', background:'#f1f5f9', border:'none', borderRadius:9, fontSize:13, fontWeight:700, cursor:'pointer', color:'#475569' }}>
+                    Clear Filters
+                  </button>
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <div style={{ textAlign:'center', padding:'60px 20px', color:'#94a3b8' }}>
-            <div style={{ fontSize:48, marginBottom:12 }}>🔍</div>
-            <div style={{ fontSize:16, fontWeight:700, color:'#475569', marginBottom:6 }}>No universities match</div>
-            <div style={{ fontSize:13 }}>Try clearing your filters</div>
-          </div>
+          </>
         )}
       </div>
 
@@ -3864,12 +4013,12 @@ export default function UniversitiesPage() {
         </div>
       </div>
 
-      <style>{`
+      <style>{\`
         @keyframes fadeUp {
           from { opacity:0; transform:translateY(16px) }
           to   { opacity:1; transform:translateY(0) }
         }
-      `}</style>
+      \`}</style>
     </div>
   )
 }
