@@ -35,7 +35,7 @@ export default function Navbar({ onOpenAuth }) {
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
-            {NAV_LINKS.map(({ to, label, end }) => (
+            {NAV_LINKS.map(({ to, label, end, highlight }) => (
               <NavLink key={to} to={to} end={end}
                 className={({ isActive }) =>
                   highlight
