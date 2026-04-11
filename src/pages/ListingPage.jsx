@@ -59,7 +59,7 @@ export default function ListingPage() {
         </div>
       </div>
 
-      <div className="container py-6">
+      <div className="container py-6" style={{overflowX:"hidden"}}>
 
         {/* ── MOBILE FILTER TOGGLE BUTTON ── */}
         <div className="md:hidden mb-4 flex gap-3">
@@ -88,7 +88,7 @@ export default function ListingPage() {
         )}
 
         {/* ── DESKTOP: side by side layout ── */}
-        <div className="grid md:grid-cols-[260px_1fr] gap-7 items-start">
+        <div className="grid md:grid-cols-[260px_1fr] gap-7 items-start w-full" style={{minWidth:0}}>
 
           {/* Sidebar — hidden on mobile, shown on desktop */}
           <div className="hidden md:block">
@@ -96,7 +96,7 @@ export default function ListingPage() {
           </div>
 
           {/* Main content */}
-          <div>
+          <div style={{minWidth:0,overflow:"hidden"}}>
 
             {/* Header row */}
             <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
@@ -120,7 +120,7 @@ export default function ListingPage() {
 
             {/* Cards */}
             {visibleCards.length > 0 ? (
-              <div className="grid sm:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {visibleCards.map(s => <ScholarshipCard key={s.id} scholarship={s} />)}
               </div>
             ) : (
