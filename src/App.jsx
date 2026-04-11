@@ -19,6 +19,10 @@ import AdminPage from '@pages/AdminPage'
 import UniversitiesPage from '@pages/UniversitiesPage'
 import ScholarshipChecker from '@pages/ScholarshipChecker'
 import ToolsPage from '@pages/ToolsPage'
+import DocumentChecklist from '@pages/DocumentChecklist'
+import CGPAConverter from '@pages/CGPAConverter'
+import CostCalculator from '@pages/CostCalculator'
+import SOPAnalyzer from '@pages/SOPAnalyzer'
 
 export default function App() {
   return (
@@ -45,6 +49,10 @@ export default function App() {
             <Route path="universities" element={<UniversitiesPage />} />
             <Route path="tools" element={<ToolsPage />} />
             <Route path="tools/eligibility-checker" element={<ScholarshipChecker />} />
+            <Route path="tools/document-checklist" element={<DocumentChecklist />} />
+            <Route path="tools/cgpa-converter" element={<CGPAConverter />} />
+            <Route path="tools/cost-calculator" element={<CostCalculator />} />
+            <Route path="tools/sop-analyzer" element={<SOPAnalyzer />} />
             <Route path="admin" element={<AdminPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
