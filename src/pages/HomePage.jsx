@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useScholarships } from '@context/ScholarshipContext'
 import ScholarshipCard from '@components/common/ScholarshipCard'
 
-const STATS = [['500+', 'Scholarships'], ['2,400+', 'Students Helped'], ['94%', 'Success Rate'], ['20+', 'Countries']]
+const STATS = [['80+', 'Scholarships'], ['2,400+', 'Students Helped'], ['94%', 'Success Rate'], ['30+', 'Countries']]
 const STEPS = [
   { n: 1, title: 'Discover & Match', desc: 'Use our smart filters and search to find scholarships perfectly matched to your profile, field, and goals.' },
   { n: 2, title: 'Prepare & Upload', desc: 'Get a personalized document checklist. Upload files securely to your dashboard. Our experts review everything.' },
@@ -125,7 +125,7 @@ export default function HomePage() {
             {featured.map(s => <ScholarshipCard key={s.id} scholarship={s} />)}
           </div>
           <div className="text-center mt-10">
-            <Link to="/scholarships" className="btn btn-outline btn-lg">View All 500+ Scholarships →</Link>
+            <Link to="/scholarships" className="btn btn-outline btn-lg">View All 80+ Scholarships →</Link>
           </div>
         </div>
       </section>
@@ -175,50 +175,6 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-
-      {/* FREE TOOLS SECTION */}
-      <section style={{ background:'linear-gradient(135deg,#f0fdf4 0%,#eff6ff 100%)', padding:'72px 0' }}>
-        <div className="container">
-          <div style={{ textAlign:'center', marginBottom:40 }}>
-            <div style={{ display:'inline-flex', alignItems:'center', gap:7, background:'#dcfce7', border:'1px solid #bbf7d0', borderRadius:50, padding:'6px 16px', marginBottom:16 }}>
-              <span style={{ fontSize:14 }}>🎁</span>
-              <span style={{ fontSize:11, fontWeight:800, color:'#166534', letterSpacing:'.08em', textTransform:'uppercase' }}>100% Free — No Signup</span>
-            </div>
-            <h2 className="font-head font-black text-3xl text-navy-800 mb-3">Free Tools for Bangladeshi Students</h2>
-            <p className="text-gray-500 text-base max-w-md mx-auto">Start your scholarship journey with our free tools — used by 2,400+ students</p>
-          </div>
-
-          {/* Featured tool card */}
-          <div style={{ background:'#fff', borderRadius:24, border:'2px solid #22c55e', boxShadow:'0 16px 48px rgba(34,197,94,.12)', padding:'32px', marginBottom:20, display:'flex', alignItems:'center', gap:28, flexWrap:'wrap' }}>
-            <div style={{ flex:1, minWidth:240 }}>
-              <div style={{ fontSize:42, marginBottom:12 }}>🎯</div>
-              <div style={{ display:'inline-block', background:'#dcfce7', color:'#166534', fontSize:11, fontWeight:800, padding:'3px 12px', borderRadius:20, marginBottom:10, textTransform:'uppercase', letterSpacing:'.06em' }}>Most Popular Tool</div>
-              <h3 className="font-head font-black text-2xl text-navy-800 mb-2">Scholarship Eligibility Checker</h3>
-              <p className="text-gray-500 text-sm leading-relaxed mb-4">Enter your CGPA, IELTS, age & field — see which scholarships you qualify for in 30 seconds. With match score and tips for each.</p>
-              <div style={{ display:'flex', flexWrap:'wrap', gap:7, marginBottom:20 }}>
-                {['12 scholarships checked','% match score','Free consultation'].map(f => (
-                  <span key={f} style={{ fontSize:11, fontWeight:700, background:'#f0fdf4', color:'#166534', padding:'4px 11px', borderRadius:20, border:'1px solid #bbf7d0' }}>✓ {f}</span>
-                ))}
-              </div>
-              <Link to="/tools/eligibility-checker" className="btn btn-primary">🎯 Check My Eligibility — Free →</Link>
-            </div>
-            <div style={{ background:'#f8fafc', borderRadius:16, padding:'20px', minWidth:200, flexShrink:0 }}>
-              <div style={{ fontSize:11, fontWeight:800, color:'#94a3b8', marginBottom:12, textTransform:'uppercase', letterSpacing:'.06em' }}>Sample results</div>
-              {[{n:'Chevening UK',s:87,c:'#22c55e'},{n:'DAAD Germany',s:74,c:'#22c55e'},{n:'GKS Korea',s:52,c:'#f59e0b'},{n:'MEXT Japan',s:40,c:'#f97316'}].map(r => (
-                <div key={r.n} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'7px 0', borderBottom:'1px solid #e2e8f0' }}>
-                  <span style={{ fontSize:12, color:'#475569', fontWeight:600 }}>{r.n}</span>
-                  <span style={{ fontSize:13, fontWeight:900, color:r.c }}>{r.s}%</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div style={{ textAlign:'center' }}>
-            <Link to="/tools" className="btn btn-outline btn-lg">View All Free Tools →</Link>
           </div>
         </div>
       </section>
