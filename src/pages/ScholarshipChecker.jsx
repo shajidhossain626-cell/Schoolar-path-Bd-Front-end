@@ -255,12 +255,26 @@ function scoreScholarship(s, form) {
     misses.push('Work experience is preferred for this scholarship')
   }
 
+  // Publications / research bonus (extra credit — boosts score)
+  const pubs = parseInt(form.publications) || 0
+  if (pubs >= 3) {
+    score += 8
+    reasons.push(`${pubs} publications — strong research profile ✓`)
+  } else if (pubs >= 1) {
+    score += 4
+    reasons.push(`${pubs} publication(s) — adds value to application ✓`)
+  }
+  if (form.researchExp) {
+    score += 4
+    reasons.push('Research lab / thesis experience ✓')
+  }
+
   return { score: Math.min(score, 100), reasons, misses }
 }
 
 export default function ScholarshipChecker() {
   const [step, setStep] = useState(1)
-  const [form, setForm] = useState({ degree:'masters', cgpa:'', ielts:'', age:'', field:'engineering', workExp:false })
+  const [form, setForm] = useState({ degree:'masters', cgpa:'', ielts:'', age:'', field:'engineering', workExp:false, publications:0, researchExp:false })
   const [results, setResults] = useState(null)
   const [showAll, setShowAll] = useState(false)
   const [lead, setLead] = useState({ name:'', phone:'', submitted:false })
@@ -419,6 +433,47 @@ export default function ScholarshipChecker() {
                     I have work experience (any job, internship, or volunteer work)
                   </span>
                 </label>
+              </div>
+
+              {/* Publications & Research Section */}
+              <div style={{ gridColumn:'1/-1', background:'linear-gradient(135deg,#f0f9ff,#eff6ff)', border:'1.5px solid #bfdbfe', borderRadius:14, padding:'18px 20px' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:14 }}>
+                  <span style={{ fontSize:18 }}>📚</span>
+                  <div>
+                    <div style={{ fontSize:13, fontWeight:800, color:'#1e40af' }}>Publications & Research (Bonus Points)</div>
+                    <div style={{ fontSize:11, color:'#3b82f6', marginTop:1 }}>These significantly boost your profile for PhD and Research scholarships</div>
+                  </div>
+                </div>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
+                  <div>
+                    <label style={{ ...labelStyle, color:'#1e40af' }}>
+                      {form.degree === 'bachelors' ? 'Conference papers / presentations' : 'Published papers / articles'}
+                    </label>
+                    <select value={form.publications} onChange={e => update('publications', e.target.value)}
+                      style={{ ...inputStyle, background:'#fff', border:'1.5px solid #bfdbfe' }}>
+                      <option value={0}>0 — None yet</option>
+                      <option value={1}>1 publication</option>
+                      <option value={2}>2 publications</option>
+                      <option value={3}>3 publications</option>
+                      <option value={5}>4–5 publications</option>
+                      <option value={8}>6+ publications</option>
+                    </select>
+                    <div style={{ fontSize:10, color:'#60a5fa', marginTop:4 }}>
+                      {form.degree === 'phd' ? 'Journals, conference papers, book chapters count' : form.degree === 'masters' ? 'Journal articles and conference papers count' : 'Conference presentations and workshop papers count'}
+                    </div>
+                  </div>
+                  <div>
+                    <label style={{ ...labelStyle, color:'#1e40af' }}>Research experience</label>
+                    <label style={{ display:'flex', alignItems:'flex-start', gap:10, cursor:'pointer', padding:'12px 14px', background:'#fff', borderRadius:10, border:'1.5px solid', borderColor:form.researchExp?'#3b82f6':'#bfdbfe', transition:'all .15s' }}>
+                      <input type="checkbox" checked={form.researchExp} onChange={e => update('researchExp', e.target.checked)}
+                        style={{ width:17, height:17, accentColor:'#1e40af', cursor:'pointer', marginTop:1, flexShrink:0 }} />
+                      <span style={{ fontSize:12, fontWeight:600, color:'#1e40af', lineHeight:1.4 }}>
+                        I have research lab / thesis / RA experience
+                      </span>
+                    </label>
+                    <div style={{ fontSize:10, color:'#60a5fa', marginTop:4 }}>Lab work, thesis writing, or research assistant roles</div>
+                  </div>
+                </div>
               </div>
 
             </div>

@@ -2,20 +2,23 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const SCALES = [
-  { from:'cgpa4', label:'CGPA (4.0 scale)', placeholder:'e.g. 3.50', min:0, max:4 },
-  { from:'cgpa5', label:'CGPA (5.0 scale)', placeholder:'e.g. 4.20', min:0, max:5 },
-  { from:'pct',   label:'Percentage (%)',   placeholder:'e.g. 85.5',  min:0, max:100 },
+  { from:'cgpa4',  label:'CGPA (4.0 scale)',  placeholder:'e.g. 3.50', min:0, max:4 },
+  { from:'cgpa5',  label:'CGPA (5.0 scale)',  placeholder:'e.g. 4.20', min:0, max:5 },
+  { from:'cgpa10', label:'CGPA (10.0 scale)', placeholder:'e.g. 8.50', min:0, max:10 },
+  { from:'pct',    label:'Percentage (%)',    placeholder:'e.g. 85.5',  min:0, max:100 },
 ]
 
 function toAll(val, from) {
   let pct = 0
-  if (from === 'cgpa4') pct = (val / 4) * 100
-  else if (from === 'cgpa5') pct = (val / 5) * 100
+  if (from === 'cgpa4')  pct = (val / 4) * 100
+  else if (from === 'cgpa5')  pct = (val / 5) * 100
+  else if (from === 'cgpa10') pct = (val / 10) * 100
   else pct = val
 
   pct = Math.min(100, Math.max(0, pct))
-  const cgpa4 = (pct / 100) * 4
-  const cgpa5 = (pct / 100) * 5
+  const cgpa4  = (pct / 100) * 4
+  const cgpa5  = (pct / 100) * 5
+  const cgpa10 = (pct / 100) * 10
 
   let ukClass = '', ukColor = ''
   if (pct >= 70)      { ukClass = '1st Class (Distinction)'; ukColor = '#166534' }
@@ -32,13 +35,14 @@ function toAll(val, from) {
   else if (cgpa4 >= 2.0) usGrade = 'C (Average)'
   else usGrade = 'Below Average'
 
+  const cgpa10Note = cgpa10 >= 8.0 ? '10-scale: Excellent — eligible for IIT scholarships, ICCR India' : cgpa10 >= 7.0 ? '10-scale: Good — meets most South Asian scholarship requirements' : '10-scale: Check minimum requirements for your target scholarship'
   const scholarshipNote =
     cgpa4 >= 3.5 ? '🟢 Excellent — eligible for most competitive scholarships (DAAD, Chevening, Fulbright)'
     : cgpa4 >= 3.0 ? '🟡 Good — eligible for most scholarships. Strengthen with IELTS & work experience'
     : cgpa4 >= 2.64 ? '🟠 Meets minimum — eligible for GKS Korea, CSC China, Stipendium Hungaricum'
     : '🔴 Below common minimums — focus on improving other profile components'
 
-  return { pct: pct.toFixed(2), cgpa4: cgpa4.toFixed(2), cgpa5: cgpa5.toFixed(2), ukClass, ukColor, usGrade, scholarshipNote }
+  return { pct: pct.toFixed(2), cgpa4: cgpa4.toFixed(2), cgpa5: cgpa5.toFixed(2), cgpa10: cgpa10.toFixed(2), ukClass, ukColor, usGrade, scholarshipNote }
 }
 
 export default function CGPAConverter() {
@@ -88,11 +92,12 @@ export default function CGPAConverter() {
 
         {result && (
           <div>
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12, marginBottom:14 }}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))', gap:12, marginBottom:14 }}>
               {[
-                { label:'CGPA (4.0 scale)', value:result.cgpa4, sub:'Used by USA, Canada, most scholarships', color:'#3b82f6' },
-                { label:'CGPA (5.0 scale)', value:result.cgpa5, sub:'Used by many Bangladeshi universities', color:'#8b5cf6' },
-                { label:'Percentage (%)', value:`${result.pct}%`, sub:'Universal standard', color:'#f97316' },
+                { label:'CGPA (4.0 scale)',  value:result.cgpa4,          sub:'USA, Canada, Europe, most scholarships', color:'#3b82f6' },
+                { label:'CGPA (5.0 scale)',  value:result.cgpa5,          sub:'Many Bangladeshi universities',          color:'#8b5cf6' },
+                { label:'CGPA (10.0 scale)', value:result.cgpa10,         sub:'India, South Asia, some EU programs',   color:'#14b8a6' },
+                { label:'Percentage (%)',    value:`${result.pct}%`,      sub:'Universal — accepted everywhere',       color:'#f97316' },
               ].map(c => (
                 <div key={c.label} style={{ background:'#fff', borderRadius:14, border:'1px solid #e2e8f0', padding:'18px 14px', textAlign:'center' }}>
                   <div style={{ fontSize:11, fontWeight:700, color:'#94a3b8', textTransform:'uppercase', letterSpacing:'.06em', marginBottom:6 }}>{c.label}</div>
