@@ -4,7 +4,7 @@ import { NewsletterFull } from '@components/common/NewsletterSignup'
 import { useScholarships } from '@context/ScholarshipContext'
 import ScholarshipCard from '@components/common/ScholarshipCard'
 
-const STATS = [['500+', 'Scholarships'], ['2,400+', 'Students Helped'], ['94%', 'Success Rate'], ['20+', 'Countries']]
+const STATS = [['80+', 'Scholarships'], ['2,400+', 'Students Helped'], ['94%', 'Success Rate'], ['20+', 'Countries']]
 const STEPS = [
   { n: 1, title: 'Discover & Match', desc: 'Use our smart filters and search to find scholarships perfectly matched to your profile, field, and goals.' },
   { n: 2, title: 'Prepare & Upload', desc: 'Get a personalized document checklist. Upload files securely to your dashboard. Our experts review everything.' },
@@ -172,51 +172,61 @@ export default function HomePage() {
 
       {/* DEADLINE CAROUSEL */}
       <div style={{ background:'#0f2444', padding:0 }}>
-        <div className="container" style={{ paddingTop:0, paddingBottom:0 }}>
-          <div style={{ display:'flex', alignItems:'center', overflow:'hidden' }}>
-            <div style={{ background:'#ef4444', padding:'10px 16px', display:'flex', alignItems:'center', gap:6, flexShrink:0 }}>
-              <div style={{ width:8, height:8, borderRadius:'50%', background:'#fff', animation:'dlpulse 1s infinite' }} />
-              <span style={{ fontSize:11, fontWeight:800, color:'#fff', textTransform:'uppercase', letterSpacing:'.1em', whiteSpace:'nowrap' }}>
+        <div style={{ paddingTop:0, paddingBottom:0 }}>
+          <div style={{ display:'flex', alignItems:'center', width:'100%' }}>
+
+            {/* Red label — always visible */}
+            <div style={{ background:'#ef4444', padding:'12px 14px', display:'flex', alignItems:'center', gap:6, flexShrink:0 }}>
+              <div style={{ width:7, height:7, borderRadius:'50%', background:'#fff', animation:'dlpulse 1s infinite' }} />
+              <span style={{ fontSize:10, fontWeight:800, color:'#fff', textTransform:'uppercase', letterSpacing:'.1em', whiteSpace:'nowrap' }}>
                 Deadlines
               </span>
             </div>
-            <div style={{ flex:1, overflow:'hidden', position:'relative', height:40 }}>
+
+            {/* Sliding content — takes all remaining space */}
+            <div style={{ flex:1, overflow:'hidden', position:'relative', height:44, minWidth:0 }}>
               {DEADLINES.map((d, i) => (
                 <div key={d.name}
                   style={{
-                    position:'absolute', inset:0, display:'flex', alignItems:'center', gap:12, padding:'0 20px',
+                    position:'absolute', inset:0,
+                    display:'flex', alignItems:'center',
+                    gap:8, padding:'0 12px',
                     transition:'opacity .5s ease, transform .5s ease',
                     opacity: i === deadlineIdx ? 1 : 0,
                     transform: i === deadlineIdx ? 'translateY(0)' : i < deadlineIdx ? 'translateY(-100%)' : 'translateY(100%)',
                   }}>
-                  <span style={{ fontSize:20 }}>{d.flag}</span>
-                  <span style={{ fontSize:13, fontWeight:700, color:'rgba(255,255,255,.9)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:320 }}>
+                  {/* Flag */}
+                  <span style={{ fontSize:18, flexShrink:0 }}>{d.flag}</span>
+                  {/* Name — takes available space, truncates */}
+                  <span style={{ fontSize:12, fontWeight:700, color:'rgba(255,255,255,.95)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', flex:1, minWidth:0 }}>
                     {d.name}
                   </span>
-                  <span style={{ fontSize:11, color:'rgba(255,255,255,.4)', whiteSpace:'nowrap', flexShrink:0 }}>
-                    {d.country}
+                  {/* Date badge — always visible, right-aligned */}
+                  <span style={{
+                    fontSize:10, fontWeight:800, padding:'3px 9px', borderRadius:20, whiteSpace:'nowrap', flexShrink:0,
+                    background: d.urgent ? '#ef4444' : d.days <= 120 ? '#f59e0b' : '#22c55e',
+                    color:'#fff'
+                  }}>
+                    {d.urgent ? '🔥' : ''} {d.date}
                   </span>
-                  <div style={{ marginLeft:'auto', flexShrink:0 }}>
-                    <span style={{
-                      fontSize:11, fontWeight:800, padding:'3px 10px', borderRadius:20, whiteSpace:'nowrap',
-                      background: d.urgent ? '#ef4444' : d.days <= 120 ? '#f59e0b' : '#22c55e',
-                      color:'#fff'
-                    }}>
-                      {d.urgent ? '🔥 ' : ''}{d.date}
-                    </span>
-                  </div>
                 </div>
               ))}
             </div>
-            <div style={{ display:'flex', gap:4, padding:'0 12px', flexShrink:0 }}>
+
+            {/* Dots — hidden on mobile, visible on md+ */}
+            <div className="hidden md:flex" style={{ gap:4, padding:'0 10px', flexShrink:0 }}>
               {DEADLINES.map((_, i) => (
                 <button key={i} onClick={() => setDeadlineIdx(i)}
-                  style={{ width: i===deadlineIdx ? 16 : 5, height:5, borderRadius:3, background: i===deadlineIdx ? '#22c55e' : 'rgba(255,255,255,.25)', border:'none', cursor:'pointer', padding:0, transition:'all .3s' }} />
+                  style={{ width: i===deadlineIdx ? 14 : 5, height:5, borderRadius:3, background: i===deadlineIdx ? '#22c55e' : 'rgba(255,255,255,.25)', border:'none', cursor:'pointer', padding:0, transition:'all .3s' }} />
               ))}
             </div>
-            <Link to="/scholarships" style={{ padding:'10px 16px', fontSize:11, fontWeight:800, color:'rgba(255,255,255,.5)', textDecoration:'none', whiteSpace:'nowrap', flexShrink:0, borderLeft:'1px solid rgba(255,255,255,.1)' }}>
-              View All →
+
+            {/* View All — hidden on mobile */}
+            <Link to="/scholarships" className="hidden md:block"
+              style={{ padding:'12px 14px', fontSize:11, fontWeight:800, color:'rgba(255,255,255,.5)', textDecoration:'none', whiteSpace:'nowrap', flexShrink:0, borderLeft:'1px solid rgba(255,255,255,.1)' }}>
+              All →
             </Link>
+
           </div>
         </div>
       </div>
@@ -233,7 +243,7 @@ export default function HomePage() {
             {featured.map(s => <ScholarshipCard key={s.id} scholarship={s} />)}
           </div>
           <div className="text-center mt-10">
-            <Link to="/scholarships" className="btn btn-outline btn-lg">View All 500+ Scholarships →</Link>
+            <Link to="/scholarships" className="btn btn-outline btn-lg">View All 80+ Scholarships →</Link>
           </div>
         </div>
       </section>
