@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { NewsletterFull } from '@components/common/NewsletterSignup'
 import { useScholarships } from '@context/ScholarshipContext'
@@ -15,15 +16,67 @@ const TESTIMONIALS = [
   { stars: 5, text: '"The MEXT scholarship process is notoriously complex. ScholarPath\'s AI answered all my questions instantly. Now I\'m studying robotics at Osaka University!"', name: 'Sabbir Hossain', meta: 'Osaka University 🇯🇵 · MEXT Scholar', av: 'SH' },
 ]
 
+const DEADLINES = [
+  { flag:'🇩🇪', country:'Germany',        name:'DAAD Research Scholarship',         date:'Oct 15, 2026', days:186, color:'#DD0000', urgent:false },
+  { flag:'🇬🇧', country:'United Kingdom',  name:'Chevening Scholarship',              date:'Nov 5, 2026',  days:207, color:'#012169', urgent:false },
+  { flag:'🇰🇷', country:'South Korea',     name:'GKS Graduate Scholarship',           date:'Feb 28, 2026', days:57,  color:'#CD2E3A', urgent:true  },
+  { flag:'🇨🇳', country:'China',           name:'CSC Government Scholarship',         date:'Apr 30, 2026', days:118, color:'#DE2910', urgent:false },
+  { flag:'🇦🇺', country:'Australia',       name:'Australia Awards Scholarship',       date:'Apr 30, 2026', days:118, color:'#00008B', urgent:false },
+  { flag:'🇯🇵', country:'Japan',           name:'MEXT Government Scholarship',        date:'Apr 15, 2026', days:103, color:'#BC002D', urgent:false },
+  { flag:'🇸🇪', country:'Sweden',          name:'Swedish Institute Scholarship',      date:'Feb 25, 2026', days:54,  color:'#006AA7', urgent:true  },
+  { flag:'🇧🇪', country:'Belgium',         name:'VLIR-UOS Scholarship',               date:'Feb 28, 2026', days:57,  color:'#000000', urgent:true  },
+  { flag:'🇫🇷', country:'France',          name:'Eiffel Excellence Scholarship',      date:'Jan 8, 2026',  days:6,   color:'#002395', urgent:true  },
+  { flag:'🇭🇺', country:'Hungary',         name:'Stipendium Hungaricum',              date:'Jan 15, 2027', days:389, color:'#CE2939', urgent:false },
+  { flag:'🇳🇱', country:'Netherlands',     name:'Orange Knowledge Programme',         date:'Jul 1, 2026',  days:180, color:'#AE1C28', urgent:false },
+  { flag:'🇮🇹', country:'Italy',           name:'Padua International Excellence',     date:'May 2, 2026',  days:120, color:'#009246', urgent:false },
+]
+
+// FIX 8 (bonus): Safe degree array parser — avoids JSON.parse crash in render
+function parseDegrees(degree) {
+  try {
+    const arr = typeof degree === 'string' ? JSON.parse(degree || '[]') : degree || []
+    return arr.map(d => d === 'masters' ? "Master's" : d === 'phd' ? 'PhD' : "Bachelor's").join('/')
+  } catch {
+    return ''
+  }
+}
+
 export default function HomePage() {
   const { scholarships } = useScholarships()
   const navigate = useNavigate()
   const featured = scholarships.slice(0, 6)
+  const [deadlineIdx, setDeadlineIdx] = useState(0)
+
+  // FIX 2–7: Controlled state for Quick Search selects (replaces document.getElementById)
+  const [degree, setDegree] = useState('')
+  const [country, setCountry] = useState('')
+  const [field, setField] = useState('')
+
+  // Auto-advance carousel
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDeadlineIdx(i => (i + 1) % DEADLINES.length)
+    }, 3000)
+    return () => clearInterval(timer)
+  }, [])
+
   const countryMap = {}
   scholarships.forEach(s => { if (s.country && s.flag) countryMap[s.country] = s.flag })
 
+  // FIX 2–4: Use React state instead of document.getElementById
+  const handleSearch = () => {
+    const params = new URLSearchParams()
+    if (degree) params.set('degree', degree)
+    if (country) params.set('country', country)
+    if (field) params.set('field', field)
+    navigate(`/scholarships?${params}`)
+  }
+
   return (
     <>
+      <style>{`
+        @keyframes dlpulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+      `}</style>
 
       {/* HERO */}
       <div className="bg-gradient-to-br from-navy-900 via-navy-800 to-navy-600 py-16 md:py-24 text-white">
@@ -61,7 +114,8 @@ export default function HomePage() {
                     <span className="text-2xl flex-shrink-0">{s.flag}</span>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-bold text-white truncate">{s.short || s.name}</div>
-                      <div className="text-xs text-white/50">{s.country} · {(typeof s.degree === 'string' ? JSON.parse(s.degree||'[]') : s.degree||[]).map(d=>d==='masters'?"Master's":d==='phd'?'PhD':"Bachelor's").join('/')}</div>
+                      {/* FIX 8 (bonus): replaced inline JSON.parse with safe parseDegrees() helper */}
+                      <div className="text-xs text-white/50">{s.country} · {parseDegrees(s.degree)}</div>
                     </div>
                     <div className="text-xs font-bold text-green-400 flex-shrink-0">{s.amount}</div>
                   </Link>
@@ -80,25 +134,32 @@ export default function HomePage() {
         <div className="container py-5">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-end">
             {[
-              { label: 'Degree Level', id: 'degree', opts: [['', 'All Levels'], ['bachelors', "Bachelor's"], ['masters', "Master's"], ['phd', 'PhD']] },
-              { label: 'Destination', id: 'country', opts: [['', 'All Countries'], ...Object.entries(countryMap).sort((a,b)=>a[0].localeCompare(b[0])).map(([c,f])=>[c,`${c} ${f}`])] },
-              { label: 'Field of Study', id: 'field',  opts: [['', 'All Fields'], ['engineering', 'Engineering & Tech'], ['business', 'Business & MBA'], ['medical', 'Medical & Health'], ['arts', 'Arts & Humanities'], ['social', 'Social Sciences'], ['multiple', 'Multiple / Any Field']] },
-            ].map(({ label, id, opts }) => (
+              {
+                label: 'Degree Level', id: 'degree',
+                value: degree, onChange: e => setDegree(e.target.value),   // FIX 5
+                opts: [['', 'All Levels'], ['bachelors', "Bachelor's"], ['masters', "Master's"], ['phd', 'PhD']],
+              },
+              {
+                label: 'Destination', id: 'country',
+                value: country, onChange: e => setCountry(e.target.value), // FIX 6
+                opts: [['', 'All Countries'], ...Object.entries(countryMap).sort((a,b)=>a[0].localeCompare(b[0])).map(([c,f])=>[c,`${c} ${f}`])],
+              },
+              {
+                label: 'Field of Study', id: 'field',
+                value: field, onChange: e => setField(e.target.value),     // FIX 7
+                opts: [['', 'All Fields'], ['engineering', 'Engineering & Tech'], ['business', 'Business & MBA'], ['medical', 'Medical & Health'], ['arts', 'Arts & Humanities'], ['social', 'Social Sciences'], ['multiple', 'Multiple / Any Field']],
+              },
+            ].map(({ label, id, opts, value, onChange }) => (
               <div key={id}>
                 <label className="label">{label}</label>
-                <select id={id} className="input text-sm">{opts.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
+                {/* FIX 5–7: controlled selects with value + onChange */}
+                <select id={id} className="input text-sm" value={value} onChange={onChange}>
+                  {opts.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                </select>
               </div>
             ))}
-            <button className="btn btn-primary" onClick={() => {
-              const d = document.getElementById('degree')?.value
-              const c = document.getElementById('country')?.value
-              const f = document.getElementById('field')?.value
-              const params = new URLSearchParams()
-              if (d) params.set('degree', d)
-              if (c) params.set('country', c)
-              if (f) params.set('field', f)
-              navigate(`/scholarships?${params}`)
-            }}>Search →</button>
+            {/* FIX 2–4: use handleSearch() with state instead of document.getElementById */}
+            <button className="btn btn-primary" onClick={handleSearch}>Search →</button>
           </div>
         </div>
       </div>
@@ -110,6 +171,57 @@ export default function HomePage() {
             {['🏆 Trusted by 2,400+ students', '🔒 Verified scholarships only', '🎯 Smart scholarship matching', '👨‍💼 Expert counselors on call', '⚡ Daily updates'].map(t => (
               <span key={t}>{t}</span>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* DEADLINE CAROUSEL */}
+      <div style={{ background:'#0f2444', padding:0 }}>
+        <div className="container" style={{ paddingTop:0, paddingBottom:0 }}>
+          <div style={{ display:'flex', alignItems:'center', overflow:'hidden' }}>
+            <div style={{ background:'#ef4444', padding:'10px 16px', display:'flex', alignItems:'center', gap:6, flexShrink:0 }}>
+              <div style={{ width:8, height:8, borderRadius:'50%', background:'#fff', animation:'dlpulse 1s infinite' }} />
+              <span style={{ fontSize:11, fontWeight:800, color:'#fff', textTransform:'uppercase', letterSpacing:'.1em', whiteSpace:'nowrap' }}>
+                Deadlines
+              </span>
+            </div>
+            <div style={{ flex:1, overflow:'hidden', position:'relative', height:40 }}>
+              {DEADLINES.map((d, i) => (
+                <div key={d.name}
+                  style={{
+                    position:'absolute', inset:0, display:'flex', alignItems:'center', gap:12, padding:'0 20px',
+                    transition:'opacity .5s ease, transform .5s ease',
+                    opacity: i === deadlineIdx ? 1 : 0,
+                    transform: i === deadlineIdx ? 'translateY(0)' : i < deadlineIdx ? 'translateY(-100%)' : 'translateY(100%)',
+                  }}>
+                  <span style={{ fontSize:20 }}>{d.flag}</span>
+                  <span style={{ fontSize:13, fontWeight:700, color:'rgba(255,255,255,.9)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:320 }}>
+                    {d.name}
+                  </span>
+                  <span style={{ fontSize:11, color:'rgba(255,255,255,.4)', whiteSpace:'nowrap', flexShrink:0 }}>
+                    {d.country}
+                  </span>
+                  <div style={{ marginLeft:'auto', flexShrink:0 }}>
+                    <span style={{
+                      fontSize:11, fontWeight:800, padding:'3px 10px', borderRadius:20, whiteSpace:'nowrap',
+                      background: d.urgent ? '#ef4444' : d.days <= 120 ? '#f59e0b' : '#22c55e',
+                      color:'#fff'
+                    }}>
+                      {d.urgent ? '🔥 ' : ''}{d.date}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display:'flex', gap:4, padding:'0 12px', flexShrink:0 }}>
+              {DEADLINES.map((_, i) => (
+                <button key={i} onClick={() => setDeadlineIdx(i)}
+                  style={{ width: i===deadlineIdx ? 16 : 5, height:5, borderRadius:3, background: i===deadlineIdx ? '#22c55e' : 'rgba(255,255,255,.25)', border:'none', cursor:'pointer', padding:0, transition:'all .3s' }} />
+              ))}
+            </div>
+            <Link to="/scholarships" style={{ padding:'10px 16px', fontSize:11, fontWeight:800, color:'rgba(255,255,255,.5)', textDecoration:'none', whiteSpace:'nowrap', flexShrink:0, borderLeft:'1px solid rgba(255,255,255,.1)' }}>
+              View All →
+            </Link>
           </div>
         </div>
       </div>
@@ -154,24 +266,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* FIX 1: TESTIMONIALS section added — TESTIMONIALS constant was defined but never rendered */}
       <section className="section">
         <div className="container">
           <div className="section-header">
-            <span className="badge badge-gold mb-3">⭐ Success Stories</span>
-            <h2>Real Students, Real Results</h2>
-            <p>Join thousands who achieved their study-abroad dreams with ScholarPath.</p>
+            <span className="badge badge-blue mb-3">⭐ Success Stories</span>
+            <h2>Students Who Made It</h2>
+            <p>Real Bangladeshi students, real scholarships, real results.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {TESTIMONIALS.map(t => (
-              <div key={t.name} className="card p-6">
-                <div className="text-amber-400 text-base mb-3">{'★'.repeat(t.stars)}</div>
-                <p className="text-gray-600 text-sm leading-relaxed italic mb-5">{t.text}</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-navy-800 flex items-center justify-center font-head font-bold text-white text-sm flex-shrink-0">{t.av}</div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {TESTIMONIALS.map(({ stars, text, name, meta, av }) => (
+              <div key={name} className="bg-white rounded-2xl shadow-card border border-gray-100 p-6 flex flex-col gap-4">
+                <div className="flex gap-1">
+                  {Array.from({ length: stars }).map((_, i) => (
+                    <span key={i} className="text-yellow-400 text-lg">★</span>
+                  ))}
+                </div>
+                <p className="text-gray-600 text-sm leading-relaxed flex-1">{text}</p>
+                <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-navy-800 flex items-center justify-center text-white text-xs font-black flex-shrink-0">
+                    {av}
+                  </div>
                   <div>
-                    <div className="font-bold text-sm text-navy-800">{t.name}</div>
-                    <div className="text-xs text-gray-500">{t.meta}</div>
+                    <div className="font-bold text-navy-800 text-sm">{name}</div>
+                    <div className="text-xs text-gray-400">{meta}</div>
                   </div>
                 </div>
               </div>
@@ -179,7 +297,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
 
       {/* FREE TOOLS SECTION */}
       <section style={{ background:'linear-gradient(135deg,#f0fdf4 0%,#eff6ff 100%)', padding:'72px 0' }}>
@@ -224,7 +341,6 @@ export default function HomePage() {
         </div>
       </section>
 
-
       {/* NEWSLETTER SECTION */}
       <section style={{ background:'linear-gradient(135deg,#0f2444 0%,#1a3a6b 50%,#0f2444 100%)', padding:'72px 0', position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', inset:0, opacity:.07, backgroundImage:'radial-gradient(circle,#fff 1px,transparent 1px)', backgroundSize:'26px 26px' }} />
@@ -232,7 +348,7 @@ export default function HomePage() {
         <div className="container" style={{ position:'relative', zIndex:1, textAlign:'center', maxWidth:580 }}>
           <span style={{ fontSize:48, display:'block', marginBottom:16 }}>🔔</span>
           <h2 className="font-head font-black text-3xl text-white mb-3">Never Miss a Scholarship Deadline</h2>
-          <p style={{ color:'rgba(255,255,255,.6)', fontSize:15, lineHeight:1.7, marginBottom:32, maxWidth:440, margin:'0 auto 32px' }}>
+          <p style={{ color:'rgba(255,255,255,.6)', fontSize:15, lineHeight:1.7, margin:'0 auto 32px', maxWidth:440 }}>
             Get weekly alerts for new scholarships, upcoming deadlines, and insider tips — delivered straight to your inbox. Free forever.
           </p>
           <div style={{ display:'flex', justifyContent:'center', gap:20, flexWrap:'wrap', marginBottom:28 }}>

@@ -265,6 +265,19 @@ export default function Navbar({ onOpenAuth }) {
                 <DropBtn name="company" label="More" />
                 {openDrop === 'company' && <Dropdown items={COMPANY} onClose={() => setOpenDrop(null)} />}
               </div>
+
+              {/* Subscribe button */}
+              <NavLink to="/subscribe"
+                style={({ isActive }) => ({
+                  display:'flex', alignItems:'center', gap:5,
+                  padding:'7px 13px', borderRadius:9, textDecoration:'none',
+                  border:'1px solid rgba(139,92,246,.35)',
+                  background: isActive ? 'rgba(139,92,246,.15)' : 'rgba(139,92,246,.07)',
+                  color:'#7c3aed', fontSize:13, fontWeight:700, transition:'all .15s',
+                })}>
+                <span style={{fontSize:13}}>🔔</span>
+                Subscribe
+              </NavLink>
             </div>
 
             {/* ── RIGHT ACTIONS ── */}
@@ -353,6 +366,12 @@ export default function Navbar({ onOpenAuth }) {
                 </div>
               </NavLink>
             ))}
+
+            {/* Subscribe */}
+            <NavLink to="/subscribe" onClick={() => setMobileOpen(false)}
+              style={({ isActive }) => ({ display:'flex', alignItems:'center', gap:8, padding:'10px 12px', borderRadius:10, textDecoration:'none', fontSize:14, fontWeight:700, color:'#7c3aed', background: isActive?'rgba(139,92,246,.08)':'transparent', marginBottom:4, border:'1px solid rgba(139,92,246,.2)' })}>
+              <span>🔔</span> Subscribe to Alerts
+            </NavLink>
 
             {/* Company section */}
             <button onClick={() => setMobileSection(s => s==='company'?null:'company')}

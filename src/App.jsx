@@ -23,6 +23,7 @@ import DocumentChecklist from '@pages/DocumentChecklist'
 import CGPAConverter from '@pages/CGPAConverter'
 import CostCalculator from '@pages/CostCalculator'
 import SOPAnalyzer from '@pages/SOPAnalyzer'
+import SubscribePage from '@pages/SubscribePage'
 
 export default function App() {
   return (
@@ -53,6 +54,7 @@ export default function App() {
             <Route path="tools/cgpa-converter" element={<CGPAConverter />} />
             <Route path="tools/cost-calculator" element={<CostCalculator />} />
             <Route path="tools/sop-analyzer" element={<SOPAnalyzer />} />
+            <Route path="subscribe" element={<SubscribePage />} />
             <Route path="admin" element={<AdminPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
