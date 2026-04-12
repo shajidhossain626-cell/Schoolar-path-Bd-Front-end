@@ -113,6 +113,20 @@ tr:hover td{background:#fafafa}
   <div class="content">
 
     <!-- STATS -->
+    <!-- LOCK TOGGLE -->
+    <div style="background:#fff;border-radius:14px;border:2px solid #e2e8f0;padding:18px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:15px;font-weight:900;color:#0f172a;margin-bottom:4px">Scholarship Database Lock</div>
+        <div style="font-size:12px;color:#64748b">Locked = paywall active. Unlocked = everyone sees all scholarships free (offer mode).</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">
+        <span id="lockLabel" style="font-size:13px;font-weight:800;color:#0f2444">Loading...</span>
+        <div id="lockTrack" onclick="toggleLock()" style="width:56px;height:28px;border-radius:28px;background:#0f2444;cursor:pointer;position:relative;transition:background .3s;flex-shrink:0">
+          <div id="lockKnob" style="position:absolute;top:4px;left:4px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left .3s;box-shadow:0 1px 4px rgba(0,0,0,.3)"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="stats">
       <div class="stat">
         <div class="stat-icon">👥</div>
@@ -367,6 +381,42 @@ function esc(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
 }
 
+
+// LOCK TOGGLE
+function initLock() {
+  var val = localStorage.getItem('sp_db_locked')
+  var isLocked = (val === null) ? true : (val === 'true')
+  applyLock(isLocked)
+}
+
+function applyLock(isLocked) {
+  var label = document.getElementById('lockLabel')
+  var track = document.getElementById('lockTrack')
+  var knob  = document.getElementById('lockKnob')
+  if (!label) return
+  if (isLocked) {
+    label.textContent    = '🔒 LOCKED'
+    label.style.color    = '#0f2444'
+    track.style.background = '#0f2444'
+    knob.style.left      = '4px'
+  } else {
+    label.textContent    = '🎁 UNLOCKED — Offer Mode'
+    label.style.color    = '#22c55e'
+    track.style.background = '#22c55e'
+    knob.style.left      = '32px'
+  }
+}
+
+function toggleLock() {
+  var val = localStorage.getItem('sp_db_locked')
+  var isLocked = (val === null) ? true : (val === 'true')
+  var newLocked = !isLocked
+  localStorage.setItem('sp_db_locked', newLocked ? 'true' : 'false')
+  applyLock(newLocked)
+  try { window.dispatchEvent(new Event('sp_lock_change')) } catch(e) {}
+  showToast(newLocked ? '🔒 Database locked — paywall is now active' : '🎁 Database UNLOCKED — everyone sees all scholarships free!')
+}
+
 function showToast(msg) {
   const t = document.getElementById('toast')
   t.textContent = msg
@@ -374,6 +424,7 @@ function showToast(msg) {
   clearTimeout(t._t)
   t._t = setTimeout(() => t.style.display = 'none', 3500)
 }
+  initLock()
 </script>
 </body>
 </html>

@@ -7,15 +7,28 @@ import { useAuth } from '@context/AuthContext'
 import { useScholarships } from '@context/ScholarshipContext'
 
 const FREE_LIMIT = 25
-const PER_PAGE   = 6
+const LOCK_KEY   = 'sp_db_locked' // 'true' = normal paywall | 'false' = full DB free for all
+
+function getIsLocked() {
+  const v = localStorage.getItem(LOCK_KEY)
+  return v === null ? true : v === 'true'
+}
 
 export default function ListingPage() {
-  const { filtered, paginated, filters, updateFilter, clearAll, page, setPage, totalPages, resultCount } = useFilters()
-  const [searchParams] = useSearchParams()
+  const { filtered, paginated, filters, updateFilter, clearAll,
+          page, setPage, totalPages, resultCount } = useFilters()
+  const [searchParams]    = useSearchParams()
   const { isLoggedIn, isPaid } = useAuth()
-  const { scholarships }       = useScholarships()
+  const { scholarships }  = useScholarships()
   const [freePage, setFreePage] = useState(1)
-  const [showFilters, setShowFilters] = useState(false)   // mobile filter toggle
+  const [locked, setLocked]     = useState(getIsLocked)
+
+  // Sync when admin toggles from the same tab
+  useEffect(() => {
+    const sync = () => setLocked(getIsLocked())
+    window.addEventListener('sp_lock_change', sync)
+    return () => window.removeEventListener('sp_lock_change', sync)
+  }, [])
 
   useEffect(() => { setFreePage(1) }, [filters])
 
@@ -30,93 +43,101 @@ export default function ListingPage() {
   const allFree     = scholarships.filter(s => s.featured).slice(0, FREE_LIMIT)
   const lockedCount = totalAll - allFree.length
 
-  const freeFiltered   = isPaid ? [] : filtered.filter(s => s.featured).slice(0, FREE_LIMIT)
-  const freeTotalPages = Math.ceil(freeFiltered.length / PER_PAGE)
-  const freePaginated  = freeFiltered.slice((freePage - 1) * PER_PAGE, freePage * PER_PAGE)
+  // When locked=false (offer mode) everyone sees everything
+  // When locked=true, only paid users see all
+  const seeAll         = !locked || isPaid
+  const freeFiltered   = seeAll ? [] : filtered.filter(s => s.featured).slice(0, FREE_LIMIT)
+  const freeTotalPages = Math.ceil(freeFiltered.length / 6) || 1
+  const freePaginated  = freeFiltered.slice((freePage-1)*6, freePage*6)
 
-  const visibleCards    = isPaid ? paginated : freePaginated
-  const currentPage     = isPaid ? page      : freePage
-  const currentTotal    = isPaid ? totalPages : freeTotalPages
-  const handlePage      = isPaid ? setPage    : setFreePage
-  const freeResultCount = freeFiltered.length
-  const showUnlockBanner = !isPaid && freePage === freeTotalPages && freeFiltered.length > 0
+  const visibleCards = seeAll ? paginated        : freePaginated
+  const curPage      = seeAll ? page             : freePage
+  const curTotal     = seeAll ? totalPages       : freeTotalPages
+  const setPage2     = seeAll ? setPage          : setFreePage
+  const shownCount   = seeAll ? resultCount      : freeFiltered.length
 
-  // Count active filters for mobile badge
-  const activeFilters = filters.countries.length + filters.degrees.length +
-    filters.funding.length + filters.fields.length + (filters.search ? 1 : 0)
+  const showSignInBanner = locked && !isLoggedIn
+  const showPaidBanner   = locked && isLoggedIn && !isPaid && freePage === freeTotalPages && freeFiltered.length > 0
 
   return (
     <>
       <div className="page-hero">
         <div className="container">
-          <div className="breadcrumb"><span>Home</span><span className="opacity-40">›</span><span>Scholarships</span></div>
+          <div className="breadcrumb">
+            <span>Home</span><span className="opacity-40">›</span><span>Scholarships</span>
+          </div>
           <h1>Browse All Scholarships</h1>
           <p>
-            {isPaid
+            {!locked
+              ? `🎉 Special offer — full database free for everyone! ${totalAll}+ scholarships`
+              : seeAll
               ? `${totalAll}+ verified international scholarships — full access unlocked ✅`
               : `${allFree.length} free scholarships · ${lockedCount}+ more with any package`}
           </p>
+          {/* Offer ribbon */}
+          {!locked && (
+            <div style={{ marginTop:12, display:'inline-flex', alignItems:'center', gap:8,
+              background:'rgba(34,197,94,.15)', border:'1px solid rgba(34,197,94,.4)',
+              borderRadius:50, padding:'6px 18px' }}>
+              <span style={{ fontSize:14 }}>🎁</span>
+              <span style={{ fontSize:12, fontWeight:800, color:'#22c55e' }}>
+                Limited-time offer — full database is FREE to browse!
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="container py-6" style={{overflowX:"hidden"}}>
-
-        {/* ── MOBILE FILTER TOGGLE BUTTON ── */}
-        <div className="md:hidden mb-4 flex gap-3">
-          <button
-            onClick={() => setShowFilters(f => !f)}
-            className="btn btn-outline flex items-center gap-2 text-sm">
-            🎯 {showFilters ? 'Hide Filters' : 'Show Filters'}
-            {activeFilters > 0 && (
-              <span className="bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                {activeFilters}
-              </span>
-            )}
-          </button>
-          {activeFilters > 0 && (
-            <button onClick={clearAll} className="btn btn-outline text-sm text-red-500 border-red-300">
-              Clear All
-            </button>
-          )}
-        </div>
-
-        {/* ── MOBILE FILTER DRAWER ── */}
-        {showFilters && (
-          <div className="md:hidden mb-5">
-            <FilterSidebar />
-          </div>
-        )}
-
-        {/* ── DESKTOP: side by side layout ── */}
-        <div className="grid md:grid-cols-[260px_1fr] gap-7 items-start w-full" style={{minWidth:0}}>
-
-          {/* Sidebar — hidden on mobile, shown on desktop */}
-          <div className="hidden md:block">
-            <FilterSidebar />
-          </div>
-
-          {/* Main content */}
-          <div style={{minWidth:0,overflow:"hidden"}}>
-
-            {/* Header row */}
+      <div className="container">
+        <div className="grid md:grid-cols-[260px_1fr] gap-7 py-9 items-start">
+          <FilterSidebar />
+          <div>
+            {/* Row header */}
             <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
               <div>
                 <h2 className="font-head font-bold text-navy-800 text-lg">
-                  {isPaid ? 'All Scholarships' : 'Free Scholarships'}
+                  {seeAll ? 'All Scholarships' : 'Free Scholarships'}
                 </h2>
-                <span className="text-gray-500 text-sm">
-                  {isPaid
-                    ? `${resultCount} scholarships found`
-                    : `${freeResultCount} scholarships found${freeTotalPages > 1 ? ` · page ${freePage} of ${freeTotalPages}` : ''}`}
-                </span>
+                <span className="text-gray-500 text-sm">{shownCount} scholarships found</span>
               </div>
-              <select className="input text-sm w-auto"
-                value={filters.sort}
+              <select className="input text-sm w-auto" value={filters.sort}
                 onChange={e => updateFilter('sort', e.target.value)}>
                 <option value="latest">Latest First</option>
                 <option value="deadline">Deadline: Soonest</option>
               </select>
             </div>
+
+            {/* ── SIGN-IN BANNER (locked + not logged in) ── */}
+            {showSignInBanner && (
+              <div style={{ background:'linear-gradient(135deg,#eff6ff,#f0fdf4)', border:'2px solid #bfdbfe',
+                borderRadius:16, padding:'16px 20px', marginBottom:20,
+                display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+                  <div style={{ fontSize:32 }}>🎓</div>
+                  <div>
+                    <div style={{ fontSize:14, fontWeight:900, color:'#1e40af', marginBottom:2 }}>
+                      Sign in FREE — get the full scholarship list
+                    </div>
+                    <div style={{ fontSize:12, color:'#3b82f6' }}>
+                      Free account gives you access to all {totalAll}+ scholarships — no payment needed
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
+                  <Link to="/dashboard"
+                    style={{ padding:'9px 20px', background:'#0f2444', color:'#fff',
+                      borderRadius:10, textDecoration:'none', fontSize:13, fontWeight:800 }}>
+                    🚀 Sign In Free →
+                  </Link>
+                  <a href="https://wa.me/8801889700879?text=Hi! I want to access all scholarships on ScholarPath BD."
+                    target="_blank" rel="noreferrer"
+                    style={{ padding:'9px 18px', background:'#22c55e', color:'#fff',
+                      borderRadius:10, textDecoration:'none', fontSize:13, fontWeight:700 }}>
+                    💬 WhatsApp
+                  </a>
+                </div>
+              </div>
+            )}
 
             {/* Cards */}
             {visibleCards.length > 0 ? (
@@ -132,57 +153,37 @@ export default function ListingPage() {
               </div>
             )}
 
-            {/* Pagination — scrollable on mobile, always visible */}
-            {currentTotal > 1 && (
+            {/* Pagination */}
+            {curTotal > 1 && (
               <div className="mt-8 overflow-x-auto pb-2">
-                <div className="flex gap-2 justify-center" style={{minWidth: 'max-content', margin: '0 auto'}}>
-                  <button
-                    onClick={() => { handlePage(p => Math.max(1, p - 1)); window.scrollTo(0,0) }}
-                    disabled={currentPage === 1}
-                    className="btn btn-outline btn-sm flex-shrink-0">← Prev</button>
-
-                  {Array.from({ length: currentTotal }, (_, i) => i + 1).map(p => (
-                    <button key={p}
-                      onClick={() => { handlePage(p); window.scrollTo(0,0) }}
-                      className={`btn btn-sm flex-shrink-0 ${p === currentPage ? 'btn-primary' : 'btn-outline'}`}>
-                      {p}
-                    </button>
+                <div className="flex gap-2 justify-center" style={{ minWidth:'max-content', margin:'0 auto' }}>
+                  <button onClick={() => { setPage2(p => Math.max(1,p-1)); window.scrollTo(0,0) }}
+                    disabled={curPage===1} className="btn btn-outline btn-sm flex-shrink-0">← Prev</button>
+                  {Array.from({length:curTotal},(_,i)=>i+1).map(p => (
+                    <button key={p} onClick={() => { setPage2(p); window.scrollTo(0,0) }}
+                      className={`btn btn-sm flex-shrink-0 ${p===curPage?'btn-primary':'btn-outline'}`}>{p}</button>
                   ))}
-
-                  <button
-                    onClick={() => { handlePage(p => Math.min(currentTotal, p + 1)); window.scrollTo(0,0) }}
-                    disabled={currentPage === currentTotal}
-                    className="btn btn-outline btn-sm flex-shrink-0">Next →</button>
+                  <button onClick={() => { setPage2(p => Math.min(curTotal,p+1)); window.scrollTo(0,0) }}
+                    disabled={curPage===curTotal} className="btn btn-outline btn-sm flex-shrink-0">Next →</button>
                 </div>
               </div>
             )}
 
-            {/* Unlock banner — last page only */}
-            {showUnlockBanner && (
+            {/* Paid upgrade banner */}
+            {showPaidBanner && (
               <div className="mt-8 rounded-2xl border-2 border-dashed border-blue-300 bg-blue-50 p-6 text-center">
                 <div className="text-3xl mb-2">🔒</div>
                 <h3 className="font-head font-black text-navy-800 text-xl mb-1">
                   You've seen all {allFree.length} free scholarships
                 </h3>
                 <p className="text-gray-500 text-sm mb-4 max-w-md mx-auto">
-                  Unlock <strong>{lockedCount}+ more scholarships</strong> — DAAD, Chevening, MEXT, Australia Awards and more — from just ৳5,000.
+                  Unlock <strong>{lockedCount}+ more</strong> — DAAD, Chevening, MEXT, Australia Awards and more.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <Link to="/services" className="btn btn-primary px-6">
-                    🚀 View Packages — from ৳5,000
-                  </Link>
+                  <Link to="/services" className="btn btn-primary px-6">🚀 View Packages — from ৳5,000</Link>
                   <a href="https://wa.me/8801889700879?text=Hi! I want to unlock all scholarships."
-                    target="_blank" rel="noreferrer"
-                    className="btn btn-outline px-6">
-                    💬 WhatsApp to Unlock
-                  </a>
+                    target="_blank" rel="noreferrer" className="btn btn-outline px-6">💬 WhatsApp to Unlock</a>
                 </div>
-                {!isLoggedIn && (
-                  <p className="text-xs text-gray-400 mt-3">
-                    Already have a package?{' '}
-                    <Link to="/dashboard" className="text-blue-600 underline">Sign in →</Link>
-                  </p>
-                )}
               </div>
             )}
 
