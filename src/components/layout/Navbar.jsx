@@ -3,11 +3,7 @@ import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@context/AuthContext'
 
 // ── NAV GROUPS ──
-const EXPLORE = [
-  { to:'/blog',     icon:'📖', label:'Blog & Guides',    sub:'Tips, deadlines, success stories' },
-  { to:'/about',    icon:'👥', label:'About Us',          sub:'Our team and mission' },
-  { to:'/contact',  icon:'💬', label:'Contact',           sub:'Get in touch with us' },
-]
+
 const TOOLS_LINKS = [
   { to:'/tools/eligibility-checker', icon:'🎯', label:'Eligibility Checker', sub:'See which scholarships you qualify for', badge:'Popular' },
   { to:'/tools/document-checklist',  icon:'📋', label:'Document Checklist', sub:'Never miss a required document' },
