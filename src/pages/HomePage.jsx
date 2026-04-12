@@ -10,11 +10,6 @@ const STEPS = [
   { n: 2, title: 'Prepare & Upload', desc: 'Get a personalized document checklist. Upload files securely to your dashboard. Our experts review everything.' },
   { n: 3, title: 'Apply & Succeed', desc: 'Apply independently or let our team handle it completely. Track your application in real-time and celebrate your acceptance!' },
 ]
-const TESTIMONIALS = [
-  { stars: 5, text: '"ScholarPath helped me land a fully-funded DAAD scholarship to Germany. Their AI matched me to the right program instantly, and the team guided me through every step."', name: 'Rafiqul Alam', meta: 'MSc CS, TU Munich 🇩🇪 · DAAD Scholar', av: 'RA' },
-  { stars: 5, text: '"Chevening was overwhelming. ScholarPath\'s Premium package was worth every taka. They wrote my essays, prepared my CV, and I got accepted first try!"', name: 'Nusrat Khan', meta: 'LSE London 🇬🇧 · Chevening Scholar', av: 'NK' },
-  { stars: 5, text: '"The MEXT scholarship process is notoriously complex. ScholarPath\'s AI answered all my questions instantly. Now I\'m studying robotics at Osaka University!"', name: 'Sabbir Hossain', meta: 'Osaka University 🇯🇵 · MEXT Scholar', av: 'SH' },
-]
 
 const DEADLINES = [
   { flag:'🇩🇪', country:'Germany',        name:'DAAD Research Scholarship',         date:'Oct 15, 2026', days:186, color:'#DD0000', urgent:false },
@@ -260,38 +255,6 @@ export default function HomePage() {
                 </div>
                 <h3 className="font-head font-bold text-navy-800 text-lg mb-3">{title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FIX 1: TESTIMONIALS section added — TESTIMONIALS constant was defined but never rendered */}
-      <section className="section">
-        <div className="container">
-          <div className="section-header">
-            <span className="badge badge-blue mb-3">⭐ Success Stories</span>
-            <h2>Students Who Made It</h2>
-            <p>Real Bangladeshi students, real scholarships, real results.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map(({ stars, text, name, meta, av }) => (
-              <div key={name} className="bg-white rounded-2xl shadow-card border border-gray-100 p-6 flex flex-col gap-4">
-                <div className="flex gap-1">
-                  {Array.from({ length: stars }).map((_, i) => (
-                    <span key={i} className="text-yellow-400 text-lg">★</span>
-                  ))}
-                </div>
-                <p className="text-gray-600 text-sm leading-relaxed flex-1">{text}</p>
-                <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-navy-800 flex items-center justify-center text-white text-xs font-black flex-shrink-0">
-                    {av}
-                  </div>
-                  <div>
-                    <div className="font-bold text-navy-800 text-sm">{name}</div>
-                    <div className="text-xs text-gray-400">{meta}</div>
-                  </div>
-                </div>
               </div>
             ))}
           </div>
