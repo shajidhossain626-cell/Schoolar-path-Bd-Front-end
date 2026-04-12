@@ -608,41 +608,46 @@ export default function ScholarshipChecker() {
               </button>
             )}
 
-            {/* Lead capture */}
-            {!lead.submitted ? (
-              <div style={{ background:'linear-gradient(135deg,#0f2444,#1a3a6b)', borderRadius:20, padding:'28px', marginTop:8 }}>
-                <div style={{ fontSize:18, fontWeight:900, color:'#fff', marginBottom:6 }}>
-                  Want a personalized scholarship plan?
-                </div>
-                <div style={{ fontSize:13, color:'rgba(255,255,255,.6)', marginBottom:20, lineHeight:1.6 }}>
-                  Our counselors will review your profile and tell you exactly which {qualified.length > 0 ? qualified.length : 'scholarships'} to apply for first — with step-by-step guidance. Completely free consultation.
-                </div>
-                <form onSubmit={submitLead} style={{ display:'flex', flexDirection:'column', gap:10 }}>
-                  <input required placeholder="Your full name" value={lead.name}
-                    onChange={e => setLead(l => ({ ...l, name: e.target.value }))}
-                    style={{ ...inputStyle, border:'none' }} />
-                  <input required placeholder="WhatsApp number (e.g. 01XXXXXXXXX)" value={lead.phone}
-                    onChange={e => setLead(l => ({ ...l, phone: e.target.value }))}
-                    style={{ ...inputStyle, border:'none' }} />
-                  <button type="submit" style={{ padding:'13px', background:'#22c55e', color:'#fff', border:'none', borderRadius:10, fontSize:14, fontWeight:800, cursor:'pointer', fontFamily:'inherit' }}>
-                    🎯 Get your Scholarship Plan
-                  </button>
-                </form>
+            {/* CTA — Intake Form + WhatsApp */}
+            <div style={{ background:'linear-gradient(135deg,#0f2444,#1a3a6b)', borderRadius:20, padding:'28px', marginTop:8, textAlign:'center' }}>
+              <div style={{ fontSize:13, fontWeight:800, color:'#22c55e', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:10 }}>
+                Ready to apply?
               </div>
-            ) : (
-              <div style={{ background:'#f0fdf4', border:'2px solid #22c55e', borderRadius:20, padding:'28px', textAlign:'center' }}>
-                <div style={{ fontSize:40, marginBottom:10 }}>🎉</div>
-                <div style={{ fontSize:20, fontWeight:900, color:'#166534', marginBottom:6 }}>We will contact you within 24 hours!</div>
-                <div style={{ fontSize:14, color:'#166534', marginBottom:16 }}>
-                  Our counselor will call you on WhatsApp to discuss your {qualified.length} eligible scholarships.
-                </div>
-                <a href={`https://wa.me/8801889700879?text=${encodeURIComponent('Hi! My name is '+lead.name+'. I used the scholarship eligibility checker and got '+qualified.length+' matches. I want a free consultation.')}`}
+              <div style={{ fontSize:20, fontWeight:900, color:'#fff', marginBottom:8, lineHeight:1.3 }}>
+                You matched {qualified.length} scholarship{qualified.length !== 1 ? 's' : ''} — let us help you apply
+              </div>
+              <div style={{ fontSize:13, color:'rgba(255,255,255,.6)', marginBottom:24, maxWidth:440, margin:'0 auto 24px', lineHeight:1.7 }}>
+                Our team handles your SOP, documents, and full application — so you can focus on your future. Fill our intake form to get started.
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:12, maxWidth:360, margin:'0 auto' }}>
+                <a
+                  href="/intake.html"
+                  style={{
+                    display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+                    padding:'14px 24px', background:'#22c55e', color:'#fff',
+                    borderRadius:12, textDecoration:'none', fontSize:14, fontWeight:800,
+                  }}
+                >
+                  📋 Fill Our Application Form →
+                </a>
+                <a
+                  href={`https://wa.me/8801889700879?text=${encodeURIComponent('Hi! I used the ScholarPath BD eligibility checker and matched '+qualified.length+' scholarships. I want help applying.')}`}
                   target="_blank" rel="noreferrer"
-                  style={{ display:'inline-block', padding:'12px 24px', background:'#22c55e', color:'#fff', borderRadius:10, textDecoration:'none', fontSize:14, fontWeight:800 }}>
-                  💬 Message Us Now on WhatsApp
+                  style={{
+                    display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+                    padding:'14px 24px',
+                    background:'rgba(255,255,255,.1)', color:'#fff',
+                    border:'1px solid rgba(255,255,255,.2)',
+                    borderRadius:12, textDecoration:'none', fontSize:14, fontWeight:700,
+                  }}
+                >
+                  💬 WhatsApp Us to Discuss →
                 </a>
               </div>
-            )}
+              <div style={{ marginTop:16, fontSize:11, color:'rgba(255,255,255,.35)' }}>
+                Response within 2 hours · bKash payment · 100% support
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -4,9 +4,9 @@ import { useAuth } from '@context/AuthContext'
 
 // ── NAV GROUPS ──
 const EXPLORE = [
-  { to:'/scholarships', icon:'🎓', label:'All Scholarships', sub:'500+ verified opportunities' },
-  { to:'/universities', icon:'🏛️', label:'Universities', sub:'80+ universities, 20+ countries' },
-  { to:'/blog',         icon:'📖', label:'Blog & Guides', sub:'Tips, deadlines, success stories' },
+  { to:'/blog',     icon:'📖', label:'Blog & Guides',    sub:'Tips, deadlines, success stories' },
+  { to:'/about',    icon:'👥', label:'About Us',          sub:'Our team and mission' },
+  { to:'/contact',  icon:'💬', label:'Contact',           sub:'Get in touch with us' },
 ]
 const TOOLS_LINKS = [
   { to:'/tools/eligibility-checker', icon:'🎯', label:'Eligibility Checker', sub:'See which scholarships you qualify for', badge:'Popular' },
@@ -16,9 +16,9 @@ const TOOLS_LINKS = [
   { to:'/tools/cgpa-converter',      icon:'📊', label:'CGPA Converter', sub:'4.0 / 5.0 / 10.0 / % conversion' },
 ]
 const COMPANY = [
-  { to:'/services', icon:'🚀', label:'Our Packages', sub:'Starter, Professional, Elite' },
-  { to:'/about',    icon:'👥', label:'About Us', sub:'Our team and mission' },
-  { to:'/contact',  icon:'💬', label:'Contact', sub:'Get in touch with us' },
+  { to:'/blog',    icon:'📖', label:'Blog & Guides', sub:'Tips, deadlines, success stories' },
+  { to:'/about',   icon:'👥', label:'About Us',       sub:'Our team and mission' },
+  { to:'/contact', icon:'💬', label:'Contact',        sub:'Get in touch with us' },
 ]
 
 function Dropdown({ label, items, onClose }) {
@@ -193,6 +193,21 @@ export default function Navbar({ onOpenAuth }) {
                 Home
               </NavLink>
 
+              <NavLink to="/scholarships"
+                style={({ isActive }) => ({ padding:'8px 12px', borderRadius:9, textDecoration:'none', fontSize:13, fontWeight:600, color: isActive?'#3b82f6':'var(--nav-text)', background: isActive?'var(--nav-active-bg)':'transparent', transition:'all .15s' })}>
+                Scholarships
+              </NavLink>
+
+              <NavLink to="/universities"
+                style={({ isActive }) => ({ padding:'8px 12px', borderRadius:9, textDecoration:'none', fontSize:13, fontWeight:600, color: isActive?'#3b82f6':'var(--nav-text)', background: isActive?'var(--nav-active-bg)':'transparent', transition:'all .15s' })}>
+                Universities
+              </NavLink>
+
+              <NavLink to="/services"
+                style={({ isActive }) => ({ padding:'8px 12px', borderRadius:9, textDecoration:'none', fontSize:13, fontWeight:600, color: isActive?'#3b82f6':'var(--nav-text)', background: isActive?'var(--nav-active-bg)':'transparent', transition:'all .15s' })}>
+                Services
+              </NavLink>
+
               {/* Explore dropdown */}
               <div style={{ position:'relative' }}>
                 <DropBtn name="explore" label="Explore" />
@@ -253,7 +268,7 @@ export default function Navbar({ onOpenAuth }) {
 
               {/* Company dropdown */}
               <div style={{ position:'relative' }}>
-                <DropBtn name="company" label="About" />
+                <DropBtn name="company" label="More" />
                 {openDrop === 'company' && <Dropdown items={COMPANY} onClose={() => setOpenDrop(null)} />}
               </div>
             </div>
@@ -311,6 +326,21 @@ export default function Navbar({ onOpenAuth }) {
             <NavLink to="/" onClick={() => setMobileOpen(false)}
               style={({ isActive }) => ({ display:'block', padding:'10px 12px', borderRadius:10, textDecoration:'none', fontSize:14, fontWeight:600, color:'var(--nav-text)', background: isActive?'var(--nav-active-bg)':'transparent', marginBottom:4 })}>
               🏠 Home
+            </NavLink>
+
+            <NavLink to="/scholarships" onClick={() => setMobileOpen(false)}
+              style={({ isActive }) => ({ display:'block', padding:'10px 12px', borderRadius:10, textDecoration:'none', fontSize:14, fontWeight:600, color:'var(--nav-text)', background: isActive?'var(--nav-active-bg)':'transparent', marginBottom:4 })}>
+              🎓 Scholarships
+            </NavLink>
+
+            <NavLink to="/universities" onClick={() => setMobileOpen(false)}
+              style={({ isActive }) => ({ display:'block', padding:'10px 12px', borderRadius:10, textDecoration:'none', fontSize:14, fontWeight:600, color:'var(--nav-text)', background: isActive?'var(--nav-active-bg)':'transparent', marginBottom:4 })}>
+              🏛️ Universities
+            </NavLink>
+
+            <NavLink to="/services" onClick={() => setMobileOpen(false)}
+              style={({ isActive }) => ({ display:'block', padding:'10px 12px', borderRadius:10, textDecoration:'none', fontSize:14, fontWeight:600, color:'var(--nav-text)', background: isActive?'var(--nav-active-bg)':'transparent', marginBottom:4 })}>
+              🚀 Services
             </NavLink>
 
             {/* Explore section */}
