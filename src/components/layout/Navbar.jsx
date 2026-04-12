@@ -3,7 +3,11 @@ import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@context/AuthContext'
 
 // ── NAV GROUPS ──
-
+const EXPLORE = [
+  { to:'/blog',     icon:'📖', label:'Blog & Guides',    sub:'Tips, deadlines, success stories' },
+  { to:'/about',    icon:'👥', label:'About Us',          sub:'Our team and mission' },
+  { to:'/contact',  icon:'💬', label:'Contact',           sub:'Get in touch with us' },
+]
 const TOOLS_LINKS = [
   { to:'/tools/eligibility-checker', icon:'🎯', label:'Eligibility Checker', sub:'See which scholarships you qualify for', badge:'Popular' },
   { to:'/tools/document-checklist',  icon:'📋', label:'Document Checklist', sub:'Never miss a required document' },
@@ -204,12 +208,6 @@ export default function Navbar({ onOpenAuth }) {
                 Services
               </NavLink>
 
-              {/* Explore dropdown */}
-              <div style={{ position:'relative' }}>
-                <DropBtn name="explore" label="Explore" />
-                {openDrop === 'explore' && <Dropdown items={EXPLORE} onClose={() => setOpenDrop(null)} />}
-              </div>
-
               {/* Free Tools dropdown */}
               <div style={{ position:'relative' }}>
                 <button
@@ -338,23 +336,6 @@ export default function Navbar({ onOpenAuth }) {
               style={({ isActive }) => ({ display:'block', padding:'10px 12px', borderRadius:10, textDecoration:'none', fontSize:14, fontWeight:600, color:'var(--nav-text)', background: isActive?'var(--nav-active-bg)':'transparent', marginBottom:4 })}>
               🚀 Services
             </NavLink>
-
-            {/* Explore section */}
-            <button onClick={() => setMobileSection(s => s==='explore'?null:'explore')}
-              style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'10px 12px', borderRadius:10, border:'none', background:'transparent', color:'var(--nav-text)', fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:'inherit', marginBottom:4 }}>
-              <span>🔭 Explore</span>
-              <span style={{ fontSize:11, opacity:.5, transform: mobileSection==='explore'?'rotate(180deg)':'none', transition:'transform .2s' }}>▾</span>
-            </button>
-            {mobileSection === 'explore' && EXPLORE.map(item => (
-              <NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)}
-                style={{ display:'flex', alignItems:'center', gap:10, padding:'9px 12px 9px 28px', borderRadius:10, textDecoration:'none', marginBottom:2, color:'var(--nav-text)' }}>
-                <span style={{fontSize:16}}>{item.icon}</span>
-                <div>
-                  <div style={{fontSize:13,fontWeight:600}}>{item.label}</div>
-                  <div style={{fontSize:11,color:'var(--nav-subtext)'}}>{item.sub}</div>
-                </div>
-              </NavLink>
-            ))}
 
             {/* Free Tools section */}
             <button onClick={() => setMobileSection(s => s==='tools'?null:'tools')}
