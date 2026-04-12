@@ -174,6 +174,30 @@ tr:hover td{background:#fafafa}
     </div>
 
     <!-- NOTICE -->
+    <!-- Subscribers -->
+    <div class="card" id="subCard" style="display:none;margin-bottom:16px">
+      <div class="card-head">
+        <h2 id="subTitle">Email Subscribers</h2>
+        <div class="ctrls">
+          <input id="subSearch" placeholder="Search email..." oninput="renderSubs()">
+          <select id="subFilter" onchange="renderSubs()">
+            <option value="">All</option>
+            <option value="Active">Active</option>
+            <option value="Unsubscribed">Unsubscribed</option>
+          </select>
+          <button class="rbtn" onclick="loadSubs()">🔄 Refresh</button>
+          <button class="rbtn" style="background:#7c3aed" onclick="window.open('mailto:?bcc='+allSubs.filter(s=>s.Status==='Active').map(s=>s.Email).join(','))">📤 Email All</button>
+        </div>
+      </div>
+      <div class="t-wrap">
+        <div class="msg" id="subMsg">Loading subscribers...</div>
+        <table id="subTable" style="display:none">
+          <thead><tr><th>Email</th><th>Name</th><th>Source</th><th>Subscribed</th><th>Status</th></tr></thead>
+          <tbody id="subBody"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="notice">
       💡 <strong>How to grant access after payment:</strong> When a client pays via bKash → find their email in the table → change their plan from <strong>Free</strong> to <strong>Starter / Professional / Elite</strong> using the dropdown. Their access updates immediately in Google Sheets. Next time they visit the website, they will see all scholarships. <br><br>
       ⚠️ <strong>No users showing?</strong> Make sure you have updated and redeployed your Google Apps Script with the new code provided. Users appear here automatically when they sign up on your website.
