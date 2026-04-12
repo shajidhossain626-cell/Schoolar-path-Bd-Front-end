@@ -124,11 +124,13 @@ export default function ListingPage() {
                   </div>
                 </div>
                 <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-                  <Link to="/dashboard"
+                  <button
+                    onClick={() => window.dispatchEvent(new Event('sp_open_auth'))}
                     style={{ padding:'9px 20px', background:'#0f2444', color:'#fff',
-                      borderRadius:10, textDecoration:'none', fontSize:13, fontWeight:800 }}>
+                      borderRadius:10, border:'none', fontSize:13, fontWeight:800,
+                      cursor:'pointer', fontFamily:'inherit' }}>
                     🚀 Sign In Free →
-                  </Link>
+                  </button>
                   <a href="https://wa.me/8801889700879?text=Hi! I want to access all scholarships on ScholarPath BD."
                     target="_blank" rel="noreferrer"
                     style={{ padding:'9px 18px', background:'#22c55e', color:'#fff',
