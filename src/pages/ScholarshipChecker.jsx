@@ -612,7 +612,7 @@ export default function ScholarshipChecker() {
             {!lead.submitted ? (
               <div style={{ background:'linear-gradient(135deg,#0f2444,#1a3a6b)', borderRadius:20, padding:'28px', marginTop:8 }}>
                 <div style={{ fontSize:18, fontWeight:900, color:'#fff', marginBottom:6 }}>
-                  Want a FREE personalized scholarship plan?
+                  Want a personalized scholarship plan?
                 </div>
                 <div style={{ fontSize:13, color:'rgba(255,255,255,.6)', marginBottom:20, lineHeight:1.6 }}>
                   Our counselors will review your profile and tell you exactly which {qualified.length > 0 ? qualified.length : 'scholarships'} to apply for first — with step-by-step guidance. Completely free consultation.
@@ -625,7 +625,7 @@ export default function ScholarshipChecker() {
                     onChange={e => setLead(l => ({ ...l, phone: e.target.value }))}
                     style={{ ...inputStyle, border:'none' }} />
                   <button type="submit" style={{ padding:'13px', background:'#22c55e', color:'#fff', border:'none', borderRadius:10, fontSize:14, fontWeight:800, cursor:'pointer', fontFamily:'inherit' }}>
-                    🎯 Get My Free Scholarship Plan
+                    🎯 Get your Scholarship Plan
                   </button>
                 </form>
               </div>
