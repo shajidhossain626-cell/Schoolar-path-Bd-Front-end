@@ -62,7 +62,7 @@ const SCHOLARSHIPS = [
 
 const DARK = {
   page:  { background:'#07020f', minHeight:'100vh', fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif' },
-  hero:  { background:'linear-gradient(135deg,#0d0320 0%,#1a0533 40%,#0d0320 100%)', padding:'48px 16px 64px', position:'relative', overflow:'hidden' },
+  hero:  { background:'linear-gradient(135deg,#0d0320 0%,#1a0533 40%,#0d0320 100%)', padding:'48px 16px 40px', position:'relative', overflow:'hidden' },
   card:  { background:'rgba(255,255,255,.04)', border:'1px solid rgba(139,92,246,.2)', borderRadius:16, overflow:'hidden' },
   label: { fontSize:10, fontWeight:800, color:'rgba(167,139,250,.6)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:6, display:'block' },
 }
@@ -118,7 +118,7 @@ export default function DocumentChecklist() {
 
       <div className="container" style={{ maxWidth:760, padding:'0 16px 56px' }}>
         {/* Scholarship picker */}
-        <div style={{ background:'rgba(255,255,255,.04)', border:'1px solid rgba(139,92,246,.2)', borderRadius:20, padding:'22px', marginTop:-32, boxShadow:'0 20px 60px rgba(139,92,246,.12)', marginBottom:16 }}>
+        <div style={{ background:'rgba(255,255,255,.04)', border:'1px solid rgba(139,92,246,.2)', borderRadius:20, padding:'22px', marginTop:24, boxShadow:'0 20px 60px rgba(139,92,246,.12)', marginBottom:16 }}>
           <div style={{ ...DARK.label, marginBottom:14 }}>Select your target scholarship</div>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,200px),1fr))', gap:10 }}>
             {SCHOLARSHIPS.map(s => {

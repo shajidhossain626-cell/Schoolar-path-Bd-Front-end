@@ -27,7 +27,7 @@ export default function SOPAnalyzer() {
   return (
     <div style={{ background:'#07020f', minHeight:'100vh', fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif' }}>
       {/* Hero */}
-      <div style={{ background:'linear-gradient(135deg,#0d0320 0%,#1a0533 40%,#0d0320 100%)', padding:'48px 16px 64px', position:'relative', overflow:'hidden' }}>
+      <div style={{ background:'linear-gradient(135deg,#0d0320 0%,#1a0533 40%,#0d0320 100%)', padding:'48px 16px 40px', position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', top:-80, right:-80, width:400, height:400, background:'radial-gradient(circle,rgba(99,102,241,.2) 0%,transparent 65%)', borderRadius:'50%', pointerEvents:'none' }} />
         <div style={{ position:'absolute', bottom:-60, left:-60, width:300, height:300, background:'radial-gradient(circle,rgba(139,92,246,.15) 0%,transparent 65%)', borderRadius:'50%', pointerEvents:'none' }} />
         <div className="container" style={{ maxWidth:760, position:'relative', zIndex:1 }}>
@@ -44,7 +44,7 @@ export default function SOPAnalyzer() {
 
       <div className="container" style={{ maxWidth:760, padding:'0 16px 56px' }}>
         {/* Textarea card */}
-        <div style={{ background:'rgba(255,255,255,.04)', border:'1px solid rgba(99,102,241,.25)', borderRadius:20, padding:'22px', marginTop:-32, boxShadow:'0 20px 60px rgba(99,102,241,.12)', marginBottom:16 }}>
+        <div style={{ background:'rgba(255,255,255,.04)', border:'1px solid rgba(99,102,241,.25)', borderRadius:20, padding:'22px', marginTop:24, boxShadow:'0 20px 60px rgba(99,102,241,.12)', marginBottom:16 }}>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
             <span style={{ fontSize:10, fontWeight:800, color:'rgba(165,180,252,.6)', textTransform:'uppercase', letterSpacing:'.1em' }}>Paste your SOP / Personal Statement</span>
             <span style={{ fontSize:11, fontWeight:700, color: wc>1000?'#f87171':wc>=500?'#34d399':'rgba(255,255,255,.4)' }}>

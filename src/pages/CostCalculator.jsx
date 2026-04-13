@@ -30,10 +30,12 @@ export default function CostCalculator() {
   const yearlyBDT = monthlyBDT * 12
 
   return (
-    <div style={{ background:'#f7f9fc', minHeight:'100vh' }}>
-      <div style={{ background:'linear-gradient(135deg,#0f2444,#1a3a6b)', padding:'48px 16px 56px', position:'relative', overflow:'hidden' }}>
+    <div style={{ background:'#07020f', minHeight:'100vh' }}>
+      <div style={{ background:'linear-gradient(135deg,#0f2444,#1a3a6b)', background:'linear-gradient(135deg,#0d0320 0%,#1a0533 40%,#0d0320 100%)', padding:'48px 16px 40px', position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', inset:0, opacity:.08, backgroundImage:'radial-gradient(circle,#fff 1px,transparent 1px)', backgroundSize:'26px 26px' }} />
         <div style={{ position:'absolute', top:-40, right:-40, width:300, height:300, background:'radial-gradient(circle,rgba(251,146,60,.12) 0%,transparent 65%)', borderRadius:'50%' }} />
+        <div style={{ position:'absolute', top:-80, right:-80, width:400, height:400, background:'radial-gradient(circle,rgba(251,146,60,.2) 0%,transparent 65%)', borderRadius:'50%', pointerEvents:'none' }} />
+        <div style={{ position:'absolute', bottom:-60, left:-60, width:300, height:300, background:'radial-gradient(circle,rgba(139,92,246,.15) 0%,transparent 65%)', borderRadius:'50%', pointerEvents:'none' }} />
         <div className="container" style={{ maxWidth:700, position:'relative', zIndex:1 }}>
           <Link to="/tools" style={{ color:'rgba(255,255,255,.5)', textDecoration:'none', fontSize:13, display:'block', marginBottom:16 }}>← Free Tools</Link>
           <div style={{ display:'inline-flex', alignItems:'center', gap:7, background:'rgba(251,146,60,.15)', border:'1px solid rgba(251,146,60,.3)', borderRadius:50, padding:'5px 14px', marginBottom:18 }}>
@@ -47,25 +49,25 @@ export default function CostCalculator() {
       </div>
 
       <div className="container" style={{ maxWidth:700, padding:'0 16px 48px' }}>
-        <div style={{ background:'#fff', borderRadius:20, border:'1px solid #e2e8f0', padding:'26px', marginTop:-28, boxShadow:'0 8px 32px rgba(0,0,0,.08)', marginBottom:16 }}>
+        <div style={{ background:'rgba(255,255,255,.04)', borderRadius:20, border:'1px solid rgba(251,146,60,.25)', padding:'26px', marginTop:24, boxShadow:'0 20px 60px rgba(251,146,60,.1)', marginBottom:16 }}>
           <div style={{ display:'grid', gridTemplateColumns:'1fr auto', gap:14, alignItems:'end' }}>
             <div>
-              <label style={{ display:'block', fontSize:11, fontWeight:700, color:'#475569', textTransform:'uppercase', letterSpacing:'.07em', marginBottom:8 }}>Select country</label>
+              <label style={{ display:'block', fontSize:10, fontWeight:800, color:'rgba(251,146,60,.7)', textTransform:'uppercase', letterSpacing:'.09em', marginBottom:8 }}>Select country</label>
               <select value={country} onChange={e => setCountry(e.target.value)}
-                style={{ width:'100%', padding:'12px 14px', border:'1.5px solid #e2e8f0', borderRadius:10, fontSize:14, outline:'none', background:'#fff', cursor:'pointer', fontFamily:'inherit' }}>
+                style={{ width:'100%', padding:'12px 14px', border:'1.5px solid rgba(251,146,60,.3)', borderRadius:10, fontSize:14, outline:'none', background:'rgba(255,255,255,.06)', cursor:'pointer', fontFamily:'inherit', color:'#e2e8f0' }}>
                 <option value="">— Choose a country —</option>
                 {COUNTRIES_DATA.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
             <div>
-              <label style={{ display:'block', fontSize:11, fontWeight:700, color:'#475569', textTransform:'uppercase', letterSpacing:'.07em', marginBottom:8 }}>Lifestyle</label>
+              <label style={{ display:'block', fontSize:10, fontWeight:800, color:'rgba(251,146,60,.7)', textTransform:'uppercase', letterSpacing:'.09em', marginBottom:8 }}>Lifestyle</label>
               <div style={{ display:'flex', gap:6 }}>
                 {[{v:'budget',l:'Budget'},{ v:'mid',l:'Comfortable'}].map(opt => (
                   <button key={opt.v} onClick={() => setLifestyle(opt.v)}
                     style={{ padding:'11px 14px', borderRadius:10, border:'1.5px solid', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:'inherit', whiteSpace:'nowrap',
-                      borderColor: lifestyle===opt.v ? '#0f2444' : '#e2e8f0',
-                      background: lifestyle===opt.v ? '#0f2444' : '#f8faff',
-                      color: lifestyle===opt.v ? '#fff' : '#475569' }}>
+                      borderColor: lifestyle===opt.v ? '#fb923c' : 'rgba(251,146,60,.25)',
+                      background: lifestyle===opt.v ? 'rgba(251,146,60,.2)' : 'rgba(255,255,255,.04)',
+                      color: lifestyle===opt.v ? '#fb923c' : 'rgba(255,255,255,.5)' }}>
                     {opt.l}
                   </button>
                 ))}
@@ -77,7 +79,7 @@ export default function CostCalculator() {
         {c && (
           <div>
             {/* Big total */}
-            <div style={{ background:'linear-gradient(135deg,#0f2444,#1a3a6b)', borderRadius:18, padding:'28px', marginBottom:14, display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
+            <div style={{ background:'linear-gradient(135deg,rgba(251,146,60,.1),rgba(251,146,60,.06))', border:'1px solid rgba(251,146,60,.25)', borderRadius:18, padding:'28px', marginBottom:14, display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
               <div style={{ textAlign:'center' }}>
                 <div style={{ fontSize:11, fontWeight:700, color:'rgba(255,255,255,.5)', textTransform:'uppercase', letterSpacing:'.08em', marginBottom:6 }}>Monthly (BDT)</div>
                 <div style={{ fontSize:36, fontWeight:900, color:'#22c55e', lineHeight:1 }}>৳{monthlyBDT.toLocaleString()}</div>
@@ -91,36 +93,36 @@ export default function CostCalculator() {
             </div>
 
             {/* Breakdown */}
-            <div style={{ background:'#fff', borderRadius:16, border:'1px solid #e2e8f0', overflow:'hidden', marginBottom:14 }}>
-              <div style={{ padding:'13px 18px', background:'#f8faff', borderBottom:'1px solid #e2e8f0', fontSize:13, fontWeight:700, color:'#0f172a' }}>Monthly cost breakdown</div>
+            <div style={{ background:'rgba(255,255,255,.04)', borderRadius:16, border:'1px solid rgba(251,146,60,.2)', overflow:'hidden', marginBottom:14 }}>
+              <div style={{ padding:'13px 18px', background:'rgba(255,255,255,.04)', borderBottom:'1px solid rgba(255,255,255,.06)', fontSize:13, fontWeight:700, color:'#fff' }}>Monthly cost breakdown</div>
               {Object.entries(c.costs).map(([key, vals]) => {
                 const amt = vals[idx]
                 const amtBDT = Math.round(amt * c.rate)
                 const pct = Math.round(amt / monthly * 100)
                 return (
-                  <div key={key} style={{ padding:'12px 18px', borderBottom:'1px solid #f1f5f9', display:'flex', alignItems:'center', gap:12 }}>
+                  <div key={key} style={{ padding:'12px 18px', borderBottom:'1px solid rgba(255,255,255,.05)', display:'flex', alignItems:'center', gap:12 }}>
                     <div style={{ flex:1 }}>
                       <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5, fontSize:13 }}>
-                        <span style={{ fontWeight:600, color:'#374151' }}>{COST_LABELS[key]}</span>
-                        <span style={{ fontWeight:700, color:'#0f172a' }}>৳{amtBDT.toLocaleString()} <span style={{ color:'#94a3b8', fontWeight:400 }}>({amt} {c.currency})</span></span>
+                        <span style={{ fontWeight:600, color:'rgba(255,255,255,.8)' }}>{COST_LABELS[key]}</span>
+                        <span style={{ fontWeight:700, color:'#fff' }}>৳{amtBDT.toLocaleString()} <span style={{ color:'rgba(255,255,255,.35)', fontWeight:400 }}>({amt} {c.currency})</span></span>
                       </div>
                       <div style={{ height:6, background:'#f1f5f9', borderRadius:3, overflow:'hidden' }}>
                         <div style={{ height:'100%', width:`${pct}%`, background:'#3b82f6', borderRadius:3 }} />
                       </div>
                     </div>
-                    <div style={{ fontSize:11, fontWeight:700, color:'#94a3b8', minWidth:32, textAlign:'right' }}>{pct}%</div>
+                    <div style={{ fontSize:11, fontWeight:700, color:'rgba(255,255,255,.35)', minWidth:32, textAlign:'right' }}>{pct}%</div>
                   </div>
                 )
               })}
             </div>
 
-            <div style={{ background:'#fff7ed', border:'1px solid #fed7aa', borderRadius:14, padding:'14px 18px', marginBottom:14, fontSize:13, color:'#9a3412', lineHeight:1.65 }}>
+            <div style={{ background:'rgba(251,146,60,.08)', border:'1px solid rgba(251,146,60,.3)', borderRadius:14, padding:'14px 18px', marginBottom:14, fontSize:13, color:'#fb923c', lineHeight:1.65 }}>
               💡 <strong>Note:</strong> {c.note}
             </div>
 
-            <div style={{ background:'linear-gradient(135deg,#f0fdf4,#dcfce7)', border:'1px solid #bbf7d0', borderRadius:14, padding:'18px', textAlign:'center' }}>
-              <div style={{ fontSize:15, fontWeight:800, color:'#166534', marginBottom:6 }}>A full scholarship covers most or all of these costs</div>
-              <div style={{ fontSize:12, color:'#166534', marginBottom:14 }}>Check which scholarships you qualify for with your current profile</div>
+            <div style={{ background:'linear-gradient(135deg,rgba(52,211,153,.1),rgba(52,211,153,.05))', border:'1px solid rgba(52,211,153,.3)', borderRadius:14, padding:'18px', textAlign:'center' }}>
+              <div style={{ fontSize:15, fontWeight:800, color:'#34d399', marginBottom:6 }}>A full scholarship covers most or all of these costs</div>
+              <div style={{ fontSize:12, color:'rgba(52,211,153,.7)', marginBottom:14 }}>Check which scholarships you qualify for with your current profile</div>
               <Link to="/tools/eligibility-checker"
                 style={{ display:'inline-block', padding:'11px 22px', background:'#166534', color:'#fff', borderRadius:10, textDecoration:'none', fontSize:13, fontWeight:800 }}>
                 🎯 Check Scholarship Eligibility →

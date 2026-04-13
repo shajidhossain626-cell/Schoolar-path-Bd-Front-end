@@ -3625,299 +3625,228 @@ const MORE = COUNTRIES.filter(c => !FEATURED_IDS.includes(c.id))
   .sort((a, b) => a.name.localeCompare(b.name))
 
 export default function UniversitiesPage() {
-  const [active, setActive] = useState(null)
-  const [moreVal, setMoreVal] = useState('')
-  const [search, setSearch] = useState('')
+  const [active, setActive]           = useState(null)
+  const [moreVal, setMoreVal]         = useState('')
+  const [search, setSearch]           = useState('')
   const [fieldFilter, setFieldFilter] = useState('')
-  const [animKey, setAnimKey] = useState(0)
+  const [animKey, setAnimKey]         = useState(0)
   const listRef = useRef(null)
 
   const totalUniversities = COUNTRIES.reduce((a, c) => a + c.universities.length, 0)
   const country = active ? COUNTRIES.find(c => c.id === active) : null
   const filtered = country ? country.universities.filter(u => {
-    const matchSearch = !search ||
-      u.name.toLowerCase().includes(search.toLowerCase()) ||
-      u.city.toLowerCase().includes(search.toLowerCase()) ||
-      u.scholarship.toLowerCase().includes(search.toLowerCase())
-    const matchField = !fieldFilter ||
-      u.fields.some(f => f.toLowerCase().includes(fieldFilter.toLowerCase()))
-    return matchSearch && matchField
+    const q  = search.toLowerCase()
+    const ms = !search || u.name.toLowerCase().includes(q) || u.city.toLowerCase().includes(q) || u.scholarship.toLowerCase().includes(q)
+    const mf = !fieldFilter || u.fields.some(f => f.toLowerCase().includes(fieldFilter.toLowerCase()))
+    return ms && mf
   }) : []
   const allFields = country ? [...new Set(country.universities.flatMap(u => u.fields))].sort() : []
 
   function pick(id) {
-    setActive(id)
-    setMoreVal('')
-    setSearch('')
-    setFieldFilter('')
-    setAnimKey(k => k + 1)
-    setTimeout(() => listRef.current && listRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
+    setActive(id); setMoreVal(''); setSearch(''); setFieldFilter(''); setAnimKey(k => k+1)
+    setTimeout(() => listRef.current && listRef.current.scrollIntoView({ behavior:'smooth', block:'start' }), 80)
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#f7f8fc' }}>
+    <div style={{ background:'#07020f', minHeight:'100vh', fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif' }}>
+      <style>{\`
+        @keyframes cardIn { from{opacity:0;transform:translateY(18px) scale(.98)} to{opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes orb { 0%,100%{transform:scale(1) translate(0,0)} 50%{transform:scale(1.05) translate(10px,-10px)} }
+      \`}</style>
 
-      {/* HERO */}
-      <div style={{
-        background: 'linear-gradient(135deg, #0f2444 0%, #1a3a6b 60%, #0f2444 100%)',
-        paddingTop: '64px', paddingBottom: '64px', position: 'relative', overflow: 'hidden'
-      }}>
-        <div style={{ position:'absolute', top:-60, right:-60, width:300, height:300, border:'1px solid rgba(255,255,255,.07)', borderRadius:'50%' }} />
-        <div style={{ position:'absolute', bottom:-80, left:-40, width:240, height:240, border:'1px solid rgba(255,255,255,.05)', borderRadius:'50%' }} />
+      {/* ── HERO ── */}
+      <div style={{ background:'linear-gradient(160deg,#0d0320 0%,#1a0533 45%,#0d0320 100%)', paddingTop:64, paddingBottom:64, position:'relative', overflow:'hidden' }}>
+        <div style={{ position:'absolute', inset:0, opacity:.1, backgroundImage:'radial-gradient(circle,rgba(167,139,250,.8) 1px,transparent 1px)', backgroundSize:'28px 28px', pointerEvents:'none' }} />
+        <div style={{ position:'absolute', top:-100, right:-100, width:500, height:500, background:'radial-gradient(circle,rgba(139,92,246,.3) 0%,transparent 65%)', borderRadius:'50%', pointerEvents:'none', animation:'orb 8s ease-in-out infinite' }} />
+        <div style={{ position:'absolute', bottom:-80, left:-80, width:400, height:400, background:'radial-gradient(circle,rgba(99,102,241,.2) 0%,transparent 65%)', borderRadius:'50%', pointerEvents:'none' }} />
+
         <div className="container" style={{ position:'relative', zIndex:1 }}>
-          <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
-            <div style={{ width:4, height:32, background:'#22c55e', borderRadius:4 }} />
-            <span style={{ fontSize:13, fontWeight:700, color:'rgba(255,255,255,.5)', textTransform:'uppercase', letterSpacing:'.1em' }}>
-              Global Universities
+          <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:18 }}>
+            <div style={{ height:3, width:28, background:'linear-gradient(90deg,#a78bfa,#60a5fa)', borderRadius:4 }} />
+            <span style={{ fontSize:11, fontWeight:800, color:'rgba(167,139,250,.5)', textTransform:'uppercase', letterSpacing:'.14em' }}>
+              Global University Directory
             </span>
           </div>
-          <h1 style={{ fontSize:'clamp(28px,5vw,48px)', fontWeight:900, color:'#fff', lineHeight:1.1, marginBottom:14, maxWidth:640 }}>
-            Find Your Dream University
+          <h1 style={{ fontSize:'clamp(28px,5vw,52px)', fontWeight:900, color:'#fff', lineHeight:1.08, marginBottom:14, letterSpacing:'-.02em' }}>
+            Find Your<br /><span style={{ background:'linear-gradient(135deg,#a78bfa,#60a5fa)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>Dream University</span>
           </h1>
-          <p style={{ fontSize:15, color:'rgba(255,255,255,.6)', maxWidth:520, lineHeight:1.7 }}>
-            {COUNTRIES.length} countries &middot; {totalUniversities}+ universities &mdash; official links, scholarships &amp; key programs for Bangladeshi students.
+          <p style={{ fontSize:15, color:'rgba(255,255,255,.45)', maxWidth:480, lineHeight:1.75 }}>
+            {COUNTRIES.length} countries · {totalUniversities}+ universities — official links, scholarships &amp; programs for Bangladeshi students.
           </p>
         </div>
       </div>
 
-      {/* FEATURED COUNTRY CARDS */}
+      {/* ── FEATURED CARDS ── */}
       <div className="container" style={{ padding:'0 16px' }}>
         <div style={{ marginTop:-36, position:'relative', zIndex:10 }}>
-          <div style={{
-            display:'grid',
-            gridTemplateColumns:'repeat(auto-fill, minmax(min(100%, 148px), 1fr))',
-            gap:12
-          }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,148px),1fr))', gap:12 }}>
             {FEATURED.map(c => {
               const isOn = active === c.id
               return (
-                <button
-                  key={c.id}
-                  onClick={() => pick(c.id)}
+                <button key={c.id} onClick={() => pick(c.id)}
                   style={{
-                    background: isOn ? c.color : '#fff',
-                    border: isOn ? 'none' : '1.5px solid #e2e8f0',
-                    borderRadius:18, padding:'20px 12px 16px',
-                    cursor:'pointer', textAlign:'center',
+                    background: isOn ? `linear-gradient(145deg,${c.color},${c.accent||c.color+'aa'})` : 'rgba(255,255,255,.05)',
+                    border: isOn ? 'none' : '1px solid rgba(139,92,246,.2)',
+                    borderRadius:18, padding:'20px 12px 16px', cursor:'pointer', textAlign:'center',
                     transition:'all .22s ease',
                     transform: isOn ? 'translateY(-6px)' : 'translateY(0)',
-                    boxShadow: isOn ? '0 20px 48px rgba(0,0,0,.25)' : '0 2px 12px rgba(0,0,0,.07)',
+                    boxShadow: isOn ? \`0 20px 48px \${c.color}50, 0 0 0 1px \${c.color}40\` : 'none',
                   }}
-                  onMouseEnter={e => {
-                    if (!isOn) {
-                      e.currentTarget.style.transform = 'translateY(-4px)'
-                      e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,.12)'
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (!isOn) {
-                      e.currentTarget.style.transform = 'translateY(0)'
-                      e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,.07)'
-                    }
-                  }}
+                  onMouseEnter={e => { if(!isOn){ e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.background='rgba(255,255,255,.08)'; e.currentTarget.style.borderColor='rgba(139,92,246,.4)' }}}
+                  onMouseLeave={e => { if(!isOn){ e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.background='rgba(255,255,255,.05)'; e.currentTarget.style.borderColor='rgba(139,92,246,.2)' }}}
                 >
                   <div style={{ fontSize:40, marginBottom:10, lineHeight:1 }}>{c.flag}</div>
-                  <div style={{ fontSize:12, fontWeight:800, lineHeight:1.3, color: isOn ? '#fff' : '#0f172a' }}>
-                    {c.name}
-                  </div>
+                  <div style={{ fontSize:12, fontWeight:800, color: isOn?'#fff':'rgba(255,255,255,.8)', lineHeight:1.3 }}>{c.name}</div>
                   <div style={{
-                    marginTop:8, fontSize:10, fontWeight:700,
-                    display:'inline-block', padding:'3px 10px', borderRadius:20,
-                    background: isOn ? 'rgba(255,255,255,.22)' : '#f1f5f9',
-                    color: isOn ? '#fff' : '#64748b',
-                  }}>
-                    {c.universities.length} unis
-                  </div>
+                    marginTop:8, fontSize:10, fontWeight:700, display:'inline-block', padding:'3px 10px', borderRadius:20,
+                    background: isOn?'rgba(255,255,255,.2)':'rgba(255,255,255,.08)',
+                    color: isOn?'#fff':'rgba(255,255,255,.5)',
+                  }}>{c.universities.length} unis</div>
                 </button>
               )
             })}
           </div>
         </div>
 
-        {/* MORE COUNTRIES */}
-        <div style={{
-          marginTop:16, background:'#fff',
-          border:'1.5px solid #e2e8f0', borderRadius:16,
-          padding:'16px 20px',
-          display:'flex', alignItems:'center', gap:14, flexWrap:'wrap',
-        }}>
-          <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
-            <span style={{ fontSize:20 }}>🌍</span>
-            <div>
-              <div style={{ fontSize:13, fontWeight:800, color:'#0f172a' }}>More Countries</div>
-              <div style={{ fontSize:10, color:'#94a3b8' }}>{MORE.length} more available</div>
+        {/* ── MORE COUNTRIES ── */}
+        {MORE.length > 0 && (
+          <div style={{ marginTop:14, background:'rgba(255,255,255,.04)', border:'1px solid rgba(139,92,246,.2)', borderRadius:16, padding:'16px 20px', display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
+              <span style={{ fontSize:20 }}>🌍</span>
+              <div>
+                <div style={{ fontSize:13, fontWeight:800, color:'rgba(255,255,255,.85)' }}>More Countries</div>
+                <div style={{ fontSize:10, color:'rgba(167,139,250,.5)' }}>{MORE.length} available</div>
+              </div>
+            </div>
+            <select value={moreVal} onChange={e => { setMoreVal(e.target.value); if(e.target.value) pick(e.target.value) }}
+              style={{ flex:1, minWidth:200, padding:'10px 14px', border:'1.5px solid rgba(139,92,246,.3)', borderRadius:10, fontSize:13, fontWeight:600, outline:'none', background:'rgba(255,255,255,.06)', cursor:'pointer', color:'#e2e8f0', fontFamily:'inherit' }}>
+              <option value="" style={{ background:'#1a0533' }}>— Select a country —</option>
+              {MORE.map(c => <option key={c.id} value={c.id} style={{ background:'#1a0533' }}>{c.flag}  {c.name}  ({c.universities.length} universities)</option>)}
+            </select>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
+              {MORE.slice(0,5).map(c => (
+                <button key={c.id} onClick={() => pick(c.id)}
+                  style={{ fontSize:12, padding:'6px 12px', borderRadius:20, border:'1px solid',
+                    borderColor: active===c.id ? c.color : 'rgba(139,92,246,.25)',
+                    background: active===c.id ? \`\${c.color}20\` : 'rgba(255,255,255,.04)',
+                    color: active===c.id ? c.color : 'rgba(255,255,255,.6)',
+                    fontWeight:700, cursor:'pointer', transition:'all .15s', display:'flex', alignItems:'center', gap:5 }}>
+                  <span style={{ fontSize:16 }}>{c.flag}</span>{c.name}
+                </button>
+              ))}
+              {MORE.length > 5 && <span style={{ fontSize:11, color:'rgba(167,139,250,.4)', alignSelf:'center' }}>+{MORE.length-5} more ↑</span>}
             </div>
           </div>
-          <select
-            value={moreVal}
-            onChange={e => { setMoreVal(e.target.value); if (e.target.value) pick(e.target.value) }}
-            style={{
-              flex:1, minWidth:200, padding:'10px 14px',
-              border:'1.5px solid #e2e8f0', borderRadius:10,
-              fontSize:13, fontWeight:600, outline:'none',
-              background:'#f8faff', cursor:'pointer', color:'#0f172a',
-            }}
-          >
-            <option value="">— Select a country —</option>
-            {MORE.map(c => (
-              <option key={c.id} value={c.id}>{c.flag}  {c.name}  ({c.universities.length} universities)</option>
-            ))}
-          </select>
-          <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
-            {MORE.slice(0, 5).map(c => (
-              <button
-                key={c.id}
-                onClick={() => pick(c.id)}
-                style={{
-                  fontSize:12, padding:'6px 12px', borderRadius:20,
-                  border: active === c.id ? 'none' : '1px solid #e2e8f0',
-                  background: active === c.id ? c.color : '#f8faff',
-                  color: active === c.id ? '#fff' : '#475569',
-                  fontWeight:700, cursor:'pointer', transition:'all .15s',
-                  display:'flex', alignItems:'center', gap:5,
-                }}
-              >
-                <span style={{ fontSize:16 }}>{c.flag}</span>{c.name}
-              </button>
-            ))}
-            {MORE.length > 5 && (
-              <span style={{ fontSize:11, color:'#94a3b8', alignSelf:'center', fontWeight:600 }}>
-                +{MORE.length - 5} more in dropdown
-              </span>
-            )}
-          </div>
-        </div>
+        )}
       </div>
 
-      {/* UNIVERSITY LIST */}
+      {/* ── UNIVERSITY LIST ── */}
       <div ref={listRef} style={{ scrollMarginTop:80 }}>
         {!country ? (
-          <div className="container" style={{ textAlign:'center', padding:'64px 16px 48px' }}>
+          <div className="container" style={{ textAlign:'center', padding:'72px 16px 56px' }}>
             <div style={{ fontSize:64, marginBottom:18 }}>🌍</div>
-            <div style={{ fontSize:22, fontWeight:900, color:'#0f172a', marginBottom:8 }}>
-              Select a country to get started
-            </div>
-            <div style={{ fontSize:14, color:'#94a3b8', maxWidth:340, margin:'0 auto' }}>
+            <div style={{ fontSize:22, fontWeight:900, color:'rgba(255,255,255,.85)', marginBottom:8 }}>Select a country to get started</div>
+            <div style={{ fontSize:14, color:'rgba(255,255,255,.35)', maxWidth:340, margin:'0 auto' }}>
               Click any featured country card above, or choose from the dropdown
             </div>
           </div>
         ) : (
           <div>
             {/* Country band */}
-            <div style={{
-              background: country.light,
-              borderBottom: '3px solid ' + country.color,
-              padding:'18px 0', marginTop:16
-            }}>
+            <div style={{ background:'rgba(255,255,255,.03)', borderTop:'1px solid rgba(139,92,246,.15)', borderBottom:'3px solid ' + country.color, padding:'16px 0', marginTop:16 }}>
               <div className="container" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
                 <div style={{ display:'flex', alignItems:'center', gap:14 }}>
-                  <span style={{ fontSize:40 }}>{country.flag}</span>
+                  <div style={{ width:52, height:52, borderRadius:14, background:\`linear-gradient(135deg,\${country.color},\${country.accent||country.color+'aa'})\`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:28, boxShadow:\`0 6px 20px \${country.color}40\` }}>{country.flag}</div>
                   <div>
-                    <div style={{ fontSize:20, fontWeight:900, color: country.color }}>{country.name}</div>
-                    <div style={{ fontSize:13, color:'#64748b', marginTop:2 }}>{country.desc}</div>
+                    <div style={{ fontSize:20, fontWeight:900, color:country.color }}>{country.name}</div>
+                    <div style={{ fontSize:12, color:'rgba(255,255,255,.4)', marginTop:2 }}>{country.desc}</div>
                   </div>
                 </div>
                 <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-                  <input
-                    placeholder="Search universities..."
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    style={{ padding:'9px 14px', border:'1.5px solid #e2e8f0', borderRadius:10, fontSize:13, outline:'none', minWidth:200, background:'#fff' }}
+                  <input placeholder="Search universities..." value={search} onChange={e => setSearch(e.target.value)}
+                    style={{ padding:'9px 14px', border:'1.5px solid rgba(139,92,246,.3)', borderRadius:10, fontSize:13, outline:'none', minWidth:200, background:'rgba(255,255,255,.06)', color:'#e2e8f0', fontFamily:'inherit' }}
+                    onFocus={e => e.target.style.borderColor=country.color}
+                    onBlur={e => e.target.style.borderColor='rgba(139,92,246,.3)'}
                   />
-                  <select
-                    value={fieldFilter}
-                    onChange={e => setFieldFilter(e.target.value)}
-                    style={{ padding:'9px 14px', border:'1.5px solid #e2e8f0', borderRadius:10, fontSize:13, outline:'none', background:'#fff', cursor:'pointer' }}
-                  >
-                    <option value="">All Fields</option>
-                    {allFields.map(f => <option key={f} value={f}>{f}</option>)}
+                  <select value={fieldFilter} onChange={e => setFieldFilter(e.target.value)}
+                    style={{ padding:'9px 14px', border:'1.5px solid rgba(139,92,246,.3)', borderRadius:10, fontSize:13, outline:'none', background:'rgba(255,255,255,.06)', cursor:'pointer', color:'#e2e8f0', fontFamily:'inherit' }}>
+                    <option value="" style={{ background:'#1a0533' }}>All Fields</option>
+                    {allFields.map(f => <option key={f} value={f} style={{ background:'#1a0533' }}>{f}</option>)}
                   </select>
                 </div>
               </div>
             </div>
 
-            {/* Grid */}
-            <div className="container" style={{ padding:'32px 16px' }}>
-              <div style={{ marginBottom:16, fontSize:13, color:'#94a3b8', fontWeight:600 }}>
-                {filtered.length} universities in {country.name}
+            <div className="container" style={{ padding:'28px 16px 32px' }}>
+              <div style={{ marginBottom:16, fontSize:13, color:'rgba(255,255,255,.4)', fontWeight:600 }}>
+                {filtered.length} universities in <span style={{ color:country.color, fontWeight:800 }}>{country.name}</span>
                 {(search || fieldFilter) && (
-                  <button
-                    onClick={() => { setSearch(''); setFieldFilter('') }}
-                    style={{ marginLeft:10, color:'#3b82f6', background:'none', border:'none', cursor:'pointer', fontSize:12, fontWeight:700 }}
-                  >
-                    Clear filters x
+                  <button onClick={() => { setSearch(''); setFieldFilter('') }}
+                    style={{ marginLeft:10, color:'#f87171', background:'none', border:'none', cursor:'pointer', fontSize:12, fontWeight:700, fontFamily:'inherit' }}>
+                    Clear ×
                   </button>
                 )}
               </div>
 
-              <div key={animKey} style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', gap:16 }}>
+              <div key={animKey} style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,320px),1fr))', gap:14 }}>
                 {filtered.map((u, i) => (
-                  <div
-                    key={u.name}
-                    style={{
-                      background:'#fff', borderRadius:16, border:'1px solid #e2e8f0',
-                      padding:'20px', transition:'all .2s', position:'relative', overflow:'hidden',
-                      animation:'fadeUp .4s ease ' + (i * 0.04) + 's both'
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow='0 12px 32px rgba(15,36,68,.1)'; e.currentTarget.style.borderColor=country.color }}
-                    onMouseLeave={e => { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow=''; e.currentTarget.style.borderColor='#e2e8f0' }}
+                  <div key={u.name}
+                    style={{ background:'rgba(255,255,255,.04)', borderRadius:16, border:'1px solid rgba(139,92,246,.15)', overflow:'hidden', display:'flex', flexDirection:'column', animation:\`cardIn .38s cubic-bezier(.16,1,.3,1) \${i*0.04}s both\`, transition:'all .2s' }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor=country.color+'60'; e.currentTarget.style.boxShadow=\`0 12px 36px \${country.color}20\`; e.currentTarget.style.transform='translateY(-3px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(139,92,246,.15)'; e.currentTarget.style.boxShadow='none'; e.currentTarget.style.transform='' }}
                   >
-                    <div style={{
-                      position:'absolute', top:16, right:16,
-                      background: u.qs <= 50 ? '#fef9c3' : u.qs <= 150 ? '#f0fdf4' : '#f8fafc',
-                      color: u.qs <= 50 ? '#854d0e' : u.qs <= 150 ? '#166534' : '#475569',
-                      border: '1px solid ' + (u.qs <= 50 ? '#fde68a' : u.qs <= 150 ? '#bbf7d0' : '#e2e8f0'),
-                      padding:'3px 9px', borderRadius:20, fontSize:11, fontWeight:700
-                    }}>
-                      QS #{u.qs}
-                    </div>
-                    <div style={{ display:'flex', alignItems:'flex-start', gap:10, marginBottom:12, paddingRight:60 }}>
-                      <span style={{ fontSize:28, flexShrink:0 }}>{country.flag}</span>
-                      <div>
-                        <div style={{ fontSize:15, fontWeight:800, color:'#0f2444', lineHeight:1.3 }}>{u.name}</div>
-                        <div style={{ fontSize:12, color:'#94a3b8', marginTop:3, display:'flex', alignItems:'center', gap:4 }}>
-                          <span>📍</span>{u.city}
+                    <div style={{ height:3, background:\`linear-gradient(90deg,\${country.color},\${country.accent||country.color+'aa'})\` }} />
+                    <div style={{ padding:'16px 16px 12px', flex:1 }}>
+                      <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:8, marginBottom:10 }}>
+                        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                          <span style={{ fontSize:24 }}>{country.flag}</span>
+                          <div style={{ fontSize:10, fontWeight:700, color:'rgba(255,255,255,.4)', textTransform:'uppercase', letterSpacing:'.05em' }}>📍 {u.city}</div>
+                        </div>
+                        <div style={{
+                          background: u.qs<=50?'rgba(251,191,36,.15)':u.qs<=200?'rgba(52,211,153,.12)':'rgba(255,255,255,.06)',
+                          border:\`1px solid \${u.qs<=50?'rgba(251,191,36,.4)':u.qs<=200?'rgba(52,211,153,.3)':'rgba(255,255,255,.15)'}\`,
+                          borderRadius:9, padding:'4px 9px', textAlign:'center', flexShrink:0
+                        }}>
+                          <div style={{ fontSize:8, fontWeight:800, color:'rgba(255,255,255,.4)', textTransform:'uppercase' }}>QS</div>
+                          <div style={{ fontSize:13, fontWeight:900, color:u.qs<=50?'#fbbf24':u.qs<=200?'#34d399':'rgba(255,255,255,.7)' }}>
+                            #{u.qs>=999?'999+':u.qs}
+                          </div>
+                        </div>
+                      </div>
+                      <h3 style={{ fontSize:13, fontWeight:800, color:'rgba(255,255,255,.9)', lineHeight:1.35, marginBottom:8 }}>{u.name}</h3>
+                      <div style={{ display:'flex', flexWrap:'wrap', gap:4, marginBottom:10 }}>
+                        {u.fields.map(f => (
+                          <span key={f} style={{ fontSize:9, fontWeight:700, padding:'2px 8px', borderRadius:20, background:\`\${country.color}18\`, color:country.color, border:\`1px solid \${country.color}25\` }}>{f}</span>
+                        ))}
+                      </div>
+                      <div style={{ background:'rgba(52,211,153,.08)', border:'1px solid rgba(52,211,153,.2)', borderRadius:9, padding:'7px 10px', display:'flex', gap:6, alignItems:'flex-start' }}>
+                        <span style={{ fontSize:12, flexShrink:0 }}>🎓</span>
+                        <div>
+                          <div style={{ fontSize:8, fontWeight:800, color:'rgba(52,211,153,.6)', textTransform:'uppercase', letterSpacing:'.06em', marginBottom:2 }}>Scholarships</div>
+                          <div style={{ fontSize:11, color:'#34d399', fontWeight:600, lineHeight:1.5 }}>{u.scholarship}</div>
                         </div>
                       </div>
                     </div>
-                    <div style={{ display:'flex', flexWrap:'wrap', gap:5, marginBottom:14 }}>
-                      {u.fields.map(f => (
-                        <span key={f} style={{
-                          fontSize:10, fontWeight:700, padding:'3px 9px', borderRadius:20,
-                          background: country.light, color: country.color,
-                          border:'1px solid ' + country.color + '30'
-                        }}>{f}</span>
-                      ))}
+                    <div style={{ padding:'0 16px 16px' }}>
+                      <a href={u.link} target="_blank" rel="noopener noreferrer"
+                        style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:6, padding:'10px', width:'100%', textDecoration:'none', background:\`linear-gradient(135deg,\${country.color},\${country.accent||country.color+'aa'})\`, color:'#fff', borderRadius:10, fontSize:12, fontWeight:800, transition:'opacity .15s' }}
+                        onMouseEnter={e => e.currentTarget.style.opacity='.82'}
+                        onMouseLeave={e => e.currentTarget.style.opacity='1'}>
+                        🌐 Visit Official Website →
+                      </a>
                     </div>
-                    <div style={{ background:'#f0fdf4', border:'1px solid #bbf7d0', borderRadius:9, padding:'8px 12px', marginBottom:14, fontSize:12 }}>
-                      <span style={{ fontWeight:700, color:'#166534' }}>🎓 Scholarships: </span>
-                      <span style={{ color:'#166534' }}>{u.scholarship}</span>
-                    </div>
-                    <a
-                      href={u.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display:'flex', alignItems:'center', justifyContent:'center', gap:6,
-                        padding:'10px 16px', background: country.color, color:'#fff',
-                        borderRadius:10, textDecoration:'none', fontSize:13, fontWeight:700,
-                        transition:'opacity .15s', width:'100%'
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.opacity='.85'}
-                      onMouseLeave={e => e.currentTarget.style.opacity='1'}
-                    >
-                      🌐 Visit Official Website
-                      <span style={{ fontSize:12 }}>→</span>
-                    </a>
                   </div>
                 ))}
               </div>
 
               {filtered.length === 0 && (
-                <div style={{ textAlign:'center', padding:'60px 20px', color:'#94a3b8' }}>
+                <div style={{ textAlign:'center', padding:'56px 20px', color:'rgba(255,255,255,.35)' }}>
                   <div style={{ fontSize:48, marginBottom:12 }}>🔍</div>
-                  <div style={{ fontSize:16, fontWeight:700, color:'#475569', marginBottom:6 }}>No universities match</div>
-                  <div style={{ fontSize:13 }}>Try clearing your filters</div>
+                  <div style={{ fontSize:16, fontWeight:700, color:'rgba(255,255,255,.6)', marginBottom:10 }}>No universities match</div>
+                  <button onClick={() => { setSearch(''); setFieldFilter('') }}
+                    style={{ padding:'9px 18px', background:'rgba(255,255,255,.08)', border:'1px solid rgba(255,255,255,.15)', borderRadius:9, fontSize:13, fontWeight:700, cursor:'pointer', color:'rgba(255,255,255,.7)', fontFamily:'inherit' }}>
+                    Clear Filters
+                  </button>
                 </div>
               )}
             </div>
@@ -3925,34 +3854,21 @@ export default function UniversitiesPage() {
         )}
       </div>
 
-      {/* BOTTOM CTA */}
-      <div style={{ background:'#0f2444', padding:'48px 16px', textAlign:'center' }}>
+      {/* ── CTA ── */}
+      <div style={{ background:'linear-gradient(135deg,rgba(139,92,246,.12),rgba(99,102,241,.08))', borderTop:'1px solid rgba(139,92,246,.2)', padding:'48px 16px', textAlign:'center' }}>
         <div className="container">
-          <div style={{ fontSize:28, fontWeight:900, color:'#fff', marginBottom:10 }}>
-            Ready to apply? We handle everything.
-          </div>
-          <div style={{ fontSize:15, color:'rgba(255,255,255,.6)', marginBottom:28, maxWidth:480, margin:'0 auto 28px' }}>
-            SOP writing, document preparation, and full guidance for any university on this list.
-          </div>
-          <div style={{ display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap' }}>
-            <a href="/services" style={{ padding:'13px 28px', background:'#22c55e', color:'#fff', borderRadius:12, textDecoration:'none', fontSize:14, fontWeight:800 }}>
-              🚀 View Our Packages
-            </a>
-            <a href="https://wa.me/8801889700879?text=Hi!%20I%20want%20to%20apply%20to%20a%20university%20and%20need%20help."
-              target="_blank" rel="noreferrer"
-              style={{ padding:'13px 28px', background:'rgba(255,255,255,.1)', color:'#fff', border:'1px solid rgba(255,255,255,.2)', borderRadius:12, textDecoration:'none', fontSize:14, fontWeight:800 }}>
+          <div style={{ fontSize:10, fontWeight:800, color:'rgba(167,139,250,.5)', textTransform:'uppercase', letterSpacing:'.14em', marginBottom:10 }}>Ready to apply?</div>
+          <div style={{ fontSize:'clamp(20px,4vw,28px)', fontWeight:900, color:'#fff', marginBottom:8, lineHeight:1.2 }}>We handle SOP, documents &amp; submission</div>
+          <div style={{ fontSize:14, color:'rgba(255,255,255,.4)', marginBottom:28 }}>Full support for any university on this page</div>
+          <div style={{ display:'flex', gap:10, justifyContent:'center', flexWrap:'wrap' }}>
+            <a href="/services" style={{ padding:'12px 26px', background:'linear-gradient(135deg,#7c3aed,#a855f7)', color:'#fff', borderRadius:12, textDecoration:'none', fontSize:13, fontWeight:800 }}>🚀 View Packages →</a>
+            <a href="https://wa.me/8801889700879?text=Hi! I want help applying to a university." target="_blank" rel="noreferrer"
+              style={{ padding:'12px 24px', background:'rgba(255,255,255,.08)', color:'#fff', border:'1px solid rgba(255,255,255,.15)', borderRadius:12, textDecoration:'none', fontSize:13, fontWeight:700 }}>
               💬 WhatsApp Us
             </a>
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes fadeUp {
-          from { opacity:0; transform:translateY(16px) }
-          to   { opacity:1; transform:translateY(0) }
-        }
-      `}</style>
     </div>
   )
 }
