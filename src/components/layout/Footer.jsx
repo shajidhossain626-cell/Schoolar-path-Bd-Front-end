@@ -4,25 +4,28 @@ import { NewsletterCompact } from '@components/common/NewsletterSignup'
 const FOOTER_LINKS = {
   Scholarships: [
     { label: 'All Scholarships', to: '/scholarships' },
-    { label: 'Germany 🇩🇪', to: '/scholarships?country=Germany' },
-    { label: 'United Kingdom 🇬🇧', to: '/scholarships?country=United+Kingdom' },
-    { label: 'USA 🇺🇸', to: '/scholarships?country=United+States' },
-    { label: 'Japan 🇯🇵', to: '/scholarships?country=Japan' },
-    { label: 'Canada 🇨🇦', to: '/scholarships?country=Canada' },
+    { label: '🇩🇪 Germany — DAAD', to: '/scholarships?country=Germany' },
+    { label: '🇬🇧 UK — Chevening', to: '/scholarships?country=United+Kingdom' },
+    { label: '🇺🇸 USA — Fulbright', to: '/scholarships?country=United+States' },
+    { label: '🇯🇵 Japan — MEXT', to: '/scholarships?country=Japan' },
+    { label: '🇨🇦 Canada — Vanier', to: '/scholarships?country=Canada' },
+    { label: '🇦🇺 Australia — AAS', to: '/scholarships?country=Australia' },
+    { label: '🇰🇷 Korea — GKS', to: '/scholarships?country=South+Korea' },
   ],
   Services: [
-    { label: 'Basic Package', to: '/services' },
-    { label: 'Standard Package', to: '/services' },
-    { label: 'Premium Package', to: '/services' },
-    { label: 'Free Consultation', to: '/contact' },
-    { label: 'Study Abroad Blog', to: '/blog' },
+    { label: '🚀 Starter — ৳5,000', to: '/services#starter' },
+    { label: '⭐ Professional — ৳12,000', to: '/services#professional' },
+    { label: '👑 Elite — ৳20,000', to: '/services#elite' },
+    { label: '🎯 Free Tools', to: '/tools' },
+    { label: '📋 Fill Intake Form', href: '/intake.html' },
+    { label: '💬 WhatsApp Us', href: 'https://wa.me/8801889700879' },
   ],
   Company: [
-    { label: 'About Us', to: '/about' },
-    { label: 'Contact', to: '/contact' },
-    { label: 'Careers', to: '/about' },
-    { label: 'Privacy Policy', to: '/' },
-    { label: 'Terms of Service', to: '/' },
+    { label: '👥 About Us', to: '/about' },
+    { label: '📖 Blog & Guides', to: '/blog' },
+    { label: '📬 Contact', to: '/contact' },
+    { label: '🔔 Subscribe', to: '/subscribe' },
+    { label: '🏛️ Universities', to: '/universities' },
   ],
 }
 
@@ -71,8 +74,11 @@ export default function Footer() {
             <div key={title}>
               <h4 className="font-head font-bold text-white text-sm mb-4 tracking-wide">{title}</h4>
               <div className="space-y-2">
-                {links.map(({ label, to }) => (
-                  <Link key={label} to={to} className="block text-sm text-white/55 hover:text-green-400 transition-colors">{label}</Link>
+                {links.map(({ label, to, href }) => (
+                  href
+                    ? <a key={label} href={href} target={href.startsWith('http') ? '_blank' : '_self'} rel="noreferrer"
+                        className="block text-sm text-white/55 hover:text-green-400 transition-colors">{label}</a>
+                    : <Link key={label} to={to} className="block text-sm text-white/55 hover:text-green-400 transition-colors">{label}</Link>
                 ))}
               </div>
             </div>

@@ -89,7 +89,7 @@ export default function ListingPage() {
       </div>
 
       <div className="container">
-        <div className="grid md:grid-cols-[260px_1fr] gap-7 py-9 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-5 py-6 items-start">
           <FilterSidebar />
           <div>
             {/* Row header */}

@@ -27,12 +27,12 @@ export default function ScholarshipCard({ scholarship: s }) {
   return (
     <Link
       to={`/scholarships/${s.id}`}
-      className="block bg-white border border-gray-200 rounded-2xl p-5 hover:border-blue-400 hover:shadow-md transition-all no-underline"
-      style={{ minWidth:0, overflow:'hidden', wordBreak:'break-word' }}
+      className="block bg-white border border-gray-200 rounded-2xl hover:border-blue-400 hover:shadow-md transition-all no-underline"
+      style={{ minWidth:0, overflow:'hidden', wordBreak:'break-word', padding:'14px 14px 12px' }}
     >
       {/* Top: flag + badge */}
       <div className="flex items-start justify-between gap-2 mb-3">
-        <div className="text-3xl flex-shrink-0">{s.flag}</div>
+        <div style={{ fontSize:'clamp(22px,5vw,30px)', flexShrink:0, lineHeight:1 }}>{s.flag}</div>
         {isUrgent ? (
           <span className="text-xs font-bold px-2 py-1 rounded-full bg-red-50 text-red-600 border border-red-200 flex-shrink-0">🔥 URGENT</span>
         ) : isFull ? (
@@ -42,21 +42,21 @@ export default function ScholarshipCard({ scholarship: s }) {
         )}
       </div>
 
-      <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">{s.country}</p>
-      <h3 className="font-head font-bold text-navy-800 text-base leading-snug mb-2 line-clamp-2">{s.name}</h3>
-      <p className="text-gray-500 text-sm leading-relaxed mb-3 line-clamp-2">{s.desc}</p>
+      <p style={{ fontSize:10, fontWeight:700, color:'#9ca3af', textTransform:'uppercase', letterSpacing:'.06em', marginBottom:4 }}>{s.country}</p>
+      <h3 style={{ fontWeight:800, color:'#0f2444', fontSize:'clamp(13px,3.5vw,15px)', lineHeight:1.3, marginBottom:6, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{s.name}</h3>
+      <p style={{ color:'#6b7280', fontSize:11, lineHeight:1.55, marginBottom:8, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{s.desc}</p>
 
       {s.tags && s.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        <div style={{ display:'flex', flexWrap:'wrap', gap:4, marginBottom:8 }}>
           {s.tags.slice(0,4).map(tag => (
-            <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">{tag}</span>
+            <span key={tag} style={{ fontSize:10, background:'#f3f4f6', color:'#6b7280', padding:'2px 8px', borderRadius:20 }}>{tag}</span>
           ))}
         </div>
       )}
 
       {/* Footer: deadline + amount + BDT */}
-      <div className="flex items-end justify-between gap-2 pt-3 border-t border-gray-100 flex-wrap">
-        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+      <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:6, paddingTop:8, borderTop:'1px solid #f3f4f6', flexWrap:'wrap' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:4, fontSize:11, color:'#9ca3af' }}>
           <span>📅</span>
           <span className={isUrgent ? 'text-red-500 font-semibold' : ''}>{s.deadline}</span>
         </div>
