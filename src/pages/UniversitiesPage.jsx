@@ -3649,10 +3649,7 @@ export default function UniversitiesPage() {
 
   return (
     <div style={{ background:'#07020f', minHeight:'100vh', fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif' }}>
-      <style>{\`
-        @keyframes cardIn { from{opacity:0;transform:translateY(18px) scale(.98)} to{opacity:1;transform:translateY(0) scale(1)} }
-        @keyframes orb { 0%,100%{transform:scale(1) translate(0,0)} 50%{transform:scale(1.05) translate(10px,-10px)} }
-      \`}</style>
+      <style>{"@keyframes cardIn { from{opacity:0;transform:translateY(18px) scale(.98)} to{opacity:1;transform:translateY(0) scale(1)} } @keyframes orb { 0%,100%{transform:scale(1) translate(0,0)} 50%{transform:scale(1.05) translate(10px,-10px)} }"}</style>
 
       {/* ── HERO ── */}
       <div style={{ background:'linear-gradient(160deg,#0d0320 0%,#1a0533 45%,#0d0320 100%)', paddingTop:64, paddingBottom:64, position:'relative', overflow:'hidden' }}>
@@ -3685,12 +3682,12 @@ export default function UniversitiesPage() {
               return (
                 <button key={c.id} onClick={() => pick(c.id)}
                   style={{
-                    background: isOn ? `linear-gradient(145deg,${c.color},${c.accent||c.color+'aa'})` : 'rgba(255,255,255,.05)',
+                    background: isOn ? 'linear-gradient(145deg,' + c.color + ',' + (c.accent || c.color + 'aa') + ')' : 'rgba(255,255,255,.05)',
                     border: isOn ? 'none' : '1px solid rgba(139,92,246,.2)',
                     borderRadius:18, padding:'20px 12px 16px', cursor:'pointer', textAlign:'center',
                     transition:'all .22s ease',
                     transform: isOn ? 'translateY(-6px)' : 'translateY(0)',
-                    boxShadow: isOn ? \`0 20px 48px \${c.color}50, 0 0 0 1px \${c.color}40\` : 'none',
+                    boxShadow: isOn ? '0 20px 48px ' + c.color + '50, 0 0 0 1px ' + c.color + '40' : 'none',
                   }}
                   onMouseEnter={e => { if(!isOn){ e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.background='rgba(255,255,255,.08)'; e.currentTarget.style.borderColor='rgba(139,92,246,.4)' }}}
                   onMouseLeave={e => { if(!isOn){ e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.background='rgba(255,255,255,.05)'; e.currentTarget.style.borderColor='rgba(139,92,246,.2)' }}}
@@ -3728,7 +3725,7 @@ export default function UniversitiesPage() {
                 <button key={c.id} onClick={() => pick(c.id)}
                   style={{ fontSize:12, padding:'6px 12px', borderRadius:20, border:'1px solid',
                     borderColor: active===c.id ? c.color : 'rgba(139,92,246,.25)',
-                    background: active===c.id ? \`\${c.color}20\` : 'rgba(255,255,255,.04)',
+                    background: active===c.id ? c.color + '20' : 'rgba(255,255,255,.04)',
                     color: active===c.id ? c.color : 'rgba(255,255,255,.6)',
                     fontWeight:700, cursor:'pointer', transition:'all .15s', display:'flex', alignItems:'center', gap:5 }}>
                   <span style={{ fontSize:16 }}>{c.flag}</span>{c.name}
@@ -3756,7 +3753,7 @@ export default function UniversitiesPage() {
             <div style={{ background:'rgba(255,255,255,.03)', borderTop:'1px solid rgba(139,92,246,.15)', borderBottom:'3px solid ' + country.color, padding:'16px 0', marginTop:16 }}>
               <div className="container" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
                 <div style={{ display:'flex', alignItems:'center', gap:14 }}>
-                  <div style={{ width:52, height:52, borderRadius:14, background:\`linear-gradient(135deg,\${country.color},\${country.accent||country.color+'aa'})\`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:28, boxShadow:\`0 6px 20px \${country.color}40\` }}>{country.flag}</div>
+                    <div style={{ width:52, height:52, borderRadius:14, background:'linear-gradient(135deg,' + country.color + ',' + (country.accent || country.color + 'aa') + ')', display:'flex', alignItems:'center', justifyContent:'center', fontSize:28, boxShadow:'0 6px 20px ' + country.color + '40' }}>{country.flag}</div>
                   <div>
                     <div style={{ fontSize:20, fontWeight:900, color:country.color }}>{country.name}</div>
                     <div style={{ fontSize:12, color:'rgba(255,255,255,.4)', marginTop:2 }}>{country.desc}</div>
@@ -3791,11 +3788,11 @@ export default function UniversitiesPage() {
               <div key={animKey} style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,320px),1fr))', gap:14 }}>
                 {filtered.map((u, i) => (
                   <div key={u.name}
-                    style={{ background:'rgba(255,255,255,.04)', borderRadius:16, border:'1px solid rgba(139,92,246,.15)', overflow:'hidden', display:'flex', flexDirection:'column', animation:\`cardIn .38s cubic-bezier(.16,1,.3,1) \${i*0.04}s both\`, transition:'all .2s' }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor=country.color+'60'; e.currentTarget.style.boxShadow=\`0 12px 36px \${country.color}20\`; e.currentTarget.style.transform='translateY(-3px)' }}
+                    style={{ background:'rgba(255,255,255,.04)', borderRadius:16, border:'1px solid rgba(139,92,246,.15)', overflow:'hidden', display:'flex', flexDirection:'column', animation:'cardIn .38s cubic-bezier(.16,1,.3,1) ' + (i*0.04) + 's both', transition:'all .2s' }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor=country.color+'60'; e.currentTarget.style.boxShadow='0 12px 36px ' + country.color + '20'; e.currentTarget.style.transform='translateY(-3px)' }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(139,92,246,.15)'; e.currentTarget.style.boxShadow='none'; e.currentTarget.style.transform='' }}
                   >
-                    <div style={{ height:3, background:\`linear-gradient(90deg,\${country.color},\${country.accent||country.color+'aa'})\` }} />
+                    <div style={{ height:3, background:'linear-gradient(90deg,' + country.color + ',' + (country.accent || country.color + 'aa') + ')' }} />
                     <div style={{ padding:'16px 16px 12px', flex:1 }}>
                       <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:8, marginBottom:10 }}>
                         <div style={{ display:'flex', alignItems:'center', gap:8 }}>
@@ -3804,7 +3801,7 @@ export default function UniversitiesPage() {
                         </div>
                         <div style={{
                           background: u.qs<=50?'rgba(251,191,36,.15)':u.qs<=200?'rgba(52,211,153,.12)':'rgba(255,255,255,.06)',
-                          border:\`1px solid \${u.qs<=50?'rgba(251,191,36,.4)':u.qs<=200?'rgba(52,211,153,.3)':'rgba(255,255,255,.15)'}\`,
+                          border:'1px solid ' + (u.qs<=50?'rgba(251,191,36,.4)':u.qs<=200?'rgba(52,211,153,.3)':'rgba(255,255,255,.15)'),
                           borderRadius:9, padding:'4px 9px', textAlign:'center', flexShrink:0
                         }}>
                           <div style={{ fontSize:8, fontWeight:800, color:'rgba(255,255,255,.4)', textTransform:'uppercase' }}>QS</div>
@@ -3816,7 +3813,7 @@ export default function UniversitiesPage() {
                       <h3 style={{ fontSize:13, fontWeight:800, color:'rgba(255,255,255,.9)', lineHeight:1.35, marginBottom:8 }}>{u.name}</h3>
                       <div style={{ display:'flex', flexWrap:'wrap', gap:4, marginBottom:10 }}>
                         {u.fields.map(f => (
-                          <span key={f} style={{ fontSize:9, fontWeight:700, padding:'2px 8px', borderRadius:20, background:\`\${country.color}18\`, color:country.color, border:\`1px solid \${country.color}25\` }}>{f}</span>
+                          <span key={f} style={{ fontSize:9, fontWeight:700, padding:'2px 8px', borderRadius:20, background:country.color + '18', color:country.color, border:'1px solid ' + country.color + '25' }}>{f}</span>
                         ))}
                       </div>
                       <div style={{ background:'rgba(52,211,153,.08)', border:'1px solid rgba(52,211,153,.2)', borderRadius:9, padding:'7px 10px', display:'flex', gap:6, alignItems:'flex-start' }}>
@@ -3829,7 +3826,7 @@ export default function UniversitiesPage() {
                     </div>
                     <div style={{ padding:'0 16px 16px' }}>
                       <a href={u.link} target="_blank" rel="noopener noreferrer"
-                        style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:6, padding:'10px', width:'100%', textDecoration:'none', background:\`linear-gradient(135deg,\${country.color},\${country.accent||country.color+'aa'})\`, color:'#fff', borderRadius:10, fontSize:12, fontWeight:800, transition:'opacity .15s' }}
+                        style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:6, padding:'10px', width:'100%', textDecoration:'none', background:'linear-gradient(135deg,' + country.color + ',' + (country.accent || country.color + 'aa') + ')', color:'#fff', borderRadius:10, fontSize:12, fontWeight:800, transition:'opacity .15s' }}
                         onMouseEnter={e => e.currentTarget.style.opacity='.82'}
                         onMouseLeave={e => e.currentTarget.style.opacity='1'}>
                         🌐 Visit Official Website →
