@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '@context/AuthContext'
 
 const SCHOLARSHIPS = [
   { name:'DAAD Research Scholarship', country:'Germany', id:'daad', icon:'🇩🇪', deadline:'Oct 15, 2026', color:'#f87171',
@@ -67,10 +68,42 @@ const DARK = {
   label: { fontSize:10, fontWeight:800, color:'rgba(167,139,250,.6)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:6, display:'block' },
 }
 
+// ── Persist key per user ──
+function storageKey(email) {
+  return 'sp_checklist_' + (email || 'guest').toLowerCase().trim()
+}
+
 export default function DocumentChecklist() {
+  const { user } = useAuth()
   const [selected, setSelected] = useState('')
   const [checked, setChecked]   = useState({})
   const [copied, setCopied]     = useState(false)
+
+  // Load saved data when user changes (login/logout) or on mount
+  useEffect(() => {
+    try {
+      const key   = storageKey(user?.email)
+      const saved = localStorage.getItem(key)
+      if (saved) {
+        const data = JSON.parse(saved)
+        setSelected(data.selected || '')
+        setChecked(data.checked  || {})
+      } else {
+        // New user or guest — reset
+        setSelected('')
+        setChecked({})
+      }
+    } catch {
+      setSelected('')
+      setChecked({})
+    }
+  }, [user?.email])
+
+  // Save to localStorage whenever checked or selected changes
+  useEffect(() => {
+    const key = storageKey(user?.email)
+    localStorage.setItem(key, JSON.stringify({ selected, checked }))
+  }, [selected, checked, user?.email])
 
   const scholarship = SCHOLARSHIPS.find(s => s.id === selected)
   const allItems    = scholarship ? scholarship.docs.flatMap(d => d.items) : []
@@ -80,7 +113,12 @@ export default function DocumentChecklist() {
 
   function toggle(key) { setChecked(c => ({ ...c, [key]: !c[key] })) }
 
-  function reset() { setChecked({}) }
+  function reset() {
+    setChecked({})
+    // Also persist the reset
+    const key = storageKey(user?.email)
+    localStorage.setItem(key, JSON.stringify({ selected, checked: {} }))
+  }
 
   function copyList() {
     if (!scholarship) return
