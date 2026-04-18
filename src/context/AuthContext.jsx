@@ -58,7 +58,7 @@ export function AuthProvider({ children }) {
             }
             setUser(updated)
             localStorage.setItem(SK, JSON.stringify(updated))
-            localStorage.setItem(`sp_profile_${u.email}`, JSON.stringify(updated))
+            localStorage.setItem('sp_profile_' + (u.email || '').trim().toLowerCase(), JSON.stringify(updated))
           }
         })
       } else {
@@ -72,11 +72,13 @@ export function AuthProvider({ children }) {
 
   // Save user to localStorage + Google Sheets
   const persist = (u) => {
-    setUser(u)
-    localStorage.setItem(SK, JSON.stringify(u))
-    // Also save a profile copy keyed by email so plan survives logout/login
-    localStorage.setItem(`sp_profile_${u.email}`, JSON.stringify(u))
-    syncToSheet(u)
+    const emailKey = (u.email || '').trim().toLowerCase()
+    const normalized = { ...u, email: emailKey }
+    setUser(normalized)
+    localStorage.setItem(SK, JSON.stringify(normalized))
+    // Also save a profile copy keyed by lowercase email so plan survives logout/login
+    localStorage.setItem('sp_profile_' + emailKey, JSON.stringify(normalized))
+    syncToSheet(normalized)
   }
 
   // ── Sign Up ──
@@ -84,13 +86,15 @@ export function AuthProvider({ children }) {
     if (!firstName || !email || !password) throw new Error('Please fill in all fields')
     if (password.length < 8) throw new Error('Password must be at least 8 characters')
 
-    const existing = localStorage.getItem(`sp_pwd_${email}`)
+    const emailKey = email.trim().toLowerCase()
+
+    const existing = localStorage.getItem('sp_pwd_' + emailKey)
     if (existing) throw new Error('An account already exists with this email. Please sign in.')
 
-    // Save password locally
-    localStorage.setItem(`sp_pwd_${email}`, btoa(password))
+    // Save password locally (keyed by lowercase email)
+    localStorage.setItem('sp_pwd_' + emailKey, btoa(password))
 
-    const u = makeUser({ email, firstName, lastName })
+    const u = makeUser({ email: emailKey, firstName, lastName })
     persist(u)
     toast.success(`Welcome to ScholarPath BD, ${u.firstName}! 🎓`)
     return u
@@ -100,17 +104,19 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     if (!email || !password) throw new Error('Please fill in all fields')
 
-    const stored = localStorage.getItem(`sp_pwd_${email}`)
+    const emailKey = email.trim().toLowerCase()
+
+    const stored = localStorage.getItem('sp_pwd_' + emailKey)
     if (!stored) throw new Error('No account found. Please create an account first.')
     if (stored !== btoa(password)) throw new Error('Wrong password. Please try again.')
 
     // Load saved profile (has their name, id etc)
-    const savedProfile = localStorage.getItem(`sp_profile_${email}`)
-    let u = savedProfile ? JSON.parse(savedProfile) : makeUser({ email })
+    const savedProfile = localStorage.getItem('sp_profile_' + emailKey)
+    let u = savedProfile ? JSON.parse(savedProfile) : makeUser({ email: emailKey })
 
     // ✅ Fetch latest plan from Google Sheets
     // This is how admin changes take effect — on next login
-    const sheetPlan = await fetchPlanFromSheet(email)
+    const sheetPlan = await fetchPlanFromSheet(emailKey)
     if (sheetPlan !== null) {
       u = { ...u, plan: sheetPlan, isPaid: sheetPlan !== 'Free' }
     }
@@ -131,7 +137,10 @@ export function AuthProvider({ children }) {
   // ── Logout ──
   const logout = () => {
     // Save profile before logout so plan persists on re-login
-    if (user) localStorage.setItem(`sp_profile_${user.email}`, JSON.stringify(user))
+    if (user) {
+      const emailKey = (user.email || '').trim().toLowerCase()
+      localStorage.setItem('sp_profile_' + emailKey, JSON.stringify(user))
+    }
     setUser(null)
     localStorage.removeItem(SK)
     toast.success('Signed out')
